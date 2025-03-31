@@ -116,6 +116,14 @@ RUN ln -s ${Z3_DIR}/bin/libz3.so ${Z3_DIR}/bin/libz3.so.4
 # Final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:6c4df091e4e531bb93bdbfe7e7f0998e7ced344f54426b7e874116a3dc3233ff
 
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libxml2 \
+    libncurses5 \
+    libzstd1 \
+    libssl3 \
+    && rm -rf /var/lib/apt/lists/*
+    
 # Set the working directory for the runtime image
 WORKDIR /App
 EXPOSE 8080
