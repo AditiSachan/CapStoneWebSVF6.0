@@ -125,7 +125,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get update \
     && apt-get install -y dotnet-runtime-8.0 \
     libxml2 \
-    libncurses5 \
+    libncurses6 \
     libzstd1 \
     libssl3 \
     && rm -rf /var/lib/apt/lists/*
