@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for api-morning-fog-5849 on 2024-10-31T11:40:39+11:00
+# fly.toml app configuration file generated for api-misty-resonance-369 on 2025-03-31T14:23:19+11:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'api-morning-fog-5849'
+app = 'api-misty-resonance-369'
 primary_region = 'syd'
 
 [build]
@@ -18,6 +18,4 @@ primary_region = 'syd'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = 'performance-1x'
