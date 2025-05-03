@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for api-misty-wind-7167 on 2025-03-31T23:19:08+11:00
+# fly.toml app configuration file generated for api-still-paper-7120 on 2025-05-03T20:10:58+10:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'api-misty-wind-7167'
+app = 'api-still-paper-7120'
 primary_region = 'syd'
 
 [build]
