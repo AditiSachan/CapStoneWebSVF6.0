@@ -1,0 +1,668 @@
+[
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/AE/Core/AbstractState.cpp.o -c /home/aditi/SVF/SVF/svf/lib/AE/Core/AbstractState.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/AE/Core/AbstractState.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/AE/Core/AbstractState.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/AE/Core/RelExeState.cpp.o -c /home/aditi/SVF/SVF/svf/lib/AE/Core/RelExeState.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/AE/Core/RelExeState.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/AE/Core/RelExeState.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/AE/Core/RelationSolver.cpp.o -c /home/aditi/SVF/SVF/svf/lib/AE/Core/RelationSolver.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/AE/Core/RelationSolver.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/AE/Core/RelationSolver.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/AE/Svfexe/AEDetector.cpp.o -c /home/aditi/SVF/SVF/svf/lib/AE/Svfexe/AEDetector.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/AE/Svfexe/AEDetector.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/AE/Svfexe/AEDetector.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/AE/Svfexe/AbsExtAPI.cpp.o -c /home/aditi/SVF/SVF/svf/lib/AE/Svfexe/AbsExtAPI.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/AE/Svfexe/AbsExtAPI.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/AE/Svfexe/AbsExtAPI.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/AE/Svfexe/AbstractInterpretation.cpp.o -c /home/aditi/SVF/SVF/svf/lib/AE/Svfexe/AbstractInterpretation.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/AE/Svfexe/AbstractInterpretation.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/AE/Svfexe/AbstractInterpretation.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFGNormalizer.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFGNormalizer.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFGNormalizer.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFGNormalizer.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFGrammar.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFGrammar.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFGrammar.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFGrammar.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLAlias.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLAlias.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLAlias.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLAlias.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLBase.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLBase.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLBase.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLBase.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLGraphBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLGraphBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLGraphBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLGraphBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLSVFGBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLSVFGBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLSVFGBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLSVFGBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLSolver.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLSolver.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLSolver.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLSolver.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/CFLVF.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/CFLVF.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/CFLVF.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/CFLVF.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/CFL/GrammarBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/CFL/GrammarBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/CFL/GrammarBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/CFL/GrammarBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/DDA/ContextDDA.cpp.o -c /home/aditi/SVF/SVF/svf/lib/DDA/ContextDDA.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/DDA/ContextDDA.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/DDA/ContextDDA.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/DDA/DDAClient.cpp.o -c /home/aditi/SVF/SVF/svf/lib/DDA/DDAClient.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/DDA/DDAClient.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/DDA/DDAClient.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/DDA/DDAPass.cpp.o -c /home/aditi/SVF/SVF/svf/lib/DDA/DDAPass.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/DDA/DDAPass.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/DDA/DDAPass.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/DDA/DDAStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/DDA/DDAStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/DDA/DDAStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/DDA/DDAStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/DDA/FlowDDA.cpp.o -c /home/aditi/SVF/SVF/svf/lib/DDA/FlowDDA.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/DDA/FlowDDA.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/DDA/FlowDDA.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/FastCluster/fastcluster.cpp.o -c /home/aditi/SVF/SVF/svf/lib/FastCluster/fastcluster.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/FastCluster/fastcluster.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/FastCluster/fastcluster.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/BasicBlockG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/BasicBlockG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/BasicBlockG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/BasicBlockG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/CDG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/CDG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/CDG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/CDG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/CFLGraph.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/CFLGraph.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/CFLGraph.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/CFLGraph.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/CHG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/CHG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/CHG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/CHG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/CallGraph.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/CallGraph.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/CallGraph.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/CallGraph.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/ConsG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/ConsG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/ConsG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/ConsG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/GraphWriter.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/GraphWriter.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/GraphWriter.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/GraphWriter.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/ICFG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/ICFG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/ICFG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/ICFG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/IRGraph.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/IRGraph.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/IRGraph.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/IRGraph.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/SVFG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/SVFG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/SVFG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/SVFG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/SVFGOPT.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/SVFGOPT.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/SVFGOPT.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/SVFGOPT.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/SVFGReadWrite.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/SVFGReadWrite.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/SVFGReadWrite.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/SVFGReadWrite.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/SVFGStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/SVFGStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/SVFGStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/SVFGStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/ThreadCallGraph.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/ThreadCallGraph.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/ThreadCallGraph.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/ThreadCallGraph.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Graphs/VFG.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Graphs/VFG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Graphs/VFG.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Graphs/VFG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MSSA/MemPartition.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MSSA/MemPartition.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MSSA/MemPartition.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MSSA/MemPartition.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MSSA/MemRegion.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MSSA/MemRegion.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MSSA/MemRegion.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MSSA/MemRegion.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MSSA/MemSSA.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MSSA/MemSSA.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MSSA/MemSSA.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MSSA/MemSSA.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MSSA/SVFGBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MSSA/SVFGBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MSSA/SVFGBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MSSA/SVFGBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MTA/LockAnalysis.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MTA/LockAnalysis.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MTA/LockAnalysis.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MTA/LockAnalysis.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MTA/MHP.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MTA/MHP.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MTA/MHP.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MTA/MHP.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MTA/MTA.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MTA/MTA.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MTA/MTA.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MTA/MTA.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MTA/MTAStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MTA/MTAStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MTA/MTAStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MTA/MTAStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MTA/TCT.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MTA/TCT.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MTA/TCT.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MTA/TCT.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MemoryModel/AccessPath.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MemoryModel/AccessPath.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MemoryModel/AccessPath.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MemoryModel/AccessPath.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MemoryModel/PointerAnalysis.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MemoryModel/PointerAnalysis.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MemoryModel/PointerAnalysis.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MemoryModel/PointerAnalysis.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MemoryModel/PointerAnalysisImpl.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MemoryModel/PointerAnalysisImpl.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MemoryModel/PointerAnalysisImpl.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MemoryModel/PointerAnalysisImpl.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/MemoryModel/PointsTo.cpp.o -c /home/aditi/SVF/SVF/svf/lib/MemoryModel/PointsTo.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/MemoryModel/PointsTo.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/MemoryModel/PointsTo.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/DoubleFreeChecker.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/DoubleFreeChecker.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/DoubleFreeChecker.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/DoubleFreeChecker.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/FileChecker.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/FileChecker.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/FileChecker.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/FileChecker.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/LeakChecker.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/LeakChecker.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/LeakChecker.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/LeakChecker.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/ProgSlice.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/ProgSlice.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/ProgSlice.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/ProgSlice.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/SaberCheckerAPI.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/SaberCheckerAPI.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/SaberCheckerAPI.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/SaberCheckerAPI.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/SaberCondAllocator.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/SaberCondAllocator.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/SaberCondAllocator.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/SaberCondAllocator.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/SaberSVFGBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/SaberSVFGBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/SaberSVFGBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/SaberSVFGBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SABER/SrcSnkDDA.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SABER/SrcSnkDDA.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SABER/SrcSnkDDA.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SABER/SrcSnkDDA.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SVFIR/PAGBuilderFromFile.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SVFIR/PAGBuilderFromFile.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SVFIR/PAGBuilderFromFile.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SVFIR/PAGBuilderFromFile.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SVFIR/SVFIR.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SVFIR/SVFIR.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SVFIR/SVFIR.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SVFIR/SVFIR.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SVFIR/SVFStatements.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SVFIR/SVFStatements.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SVFIR/SVFStatements.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SVFIR/SVFStatements.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SVFIR/SVFType.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SVFIR/SVFType.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SVFIR/SVFType.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SVFIR/SVFType.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SVFIR/SVFValue.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SVFIR/SVFValue.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SVFIR/SVFValue.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SVFIR/SVFValue.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/SVFIR/SVFVariables.cpp.o -c /home/aditi/SVF/SVF/svf/lib/SVFIR/SVFVariables.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/SVFIR/SVFVariables.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/SVFIR/SVFVariables.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/BitVector.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/BitVector.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/BitVector.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/BitVector.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/CDGBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/CDGBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/CDGBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/CDGBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/CallGraphBuilder.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/CallGraphBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/CallGraphBuilder.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/CallGraphBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/CoreBitVector.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/CoreBitVector.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/CoreBitVector.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/CoreBitVector.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/ExtAPI.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/ExtAPI.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/ExtAPI.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/ExtAPI.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/NodeIDAllocator.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/NodeIDAllocator.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/NodeIDAllocator.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/NodeIDAllocator.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/Options.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/Options.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/Options.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/Options.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/PTAStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/PTAStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/PTAStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/PTAStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/SVFBugReport.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/SVFBugReport.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/SVFBugReport.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/SVFBugReport.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/SVFStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/SVFStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/SVFStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/SVFStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/SVFUtil.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/SVFUtil.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/SVFUtil.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/SVFUtil.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/ThreadAPI.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/ThreadAPI.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/ThreadAPI.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/ThreadAPI.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/Z3Expr.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/Z3Expr.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/Z3Expr.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/Z3Expr.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/Util/cJSON.cpp.o -c /home/aditi/SVF/SVF/svf/lib/Util/cJSON.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/Util/cJSON.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/Util/cJSON.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/Andersen.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/Andersen.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/Andersen.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/Andersen.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/AndersenSCD.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/AndersenSCD.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/AndersenSCD.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/AndersenSCD.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/AndersenSFR.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/AndersenSFR.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/AndersenSFR.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/AndersenSFR.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/AndersenStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/AndersenStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/AndersenStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/AndersenStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/AndersenWaveDiff.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/AndersenWaveDiff.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/AndersenWaveDiff.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/AndersenWaveDiff.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/CSC.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/CSC.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/CSC.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/CSC.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/FlowSensitive.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/FlowSensitive.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/FlowSensitive.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/FlowSensitive.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/FlowSensitiveStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/FlowSensitiveStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/FlowSensitiveStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/FlowSensitiveStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/Steensgaard.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/Steensgaard.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/Steensgaard.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/Steensgaard.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/TypeAnalysis.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/TypeAnalysis.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/TypeAnalysis.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/TypeAnalysis.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/VersionedFlowSensitive.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/VersionedFlowSensitive.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/VersionedFlowSensitive.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/VersionedFlowSensitive.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/VersionedFlowSensitiveStat.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/VersionedFlowSensitiveStat.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/VersionedFlowSensitiveStat.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/VersionedFlowSensitiveStat.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfCore_EXPORTS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfCore.dir/lib/WPA/WPAPass.cpp.o -c /home/aditi/SVF/SVF/svf/lib/WPA/WPAPass.cpp",
+  "file": "/home/aditi/SVF/SVF/svf/lib/WPA/WPAPass.cpp",
+  "output": "svf/CMakeFiles/SvfCore.dir/lib/WPA/WPAPass.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/BreakConstantExpr.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/BreakConstantExpr.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/BreakConstantExpr.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/BreakConstantExpr.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/CHGBuilder.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/CHGBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/CHGBuilder.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/CHGBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/CppUtil.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/CppUtil.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/CppUtil.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/CppUtil.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/DCHG.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/DCHG.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/DCHG.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/DCHG.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/ICFGBuilder.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/ICFGBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/ICFGBuilder.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/ICFGBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/LLVMLoopAnalysis.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/LLVMLoopAnalysis.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/LLVMLoopAnalysis.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/LLVMLoopAnalysis.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/LLVMModule.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/LLVMModule.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/LLVMModule.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/LLVMModule.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/LLVMUtil.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/LLVMUtil.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/LLVMUtil.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/LLVMUtil.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/ObjTypeInference.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/ObjTypeInference.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/ObjTypeInference.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/ObjTypeInference.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/SVFIRBuilder.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/SVFIRBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/SVFIRBuilder.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/SVFIRBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/SVFIRExtAPI.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/SVFIRExtAPI.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/SVFIRExtAPI.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/SVFIRExtAPI.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -DSvfLLVM_EXPORTS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf-llvm/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/SvfLLVM.dir/lib/SymbolTableBuilder.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/lib/SymbolTableBuilder.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/lib/SymbolTableBuilder.cpp",
+  "output": "svf-llvm/CMakeFiles/SvfLLVM.dir/lib/SymbolTableBuilder.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/SABER",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/saber.dir/saber.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/SABER/saber.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/SABER/saber.cpp",
+  "output": "svf-llvm/tools/SABER/CMakeFiles/saber.dir/saber.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/WPA",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/wpa.dir/wpa.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/WPA/wpa.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/WPA/wpa.cpp",
+  "output": "svf-llvm/tools/WPA/CMakeFiles/wpa.dir/wpa.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/Example",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/svf-ex.dir/svf-ex.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/Example/svf-ex.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/Example/svf-ex.cpp",
+  "output": "svf-llvm/tools/Example/CMakeFiles/svf-ex.dir/svf-ex.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/DDA",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/dvf.dir/dda.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/DDA/dda.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/DDA/dda.cpp",
+  "output": "svf-llvm/tools/DDA/CMakeFiles/dvf.dir/dda.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/MTA",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/mta.dir/mta.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/MTA/mta.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/MTA/mta.cpp",
+  "output": "svf-llvm/tools/MTA/CMakeFiles/mta.dir/mta.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/CFL",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/cfl.dir/cfl.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/CFL/cfl.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/CFL/cfl.cpp",
+  "output": "svf-llvm/tools/CFL/CMakeFiles/cfl.dir/cfl.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/LLVM2SVF",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/llvm2svf.dir/llvm2svf.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/LLVM2SVF/llvm2svf.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/LLVM2SVF/llvm2svf.cpp",
+  "output": "svf-llvm/tools/LLVM2SVF/CMakeFiles/llvm2svf.dir/llvm2svf.cpp.o"
+},
+{
+  "directory": "/home/aditi/SVF/SVF/Release-build/svf-llvm/tools/AE",
+  "command": "/usr/bin/c++ -DSVF_INSTALL_EXTAPI_BC=\\\"/home/aditi/SVF/SVF/Release-build/lib/extapi.bc\\\" -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/aditi/SVF/SVF/svf/include -I/home/aditi/SVF/SVF/Release-build -I/home/aditi/SVF/SVF/Release-build/include -I/home/aditi/SVF/SVF/Release-build/include/SVF -I/home/aditi/SVF/SVF/svf-llvm/include -isystem /home/aditi/SVF/SVF/llvm-16.0.0.obj/include -isystem /home/aditi/SVF/SVF/z3.obj/include -O3 -DNDEBUG -std=gnu++17 -fPIE  -fno-exceptions -Wall -Werror -Wno-deprecated-declarations -UNDEBUG -o CMakeFiles/ae.dir/ae.cpp.o -c /home/aditi/SVF/SVF/svf-llvm/tools/AE/ae.cpp",
+  "file": "/home/aditi/SVF/SVF/svf-llvm/tools/AE/ae.cpp",
+  "output": "svf-llvm/tools/AE/CMakeFiles/ae.dir/ae.cpp.o"
+}
+]
