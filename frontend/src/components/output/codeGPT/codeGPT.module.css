@@ -119,18 +119,23 @@
 }
 
 .codegptButton {
-  padding: 10px 20px;
-  background-color: #007bff;
+  padding: 10px 15px;
+  background-color: #4CAF50; /* Change to green */
   color: white;
   border: none;
-  border-radius: 1.5em;
+  border-radius: 5px; /* Change to rounded rectangle instead of circular */
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500; /* Make text slightly bolder */
   margin-left: 10px;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 80px; /* Ensure button has enough width for "Enter" text */
+  min-height: 40px;
 }
 
 .codegptButton:hover {
-  background-color: #0056b3;
+  background-color: #3e8e41; /* Darker green on hover */
 }
 
 .resetButton {
@@ -154,4 +159,38 @@
   padding: 10px;
   border-radius: 4px;
   overflow: auto;
+}
+
+
+.scrollToBottomButton {
+  position: fixed;
+  bottom: 120px;
+  right: 30px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #007bff; /* Keep this blue */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+  opacity: 0.8;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 0.8; transform: translateY(0); }
+}
+
+.scrollToBottomButton:hover {
+  background-color: #0056b3;
+  opacity: 1;
+  transform: scale(1.05);
 }
