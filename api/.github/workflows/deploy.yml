@@ -2,7 +2,8 @@ name: Deploy to Fly.io
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
