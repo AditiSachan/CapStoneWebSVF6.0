@@ -1,19 +1,24 @@
-export default async function handler(req, res) {
-  const targetUrl = 'https://api-morning-fog-5849.fly.dev/api/controller';
+return await fetch('/api/proxy', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(requestBody),
+})
+  .then(async (response) => {
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server error: ${errorText}`);
+    }
 
-  try {
-    const response = await fetch(targetUrl, {
-      method: req.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...req.headers,
-      },
-      body: req.method === 'POST' ? JSON.stringify(req.body) : undefined,
-    });
-
-    const data = await response.text(); // or .json() if you expect JSON
-    res.status(response.status).send(data);
-  } catch (error) {
-    res.status(500).json({ error: 'Proxy error', details: error.message });
-  }
-}
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    } else {
+      return { output: await response.text() };
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    return { error: error.message };
+  });
