@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for api-hidden-feather-7401 on 2025-05-13T01:05:48+10:00
+# fly.toml app configuration file generated for api-muddy-waterfall-2069 on 2025-05-26T01:49:33+10:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'api-hidden-feather-7401'
+app = 'api-muddy-waterfall-2069'
 primary_region = 'syd'
 
 [build]
