@@ -104,3 +104,5 @@ api/obj/*
 .vscode/*
 ../vscode/*
 api/SVF
+
+api/SVF-prebuilt
