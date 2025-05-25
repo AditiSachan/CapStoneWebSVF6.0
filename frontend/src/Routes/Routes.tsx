@@ -9,6 +9,10 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
+        element: <GraphsPage />,  // Default path with no session ID
+      },
+      {
+        path: 'session/:sessionId',  // Path with session ID parameter
         element: <GraphsPage />,
       },
     ],

@@ -4,13 +4,82 @@ import styles from './codeGPT.module.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coy as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onSaveMessages, passedPrompt }: { code: string, graphs: any, terminalOutput: string, llvmIR: string, savedMessages: any, onSaveMessages: any, passedPrompt: string }) => {
-  const [messages, setMessages] = useState(savedMessages || []);
+  const [messages, setMessages] = useState<{ role: string, content: string }[]>([]);
   const [gptInputQuery, setGptInputQuery] = useState('');
   const [suggestionCategory, setSuggestionCategory] = useState('code');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const responseContainerRef = useRef<HTMLDivElement>(null);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  
+  // Load messages from props
+  useEffect(() => {
+    setMessages(savedMessages || []);
+  }, [savedMessages]);
+  
+  // Scroll to bottom function
+  const scrollToBottom = () => {
+    if (responseContainerRef.current) {
+      responseContainerRef.current.scrollTop = responseContainerRef.current.scrollHeight;
+    }
+  };
+
+  // Check scroll position and show/hide scroll button
+  const handleScroll = () => {
+    if (responseContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = responseContainerRef.current;
+      // Show button if not at bottom (with some margin)
+      const isNotAtBottom = scrollHeight - scrollTop - clientHeight > 50;
+      setShowScrollToBottom(isNotAtBottom);
+    }
+  };
+  
+  // Always scroll to bottom when component mounts or becomes visible
+  useEffect(() => {
+    // Scroll to bottom when component mounts
+    scrollToBottom();
+    
+    // Set up resize observer to handle layout changes
+    const resizeObserver = new ResizeObserver(() => {
+      scrollToBottom();
+    });
+    
+    if (responseContainerRef.current) {
+      resizeObserver.observe(responseContainerRef.current);
+      responseContainerRef.current.addEventListener('scroll', handleScroll);
+    }
+    
+    return () => {
+      if (responseContainerRef.current) {
+        resizeObserver.unobserve(responseContainerRef.current);
+        responseContainerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
+  // Scroll to bottom whenever tab becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Small delay to ensure DOM is rendered
+        setTimeout(scrollToBottom, 50);
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    // When messages change, scroll to bottom
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = async () => {
     callChatGPT(gptInputQuery);
@@ -21,23 +90,39 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
 
     const newMessage = { role: 'user', content: prompt };
     const updatedMessages = [...messages, newMessage, { role: 'assistant', content: "Loading response..." }];
+    
+    // Update local state
     setMessages(updatedMessages);
+    
+    // Immediately notify parent component
     onSaveMessages(updatedMessages);
+    
     setGptInputQuery('');
 
     try {
       const response = await doOpenAICall([{ role: 'user', content: prompt }]);
       const assistantMessage = { role: 'assistant', content: response.choices[0].message.content };
       const finalMessages = [...updatedMessages.slice(0, -1), assistantMessage];
+      
+      // Update local state
       setMessages(finalMessages);
+      
+      // Immediately notify parent component
       onSaveMessages(finalMessages);
     } catch (error) {
       const errorMessage = { role: 'assistant', content: "Error: " + error.message };
       const errorMessages = [...updatedMessages.slice(0, -1), errorMessage];
+      
+      // Update local state
       setMessages(errorMessages);
+      
+      // Immediately notify parent component
       onSaveMessages(errorMessages);
     }
-  }
+    
+    // Scroll to bottom after new message
+    setTimeout(scrollToBottom, 100);
+  };
 
   useEffect(() => {
     if (passedPrompt !== '') {
@@ -63,17 +148,6 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
   };
 
   const handleSuggestionClick = (suggestion: string, suggestionGroup: string) => {
-    // if (suggestion.includes('code') && suggestionGroup !== 'code') {
-    //   suggestion = `Explain the following code:\n\n${wrapInBackticks(code)}`;
-    // } else if (suggestion.includes('graph')) {
-    //   Object.keys(graphs).forEach(graph => {
-    //     suggestion = suggestion.replace(`Explain the following graph (${graph}):\n\n${graphs[graph]}`, `Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`);
-    //   });
-    // } else if (suggestion.includes('terminal')) {
-    //   suggestion = `Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`;
-    // } else if (suggestion.includes('LLVM IR')) {
-    //   suggestion = `Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`;
-    // }
     setGptInputQuery(suggestion);
   };
 
@@ -82,27 +156,27 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
     onSaveMessages([]);
   };
 
+  const renderMessageContent = (content: string, role: string) => {
+    const codeBlockRegex = /```([\s\S]*?)```/g;
+    const parts = content.split(codeBlockRegex);
 
-const renderMessageContent = (content: string, role: string) => {
-  const codeBlockRegex = /```([\s\S]*?)```/g;
-  const parts = content.split(codeBlockRegex);
+    return (
+      <div className={styles[role === 'user' ? 'userMessage' : 'assistantMessage']}>
+        {parts.map((part, index) => {
+          if (index % 2 === 1) { // Code block
+            return (
+              <SyntaxHighlighter key={index} language="c" style={syntaxStyle} className={styles.syntaxHighlighter}>
+                {part.trim()}
+              </SyntaxHighlighter>
+            );
+          }
+          return <span key={index} style={{ whiteSpace: 'pre-wrap' }}>{part}</span>; // Regular text with role-based styling
+        })}
+      </div>
+    );
+  };
 
-  return (
-    <div className={styles[role === 'user' ? 'userMessage' : 'assistantMessage']}>
-      {parts.map((part, index) => {
-        if (index % 2 === 1) { // Code block
-          return (
-            <SyntaxHighlighter key={index} language="c" style={syntaxStyle} className={styles.syntaxHighlighter}>
-              {part.trim()}
-            </SyntaxHighlighter>
-          );
-        }
-        return <span key={index} style={{ whiteSpace: 'pre-wrap' }}>{part}</span>; // Regular text with role-based styling
-      })}
-    </div>
-  );
-};
-
+  // Existing renderSuggestions function (no changes)
   const renderSuggestions = () => {
     switch (suggestionCategory) {
       case 'code':
@@ -188,7 +262,11 @@ const renderMessageContent = (content: string, role: string) => {
           <RefreshIcon />
         </button>
       </div>
-      <div className={styles.codegptResponse}>
+      <div 
+        className={styles.codegptResponse} 
+        ref={responseContainerRef}
+        onScroll={handleScroll}
+      >
         {messages.map((message, index) => (
           <div key={index} className={`${styles.message} ${styles[message.role]}`}>
             {message.role === 'assistant' && <div className={styles.assistantLabel}>CodeGPT</div>}
@@ -196,6 +274,18 @@ const renderMessageContent = (content: string, role: string) => {
           </div>
         ))}
       </div>
+      
+      {/* Scroll to bottom button */}
+      {showScrollToBottom && (
+        <button 
+          className={styles.scrollToBottomButton} 
+          onClick={scrollToBottom}
+          title="Jump to bottom"
+        >
+          <KeyboardDoubleArrowDownIcon />
+        </button>
+      )}
+
       <div className={styles.stickyContainer}>
         <div className={styles.suggestionCategory}>
           <button
@@ -242,7 +332,7 @@ const renderMessageContent = (content: string, role: string) => {
             ref={buttonRef}
             title="Submit"
           >
-            ↑
+            Enter
           </button>
         </div>
       </div>
