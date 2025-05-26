@@ -288,50 +288,6 @@ function GraphsPage() {
     }
   };
 
-//   const handleSessionSelect = (sessionId: string) => {
-//     // Make sure to save the current session's state before switching
-//     if (currentSessionId) {
-//       const updatedSession = {
-//         code,
-//         selectedCompileOptions,
-//         selectedExecutableOptions,
-//         lineNumDetails,
-//         graphs,
-//         terminalOutput: terminalOutputString,
-//         llvmIR: llvmIRString,
-//         savedMessages,
-//         currentOutput,
-//         lineNumToHighlight: Array.from(lineNumToHighlight),
-//         tabPositions
-//       };
-      
-//       SessionManager.updateSession(currentSessionId, updatedSession);
-//     }
-
-//     // Then load the selected session
-//   const session = SessionManager.getSession(sessionId);
-//   if (session) {
-//     setCurrentSessionId(sessionId);
-    
-//     // Load all session data at once
-//     setCode(session.code || '');
-//     setSelectedCompileOptions(session.selectedCompileOptions || []);
-//     setSelectedExecutableOptions(session.selectedExecutableOptions || []);
-//     setLineNumDetails(session.lineNumDetails || {});
-//     setGraphs(session.graphs || {});
-//     setTerminalOutputString(session.terminalOutput || 'Run the code to see the terminal output here');
-//     setllvmIRString(session.llvmIR || 'Run the code to see the LLVM IR of your here');
-//     setSavedMessages(session.savedMessages || []);
-//     setCurrentOutput(session.currentOutput || 'Graph');
-//     setlineNumToHighlight(new Set(session.lineNumToHighlight || []));
-//     setTabPositions(session.tabPositions || {
-//       Graph: 'main',
-//       'Terminal Output': 'main',
-//       CodeGPT: 'main',
-//       LLVMIR: 'main',
-//     });
-//   }
-// };
 
 const handleSessionSelect = (sessionId: string) => {
   // Save current session
