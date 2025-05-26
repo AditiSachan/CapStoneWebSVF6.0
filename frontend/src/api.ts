@@ -29,7 +29,7 @@ const requestBody = {
 
 // return sampleResponse3;
 // Perform the fetch request
-return await fetch('api/proxy', {
+return await fetch(url, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'

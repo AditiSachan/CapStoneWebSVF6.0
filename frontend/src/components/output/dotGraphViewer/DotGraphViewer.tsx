@@ -3,10 +3,8 @@ import { graphviz } from "d3-graphviz";
 import { Graphviz } from "graphviz-react";
 import * as d3 from 'd3';
 import './dotGraphViewer.css';
+import GraphButton from "../../tooltip/GraphButton";
 // import NodeSelectedLookup from "../../nodeSelectedLookup/NodeSelectedLookup";
-
-
-
 
 interface DotGraphViewerProps {
   dotGraphString: string;
@@ -17,8 +15,7 @@ interface DotGraphViewerProps {
   setLineNumDetails: (newLineNumDetails: { [lineNum: string]: { nodeOrllvm: string[], colour: string } }) => void;
   currCodeLineNum: number;
   code: string;
-
-
+ setPassedPrompt?: (prompt: string) => void;
 }
 
 // These are the colours that will be used for the background of the nodes and highlight colour for the code editor
@@ -33,6 +30,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
   setLineNumDetails,
   currCodeLineNum,
   code,
+  setPassedPrompt
 }) => {
 
   /*  currentGraph holds the name of the current graph
@@ -588,13 +586,13 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
         <div id="graph-button-container">
         {
           Object.keys(graphObj).map((graphKey) => (
-            
-            <button 
-              className={`graph-button ${currentGraph === graphKey ? 'selected' : ''}`}  
-              key={graphKey} 
-              onClick={() => graphBtnClick(graphKey)}>
-                {graphKey.replace(/\.dot$/, '')}
-            </button>
+           <GraphButton
+              key={graphKey}
+              graphKey={graphKey}
+              isSelected={currentGraph === graphKey}
+              onClick={() => graphBtnClick(graphKey)}
+              setPassedPrompt={setPassedPrompt}
+            />
           ))
         }
         </div>

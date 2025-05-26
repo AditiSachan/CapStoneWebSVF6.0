@@ -1,28 +1,24 @@
-// optionTypes.ts - Extended option types with description property
+// optionTypes.ts - Updated with toolType utility
 import { GroupBase } from 'react-select';
 
-// Extend the base option type to include descriptions
 export interface OptionWithDescription {
   value: string;
   label: string;
   description?: string;
 }
 
-// Type for compile options with descriptions
 export interface CompileOption extends OptionWithDescription {
   value: string;
   label: string;
   description?: string;
 }
 
-// Type for executable options with descriptions
 export interface ExecutableOption extends OptionWithDescription {
   value: string;
   label: string;
   description?: string;
 }
 
-// Helper function to add descriptions to options
 export function addDescriptionsToOptions<T extends { value: string; label: string }>(
   options: T[],
   descriptions: Record<string, string>
@@ -32,3 +28,15 @@ export function addDescriptionsToOptions<T extends { value: string; label: strin
     description: descriptions[option.value] || undefined
   }));
 }
+
+// Utility function to determine tool type from executable name
+export const getToolType = (executableName: string): 'mta' | 'saber' | 'ae' | undefined => {
+  if (!executableName) return undefined;
+  
+  const name = executableName.toLowerCase();
+  if (name.includes('mta') || name.includes('multi-thread')) return 'mta';
+  if (name.includes('saber')) return 'saber';
+  if (name.includes('ae') || name.includes('abstract')) return 'ae';
+  
+  return undefined;
+};
