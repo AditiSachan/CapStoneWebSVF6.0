@@ -64,21 +64,6 @@ namespace api.Controllers
             };
 
             return Ok(result);
-
-            //send a post request
-            // var request = (HttpWebRequest)WebRequest.Create("http://3.142.95.238/svf");
-            // request.Method = "POST";
-            // request.ContentType = "application/json";
-            // var json = JsonConvert.SerializeObject(requestBody);
-            // var data = Encoding.UTF8.GetBytes(json);
-            // using (var stream = await request.GetRequestStreamAsync())
-            // {
-            //     stream.Write(data, 0, data.Length);
-            // }
-            // var response = (HttpWebResponse)await request.GetResponseAsync();
-            // var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            // var result = JsonConvert.DeserializeObject<SvfResult>(responseString);
-            // return Ok(result);
             
         }
 
@@ -104,32 +89,6 @@ namespace api.Controllers
             await System.IO.File.WriteAllTextAsync("analyzeBcFile.sh", executablesScript);
 
         }
-        // // Launches Script that does compiles the C code into LLVM using clang
-        // private async static Task<api.models.ScriptOutput> LaunchScriptClang()
-        // {
-        //     string command = "sh";
-        //     string argss = "createLLVM.sh";
-        //     string verb = " ";
-
-        //     ProcessStartInfo procInfo = new ProcessStartInfo();
-        //     procInfo.WindowStyle = ProcessWindowStyle.Normal;
-        //     procInfo.UseShellExecute = false;
-        //     procInfo.FileName = command;   // 'sh' for bash 
-        //     procInfo.Arguments = argss;        // The Script name 
-        //     procInfo.Verb = verb;                // ------------
-        //     procInfo.RedirectStandardOutput = true;
-        //     procInfo.RedirectStandardError = true;
-
-        //     var p = new Process();
-        //     p.StartInfo = procInfo;
-        //     p.Start();
-        //     // string output = p.StandardOutput.ReadToEnd();
-        //     string error = p.StandardError.ReadToEnd();
-        //     p.WaitForExit();
-        //     // await WaitForExitAsync(Process.Start(procInfo), new TimeSpan(0, 0, 30));// Start that process.
-        //     //return !String.IsNullOrWhiteSpace(error) ? error : output;
-        //     return error;
-        // }
 
         private async static Task<api.models.ScriptOutput> LaunchScript(string scriptFileName)
         {

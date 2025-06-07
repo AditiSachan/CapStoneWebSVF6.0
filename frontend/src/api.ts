@@ -1,24 +1,6 @@
 const submitCodeFetch = async (code: string, compileOptions: string, executables: string[]) => {
   
-  // try {
-  //   const response = await fetch('/your-endpoint', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ code }),
-  //   });
-  //   if (!response.ok) {
-  //     throw new Error(`Error: ${response.statusText}`);
-  //   }
-  //   return await response.json();
-  // } catch (error) {
-  //   console.error('Error:', error);
-  //   throw error;
-  // }
-  // Define the URL of the API endpoint
-// const url = 'https://api-morning-fog-5849.fly.dev/api/controller';
-const url = 'https://api-spring-cloud-3523.fly.dev/';
+const url = 'https://api-morning-fog-5849.fly.dev/api/controller';
 
 // Define the request body
 const requestBody = {

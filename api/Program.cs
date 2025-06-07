@@ -13,6 +13,7 @@ builder.Services.AddCors(options =>
             "http://localhost:5173",
             "https://websvf-comp6131.vercel.app/",
             "https://capstonewebsvf-5-0-aditi.vercel.app"
+
             ) // Change this to your frontend's URL
             .AllowAnyHeader()
             .AllowAnyMethod());
