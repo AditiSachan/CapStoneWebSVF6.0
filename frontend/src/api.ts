@@ -1,6 +1,6 @@
 const submitCodeFetch = async (code: string, compileOptions: string, executables: string[]) => {
   
-const url = 'https://api-morning-fog-5849.fly.dev/api/controller';
+const url = 'https://api-broken-moon-5814.fly.dev/api/controller';
 
 // Define the request body
 const requestBody = {
