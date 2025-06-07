@@ -75,20 +75,20 @@ namespace api.Controllers
         private static async Task SetCompileOptions(RequestBody requestBody)
         {
             var clangScript = "clang " + requestBody.CompileOptions + " example.c -o example.ll";
-            var executablesScript = "./svf-ex example.ll";
+            var executablesScript = "/home/SVF-tools/SVF/Release-build/bin/svf-ex example.ll";
 
             if (requestBody.ExtraExecutables != null)
             {
                 foreach (var executable in requestBody.ExtraExecutables)
                 {
-                    executablesScript += $"\n./SVF/Release-build/bin/{executable} example.ll";
+                    executablesScript += $"\n/home/SVF-tools/SVF/Release-build/bin/{executable} example.ll";
                 }
             }
 
             await System.IO.File.WriteAllTextAsync("createLLVM.sh", clangScript);
             await System.IO.File.WriteAllTextAsync("analyzeBcFile.sh", executablesScript);
-
         }
+
 
         private async static Task<api.models.ScriptOutput> LaunchScript(string scriptFileName)
         {
