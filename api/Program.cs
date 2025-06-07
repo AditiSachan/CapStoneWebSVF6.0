@@ -9,9 +9,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:5173") // Change this to your frontend's URL
-                          .AllowAnyHeader()
-                          .AllowAnyMethod());
+        builder => builder.WithOrigins(
+            "http://localhost:5173",
+            "https://websvf-comp6131.vercel.app/",
+            "https://capstonewebsvf-5-0-aditi.vercel.app"
+
+            ) // Change this to your frontend's URL
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 });
 
 var app = builder.Build();
