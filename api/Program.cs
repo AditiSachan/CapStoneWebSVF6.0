@@ -11,11 +11,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder => builder.WithOrigins(
             "http://localhost:5173",
-            "https://capstonewebsvf-5-0-aditi.vercel.app",
-            "https://capstonewebsvf-5-0-aditi-git-aditisachan-aditisachans-projects.vercel.app",
-            "https://capstonewebsvf-5-0-aditi-aditisachans-projects.vercel.app",
-            "https://capstonewebsvf-5-0-aditi-git-main-aditisachans-projects.vercel.app"
-
+            "https://websvf-comp6131.vercel.app/",
+            "https://capstonewebsvf-5-0-aditi.vercel.app"
             ) // Change this to your frontend's URL
             .AllowAnyHeader()
             .AllowAnyMethod());
