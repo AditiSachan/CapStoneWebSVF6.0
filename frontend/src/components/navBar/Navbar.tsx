@@ -28,11 +28,7 @@ function Navbar({ openShare }: { openShare: () => void }) {
 
         {/* Theme Toggle Switch */}
         <label className="theme-toggle">
-          <input
-            type="checkbox"
-            checked={theme === 'dark'}
-            onChange={toggleTheme}
-          />
+          <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} />
           <span className="theme-slider"></span>
         </label>
       </div>

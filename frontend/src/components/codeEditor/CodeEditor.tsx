@@ -8,40 +8,59 @@ interface CodeEditorProps {
   code: string;
   setCode: (code: string) => void;
   lineNumToHighlight: Set<number>;
-  lineNumDetails: { [key: string]: { nodeOrllvm: string[], colour: string } };
+  lineNumDetails: { [key: string]: { nodeOrllvm: string[]; colour: string } };
   setCurrCodeLineNum: (lineNum: number) => void;
-  codeError : string[];
+  codeError: string[];
   setPassedPrompt: (prompt: string) => void;
 }
 
-const highlightColours = ['d9f0e9', 'ffffe3', 'e9e8f1', 'ffd6d2', 'd4e5ee', 'd5e4ef', 'ffe5c9', 'e5f4cd', 'f2f2f0', 'e9d6e7', 'edf8ea', 'fff8cf'];
+const highlightColours = [
+  'd9f0e9',
+  'ffffe3',
+  'e9e8f1',
+  'ffd6d2',
+  'd4e5ee',
+  'd5e4ef',
+  'ffe5c9',
+  'e5f4cd',
+  'f2f2f0',
+  'e9d6e7',
+  'edf8ea',
+  'fff8cf',
+];
 
-
-const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighlight, lineNumDetails, setCurrCodeLineNum, codeError, setPassedPrompt}) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  code,
+  setCode,
+  lineNumToHighlight,
+  lineNumDetails,
+  setCurrCodeLineNum,
+  codeError,
+  setPassedPrompt,
+}) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [fontSize, setFontSize] = useState(16);
   const [decorations, setDecorations] = useState<string[]>([]);
   const [oldHighlight, setOldHighlight] = useState<Set<number>>(new Set<number>());
-  const [decorationCollection, setDecorationsCollection] = useState<monaco.editor.IEditorDecorationsCollection | null>(null);
+  const [decorationCollection, setDecorationsCollection] =
+    useState<monaco.editor.IEditorDecorationsCollection | null>(null);
   const decorationsRef = useRef(null);
   const [editorKey, setEditorKey] = useState(0); // State variable for the key
-  
+
   // This ref is used to ensure that only one Ask codeGPT action appears for quickfix
   // We clear it before adding new quickFix ask codeGPT action
   const codeActionProviderRef = useRef<monaco.IDisposable | null>(null);
 
-
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
-    const model = monaco.editor.createModel(code, 'c', monaco.Uri.parse('inmemory://test_script')
-  );
+    const model = monaco.editor.createModel(code, 'c', monaco.Uri.parse('inmemory://test_script'));
     editor.setModel(model);
     decorationsRef.current = editor.createDecorationsCollection();
     setDecorationsCollection(editor.createDecorationsCollection());
-    editor.updateOptions({ 
+    editor.updateOptions({
       fontSize: fontSize,
       renderValidationDecorations: 'on',
-     });
+    });
     monaco.languages.register({ id: 'c' });
 
     monaco.languages.setLanguageConfiguration('c', {});
@@ -52,11 +71,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
     });
 
     // Sets the current line number when the cursor position changes
-    editor.onDidChangeCursorPosition((event) => {
+    editor.onDidChangeCursorPosition(event => {
       const lineNum = event.position.lineNumber;
       setCurrCodeLineNum(lineNum);
     });
-    const markers  = applyMarkers();
+    const markers = applyMarkers();
     monaco.editor.setModelMarkers(model, 'c', markers);
     // editor.updateOptions({
     //   lightbulb: {
@@ -64,12 +83,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
     //   },
     // });
 
-
     // Register the ask code gpt command
     monaco.editor.registerCommand('askCodeGPTCommand', (accessor, ...args) => {
       const [uri, range, problemMessage, lineCode] = args;
       askCodeGPT(uri, range, problemMessage, lineCode);
-    })
+    });
     // Dispose of the previous code action provider if it exists
     // This prevents adding multiple ask codeGPT action into quick fix
     if (codeActionProviderRef.current) {
@@ -79,80 +97,102 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
     codeActionProviderRef.current = monaco.languages.registerCodeActionProvider('c', {
       provideCodeActions: (model, range, context, token) => {
         const markers = monaco.editor.getModelMarkers({ resource: model.uri });
-        const relevantMarker = markers.find(marker => marker.startLineNumber === range.startLineNumber);
-    
+        const relevantMarker = markers.find(
+          marker => marker.startLineNumber === range.startLineNumber
+        );
+
         if (!relevantMarker) {
           return { actions: [], dispose: () => {} };
-        }        
+        }
         const quickFix = {
-          title: "Ask CodeGPT",
+          title: 'Ask CodeGPT',
           diagnostics: [relevantMarker],
-          kind: "quickfix",
+          kind: 'quickfix',
           command: {
             id: 'askCodeGPTCommand',
-            title: "Ask CodeGPT",
-            arguments: [model.uri, range, relevantMarker.message, model.getLineContent(relevantMarker.startLineNumber)], // Pass message and line code
+            title: 'Ask CodeGPT',
+            arguments: [
+              model.uri,
+              range,
+              relevantMarker.message,
+              model.getLineContent(relevantMarker.startLineNumber),
+            ], // Pass message and line code
           },
           isPreferred: true,
         };
-        
+
         return {
           actions: [quickFix],
           dispose: () => {},
         };
-
       },
     });
-
   };
 
-
-  // useEffect(() => {
-  //   if (editorRef.current) {
-  //     const model = editorRef.current.getModel();
-  //     if (model && model.getValue() !== code) {
-  //       console.log('setting code to', code);
-  //       model.setValue(code);
-  //     }
-  //     setEditorKey(prevKey => prevKey + 1);
-
-  //   }
-  // }, [code]);
-  const askCodeGPT = (uri: monaco.Uri, range: monaco.Range, problemMessage: string, lineCode: string) => {
+  const askCodeGPT = (
+    uri: monaco.Uri,
+    range: monaco.Range,
+    problemMessage: string,
+    lineCode: string
+  ) => {
     // Additional logic for handling the problem message and code line
     let prompt = '```' + code + '```';
-    if (problemMessage.includes("CLANG:")) {
-      prompt = prompt + '\n In my code, I received an error message of "' + problemMessage + '" for the line of code ```' + lineCode + ' ```when compiling my code with clang. ';
-    } else if (problemMessage.includes("MEMORY LEAK:")) {
-      prompt = prompt + '\n In my code, I received a memory leak error message of "' + problemMessage + '" for the line of code ```' + lineCode + '```. ';
-    } else if (problemMessage.includes("BUFFER OVERFLOW:")) {
-      prompt = prompt + '\n In my code, I received a buffer overflow message of "' + problemMessage + '" for the line of code ```' + lineCode + '```. ';
+    if (problemMessage.includes('CLANG:')) {
+      prompt =
+        prompt +
+        '\n In my code, I received an error message of "' +
+        problemMessage +
+        '" for the line of code ```' +
+        lineCode +
+        ' ```when compiling my code with clang. ';
+    } else if (problemMessage.includes('MEMORY LEAK:')) {
+      prompt =
+        prompt +
+        '\n In my code, I received a memory leak error message of "' +
+        problemMessage +
+        '" for the line of code ```' +
+        lineCode +
+        '```. ';
+    } else if (problemMessage.includes('BUFFER OVERFLOW:')) {
+      prompt =
+        prompt +
+        '\n In my code, I received a buffer overflow message of "' +
+        problemMessage +
+        '" for the line of code ```' +
+        lineCode +
+        '```. ';
     } else {
-      prompt = prompt + '\n In my code, I received an error message of "' + problemMessage + '" for the line of code ``` ' + lineCode + '```. ';
+      prompt =
+        prompt +
+        '\n In my code, I received an error message of "' +
+        problemMessage +
+        '" for the line of code ``` ' +
+        lineCode +
+        '```. ';
     }
-    prompt = prompt + 'Can you explain why I have this error and how to solve this issue?'
+    prompt = prompt + 'Can you explain why I have this error and how to solve this issue?';
     setPassedPrompt(prompt);
   };
   // Adds the red squigly line on the code editor indicating an error or warning to line of code
-  const applyMarkers = ():monaco.editor.IMarkerData[] => {
+  const applyMarkers = (): monaco.editor.IMarkerData[] => {
     monaco.languages.register({ id: 'c' });
 
     monaco.languages.setLanguageConfiguration('c', {
       // Ensure C language supports diagnostics markers
     });
-    if (editorRef.current && codeError.length !== 0 ) {
+    if (editorRef.current && codeError.length !== 0) {
       const model = editorRef.current.getModel();
       // Clear any previous markers
       monaco.editor.setModelMarkers(model, 'c', []);
-      
+
       const lnRegex = /ln:\s*(\d+)/g;
       const lnJsonRegex = /ln":\s*(\d+)/g;
       const clRegex = /cl:\s*(\d+)/g;
       const lnRegexcl = /ln:\s*(\d+)\s*cl:\s*(\d+)/;
       const quotedRegex = /"ln":\s*(\d+),\s*"cl":\s*(\d+)/;
       const clangRegex = /example.c:(\d+):(\d+)/;
-      let markers: monaco.editor.IMarkerData[] = []
-      codeError.map((error) => {
+      const markers: monaco.editor.IMarkerData[] = [];
+      codeError.map(error => {
         let match;
         let lnNum = 0;
         let clNum = 1;
@@ -187,66 +227,64 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
             endColumn: model.getLineLength(lnNum) + 1,
             message: error,
             severity: monaco.MarkerSeverity.Error,
-          })
+          });
         }
-      })
+      });
       return markers;
     }
     return [];
-  }
+  };
 
-  const memoryLeakError = (errorMsg:string) => {
+  const memoryLeakError = (errorMsg: string) => {
     const lnRegex = /ln:\s*(\d+)/g;
-      const lnJsonRegex = /ln":\s*(\d+)/g;
-      const clRegex = /cl:\s*(\d+)/g;
-      let match;
-      let lnNum = 0;
-      let clNum = 1;
+    const lnJsonRegex = /ln":\s*(\d+)/g;
+    const clRegex = /cl:\s*(\d+)/g;
+    let match;
+    let lnNum = 0;
+    let clNum = 1;
 
-      match = errorMsg.match(lnRegex);
-      if (match) {
-        const lineAndNum = match[0].split(' ');
-        lnNum = parseInt(lineAndNum[1], 10);
-      }
+    match = errorMsg.match(lnRegex);
+    if (match) {
+      const lineAndNum = match[0].split(' ');
+      lnNum = parseInt(lineAndNum[1], 10);
+    }
 
-      match = errorMsg.match(clRegex);
-      if (match) {
-        const lineAndNum = match[0].split(' ');
-        clNum = parseInt(lineAndNum[1], 10);
-      }
-      return {
-        'lineNum': lnNum,
-        'columnNum': clNum,
-      }
-  }
+    match = errorMsg.match(clRegex);
+    if (match) {
+      const lineAndNum = match[0].split(' ');
+      clNum = parseInt(lineAndNum[1], 10);
+    }
+    return {
+      lineNum: lnNum,
+      columnNum: clNum,
+    };
+  };
 
   useEffect(() => {
     if (editorRef.current) {
       const model = editorRef.current.getModel();
       if (model) {
         // model.onDidChangeContent(() => {
-          const markers = applyMarkers();
-          monaco.editor.setModelMarkers(model, 'c', markers);
-          setEditorKey(prevKey => prevKey + 1);
+        const markers = applyMarkers();
+        monaco.editor.setModelMarkers(model, 'c', markers);
+        setEditorKey(prevKey => prevKey + 1);
 
         // });
       }
     }
-    
   }, [codeError]);
 
   // Used to detect for any changes in code
   // This is needed for when lz string compression calls setcode
-  useEffect(() => {    
+  useEffect(() => {
     if (editorRef.current) {
       const model = editorRef.current.getModel();
       if (model && model.getValue() !== code) {
         model.setValue(code);
         setEditorKey(prevKey => prevKey + 1);
       }
-    } 
+    }
   }, [code, editorRef.current]);
-
 
   useEffect(() => {
     if (decorationsRef !== null && decorationsRef.current !== null) {
@@ -261,15 +299,12 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
             options: {
               isWholeLine: true,
               inlineClassName: `line-decoration-text-${colour}`,
-            }
-          }
+            },
+          };
           if (editorRef.current) {
-
             // editorRef.current.setPosition({lineNumber: parseInt(lineNum), column: 1})
             editorRef.current.revealLine(parseInt(lineNum));
           }
-
-  
         } else {
           decoration = {
             range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
@@ -279,7 +314,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
             },
           };
         }
-        
+
         newDecorations.push(decoration);
       }
       decorationsRef.current.set(newDecorations);
@@ -304,7 +339,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({code, setCode, lineNumToHighligh
       // oldLineHighlights.add(parseInt(lineNum));
       decorationsRef.current.set(newDecorations);
     }
-    }, [lineNumDetails]);
+  }, [lineNumDetails]);
 
   /*
   d9f0e9
@@ -353,14 +388,14 @@ d5f1ec
     `;
     document.head.appendChild(style);
   }, []);
-  console.log('code in editor is ', code);
 
   const [theme, setTheme] = useState<'vs-light' | 'vs-dark'>('vs-light'); // Theme state for Monaco Editor
 
   // Effect to handle dynamic theme changes based on the `data-theme` attribute
   useEffect(() => {
     const updateTheme = () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs-light';
+      const currentTheme =
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs-light';
       setTheme(currentTheme);
     };
 
@@ -369,32 +404,31 @@ d5f1ec
 
     // Listen for changes to the data-theme attribute
     const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
 
     return () => observer.disconnect(); // Cleanup observer on unmount
   }, []);
 
-
   return (
     <>
-    <div>
-      <div id='codeEditor-fontSize-container'>
-        <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize}/>
+      <div>
+        <div id="codeEditor-fontSize-container">
+          <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize} />
+        </div>
+        <Editor
+          key={editorKey}
+          height="90vh"
+          language="c"
+          theme={theme}
+          value={code}
+          onMount={handleEditorDidMount}
+          options={{ fontSize: fontSize }}
+        />
       </div>
-      <Editor
-        key={editorKey}
-        height="90vh"
-        language="c"
-        theme={theme}
-        value={code}
-        onMount={handleEditorDidMount}
-        options={{ fontSize: fontSize }}
-      />
-
-    </div>
-
     </>
-    
   );
 };
 

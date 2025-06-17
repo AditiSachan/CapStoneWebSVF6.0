@@ -19,7 +19,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   title,
   message,
   onConfirm,
-  onCancel
+  onCancel,
 }) => {
   return (
     <Dialog
@@ -30,9 +30,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {message}
-        </DialogContentText>
+        <DialogContentText id="alert-dialog-description">{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>Cancel</Button>

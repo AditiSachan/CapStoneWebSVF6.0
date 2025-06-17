@@ -9,18 +9,25 @@ import './llvmir.css';
 interface LLVMIRProps {
   LLVMIRString: string;
   code: string;
-  lineNumDetails: { [codeLineNum: string]: { nodeOrllvm: string[], colour: string } };
-  setLineNumDetails: (newLineNumDetails: { [codeLineNum: string]: { nodeOrllvm: string[], colour: string } }) => void;
+  lineNumDetails: { [codeLineNum: string]: { nodeOrllvm: string[]; colour: string } };
+  setLineNumDetails: (newLineNumDetails: {
+    [codeLineNum: string]: { nodeOrllvm: string[]; colour: string };
+  }) => void;
 }
 
 interface lineNumDetails {
   [codeLineNum: string]: {
-    nodeOrllvm: string[],
-    colour: string
-  }
+    nodeOrllvm: string[];
+    colour: string;
+  };
 }
 
-const LLVMIR: React.FC<LLVMIRProps> = ({LLVMIRString, code, lineNumDetails, setLineNumDetails}) => {
+const LLVMIR: React.FC<LLVMIRProps> = ({
+  LLVMIRString,
+  code,
+  lineNumDetails,
+  setLineNumDetails,
+}) => {
   const [fontSize, setFontSize] = useState(16);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   // const [decorations, setDecorations] = useState<string[]>([]);
@@ -77,15 +84,12 @@ const LLVMIR: React.FC<LLVMIRProps> = ({LLVMIRString, code, lineNumDetails, setL
   // }, []);
 
   // const highlightLineNum = (lineNumDetails: lineNumDetails) => {
-  //   console.log('highlightLineNum');
-  //   console.log(lineNumDetails);
   //   if (decorationsRef !== null && decorationsRef.current !== null) {
   //     const newDecorations = [];
 
   //     for (const lineNum in lineNumDetails) {
-  //       console.log('lineNum ', lineNum);
+
   //       for (let i = 0; i < lineNumDetails[lineNum]['nodeOrllvm'].length; i++) {
-  //         console.log('llvmLinenum ', lineNumDetails[lineNum]['nodeOrllvm'][i]);
   //         const llvmLineNum = lineNumDetails[lineNum]['nodeOrllvm'][i];
   //         const colour = lineNumDetails[lineNum]['colour'].slice(1).toLowerCase();
   //         const decoration = {
@@ -96,10 +100,9 @@ const LLVMIR: React.FC<LLVMIRProps> = ({LLVMIRString, code, lineNumDetails, setL
   //             },
   //         };
   //         newDecorations.push(decoration);
-  //       }        
+  //       }
   //     }
   //     // oldLineHighlights.add(parseInt(lineNum));
-  //     console.log('decorations', newDecorations);
 
   //     decorationsRef.current.set(newDecorations);
   //   }
@@ -118,28 +121,30 @@ const LLVMIR: React.FC<LLVMIRProps> = ({LLVMIRString, code, lineNumDetails, setL
 
     // Listen for theme changes
     const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
 
     return () => observer.disconnect();
   }, []);
- 
+
   return (
     <>
-    <div>
-      <div id='llvmir-fontSize-container'>
-        <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize}/>
+      <div>
+        <div id="llvmir-fontSize-container">
+          <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize} />
+        </div>
+        <Editor
+          height="90vh"
+          language="llvm-ir"
+          theme={theme}
+          value={LLVMIRString}
+          onMount={handleEditorDidMount}
+          options={{ fontSize: fontSize }}
+        />
       </div>
-      <Editor
-        height="90vh"
-        language='llvm-ir'
-        theme={theme}
-        value={LLVMIRString}
-        onMount={handleEditorDidMount}
-        options={{ fontSize: fontSize }}
-      />
-    </div>
     </>
-    
   );
 };
 

@@ -1,44 +1,57 @@
-const highlightColours = ['#D9F0E9', '#FFFFE3', '#E9E8F1', '#FFD6D2', '#D4E5EE', '#D5E4EF', '#FFE5C9', '#E5F4CD', '#F2F2F0', '#E9D6E7', '#EDF8EA', '#FFF8CF'];
+const highlightColours = [
+  '#D9F0E9',
+  '#FFFFE3',
+  '#E9E8F1',
+  '#FFD6D2',
+  '#D4E5EE',
+  '#D5E4EF',
+  '#FFE5C9',
+  '#E5F4CD',
+  '#F2F2F0',
+  '#E9D6E7',
+  '#EDF8EA',
+  '#FFF8CF',
+];
 
 interface lineNumDetails {
   [codeLineNum: string]: {
-    nodeOrllvm: string[],
-    colour: string
-  }
+    nodeOrllvm: string[];
+    colour: string;
+  };
 }
 
 export const llvmHighlight = (codeByLine: string[], llvmIRByLine: string[]) => {
   let llvmIndex: number = 0;
-  let highlightDetails: lineNumDetails = {};
+  const highlightDetails: lineNumDetails = {};
   let highlightColourIndex: number = 0;
-  console.log('llvmHighlight');
 
   for (let i = 0; i < codeByLine.length; i++) {
-    const codeLine:string = codeByLine[i];
+    const codeLine: string = codeByLine[i];
     // Checks if the line is a return statement
     // Looks for a return with a space after it
     if (codeLine.match(/return\s+\w+;/)) {
-      console.log(codeLine, i+1);
       llvmIndex = findReturn(codeByLine, llvmIRByLine, i, llvmIndex);
-      highlightDetails[i + 1] =  {
+      highlightDetails[i + 1] = {
         nodeOrllvm: [llvmIndex.toString()],
-        colour: highlightColours[highlightColourIndex % highlightColours.length]
-      }
+        colour: highlightColours[highlightColourIndex % highlightColours.length],
+      };
       highlightColourIndex++;
-
-
     }
   }
   return highlightDetails;
-}
+};
 
-const findReturn = (codeByLine: string [], llvmIRByLine: string[], codeIndex: number, llvmIndex: number) => {
+const findReturn = (
+  codeByLine: string[],
+  llvmIRByLine: string[],
+  codeIndex: number,
+  llvmIndex: number
+) => {
   // Look for return statements in llvm
   // return statement regex is space after ret then space
   for (let i = llvmIndex; i < llvmIRByLine.length; i++) {
-    const llvmLine:string = llvmIRByLine[i];
+    const llvmLine: string = llvmIRByLine[i];
     if (llvmLine.match(/^\s+ret\s+/)) {
-      console.log('in find return we found',llvmLine, i+1);
       return i + 1;
       // Highlight the return statement
       // Highlight the code line
@@ -46,6 +59,5 @@ const findReturn = (codeByLine: string [], llvmIRByLine: string[], codeIndex: nu
       // Highlight the return statement
     }
   }
-  return llvmIndex
-  console.log('return not found');
-}
+  return llvmIndex;
+};

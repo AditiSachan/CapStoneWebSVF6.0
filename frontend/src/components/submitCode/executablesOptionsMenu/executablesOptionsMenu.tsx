@@ -4,7 +4,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import CustomOption from '../../tooltip/customOption';
 import CustomMultiValueLabel from '../../tooltip/customMultiValueLabel';
-import { executableOptionDescriptions, addDescriptionsToOptions } from '../../tooltip/tooltipDescriptions';
+import {
+  executableOptionDescriptions,
+  addDescriptionsToOptions,
+} from '../../tooltip/tooltipDescriptions';
 
 const animatedComponents = makeAnimated();
 
@@ -31,7 +34,7 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
   executableOptions,
   setSelectedExecutableOptions,
   selectedExecutableOptions,
-  setPassedPrompt
+  setPassedPrompt,
 }) => {
   // Add descriptions to options
   const optionsWithDescriptions = addDescriptionsToOptions(
@@ -85,7 +88,7 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
     components: {
       ...animatedComponents,
       Option: CustomOption,
-      MultiValueLabel: CustomMultiValueLabel
+      MultiValueLabel: CustomMultiValueLabel,
     },
     styles: customStyles,
     isMulti: true,
@@ -94,7 +97,7 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
     onChange: handleChange,
     menuPortalTarget: document.body,
     menuPosition: 'fixed',
-    name: "executableOptions"
+    name: 'executableOptions',
   };
 
   // Add setPassedPrompt to props if it exists

@@ -4,7 +4,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import CustomOption from '../../tooltip/customOption';
 import CustomMultiValueLabel from '../../tooltip/customMultiValueLabel';
-import { compileOptionDescriptions, addDescriptionsToOptions } from '../../tooltip/tooltipDescriptions';
+import {
+  compileOptionDescriptions,
+  addDescriptionsToOptions,
+} from '../../tooltip/tooltipDescriptions';
 
 const animatedComponents = makeAnimated();
 
@@ -31,7 +34,7 @@ const CompileOptionsMenu: React.FC<CompileOptionsMenuProps> = ({
   compileOptions,
   setSelectedCompileOptions,
   selectedCompileOptions,
-  setPassedPrompt
+  setPassedPrompt,
 }) => {
   // Add descriptions to options
   const optionsWithDescriptions = addDescriptionsToOptions(
@@ -85,7 +88,7 @@ const CompileOptionsMenu: React.FC<CompileOptionsMenuProps> = ({
     components: {
       ...animatedComponents,
       Option: CustomOption,
-      MultiValueLabel: CustomMultiValueLabel
+      MultiValueLabel: CustomMultiValueLabel,
     },
     styles: customStyles,
     isMulti: true,
@@ -95,13 +98,13 @@ const CompileOptionsMenu: React.FC<CompileOptionsMenuProps> = ({
     menuPortalTarget: document.body,
     menuPosition: 'fixed',
     defaultValue: [
-      optionsWithDescriptions[0], 
-      optionsWithDescriptions[1], 
-      optionsWithDescriptions[2], 
-      optionsWithDescriptions[3], 
-      optionsWithDescriptions[4]
+      optionsWithDescriptions[0],
+      optionsWithDescriptions[1],
+      optionsWithDescriptions[2],
+      optionsWithDescriptions[3],
+      optionsWithDescriptions[4],
     ],
-    name: "compileOptions"
+    name: 'compileOptions',
   };
 
   // Add setPassedPrompt to props if it exists

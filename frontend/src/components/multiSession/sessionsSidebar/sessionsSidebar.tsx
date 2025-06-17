@@ -19,15 +19,16 @@ interface SessionsSidebarProps {
   onShareSession: (sessionId: string) => void;
 }
 
-const SessionsSidebar: React.FC<SessionsSidebarProps> = ({ 
-  sessions, 
-  currentSessionId, 
-  onSessionSelect, 
+const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
+  sessions,
+  currentSessionId,
+  onSessionSelect,
   onNewSession,
   onRenameSession,
   onDeleteSession,
   isOpen,
-  toggleSidebar, onShareSession
+  toggleSidebar,
+  onShareSession,
 }) => {
   const [editSessionId, setEditSessionId] = useState<string | null>(null);
   const [newSessionTitle, setNewSessionTitle] = useState('');
@@ -79,13 +80,16 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
   if (!isOpen) {
     return (
       <div className="sessions-sidebar-collapsed">
-        <div className="sessions-sidebar-toggle sessions-sidebar-toggle-collapsed" onClick={toggleSidebar}>
+        <div
+          className="sessions-sidebar-toggle sessions-sidebar-toggle-collapsed"
+          onClick={toggleSidebar}
+        >
           ≫
         </div>
       </div>
     );
   }
-  
+
   return (
     <div className="sessions-sidebar">
       <div className="sessions-sidebar-header">
@@ -100,16 +104,16 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
 
       <div className="sessions-list">
         {sessions.map(session => (
-          <div 
-            key={session.id} 
+          <div
+            key={session.id}
             className={`session-item ${session.id === currentSessionId ? 'active' : ''}`}
             onClick={() => onSessionSelect(session.id)}
           >
             {editSessionId === session.id ? (
               <div className="session-edit" onClick={e => e.stopPropagation()}>
-                <input 
-                  type="text" 
-                  value={newSessionTitle} 
+                <input
+                  type="text"
+                  value={newSessionTitle}
                   onChange={handleTitleChange}
                   autoFocus
                   onBlur={() => handleTitleSave(session.id)}
@@ -121,24 +125,24 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
                 <div className="session-info">
                   <div className="session-title">{session.title || 'Untitled Project'}</div>
                   <div className="session-date">
-                    {`${new Date(session.lastUpdated).toLocaleDateString()} ${new Date(session.lastUpdated).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
-                    </div>
+                    {`${new Date(session.lastUpdated).toLocaleDateString()} ${new Date(session.lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+                  </div>
                 </div>
                 <div className="session-actions">
-                  <EditIcon 
-                    fontSize="small" 
-                    className="edit-icon" 
-                    onClick={(e) => handleEditClick(session.id, session.title, e)} 
+                  <EditIcon
+                    fontSize="small"
+                    className="edit-icon"
+                    onClick={e => handleEditClick(session.id, session.title, e)}
                   />
-                    <ShareIcon
-                        fontSize="small"
-                        className="share-icon"
-                        onClick={(e) => handleShareClick(session.id, e)}
-                    />
-                  <DeleteIcon 
-                    fontSize="small" 
-                    className="delete-icon" 
-                    onClick={(e) => handleDeleteClick(session.id, e)} 
+                  <ShareIcon
+                    fontSize="small"
+                    className="share-icon"
+                    onClick={e => handleShareClick(session.id, e)}
+                  />
+                  <DeleteIcon
+                    fontSize="small"
+                    className="delete-icon"
+                    onClick={e => handleDeleteClick(session.id, e)}
                   />
                 </div>
               </>
@@ -147,8 +151,8 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
         ))}
       </div>
 
-      <ConfirmationDialog 
-        open={deleteConfirmOpen} 
+      <ConfirmationDialog
+        open={deleteConfirmOpen}
         title="Delete Project"
         message="Are you sure you want to delete this project? This action cannot be undone."
         onConfirm={handleConfirmDelete}

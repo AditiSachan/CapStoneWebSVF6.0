@@ -6,20 +6,36 @@ import { coy as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/pri
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
-const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onSaveMessages, passedPrompt }: { code: string, graphs: any, terminalOutput: string, llvmIR: string, savedMessages: any, onSaveMessages: any, passedPrompt: string }) => {
-  const [messages, setMessages] = useState<{ role: string, content: string }[]>([]);
+const CodeGPT = ({
+  code,
+  graphs = {},
+  terminalOutput,
+  llvmIR,
+  savedMessages,
+  onSaveMessages,
+  passedPrompt,
+}: {
+  code: string;
+  graphs: any;
+  terminalOutput: string;
+  llvmIR: string;
+  savedMessages: any;
+  onSaveMessages: any;
+  passedPrompt: string;
+}) => {
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [gptInputQuery, setGptInputQuery] = useState('');
   const [suggestionCategory, setSuggestionCategory] = useState('code');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const responseContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
-  
+
   // Load messages from props
   useEffect(() => {
     setMessages(savedMessages || []);
   }, [savedMessages]);
-  
+
   // Scroll to bottom function
   const scrollToBottom = () => {
     if (responseContainerRef.current) {
@@ -36,22 +52,22 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
       setShowScrollToBottom(isNotAtBottom);
     }
   };
-  
+
   // Always scroll to bottom when component mounts or becomes visible
   useEffect(() => {
     // Scroll to bottom when component mounts
     scrollToBottom();
-    
+
     // Set up resize observer to handle layout changes
     const resizeObserver = new ResizeObserver(() => {
       scrollToBottom();
     });
-    
+
     if (responseContainerRef.current) {
       resizeObserver.observe(responseContainerRef.current);
       responseContainerRef.current.addEventListener('scroll', handleScroll);
     }
-    
+
     return () => {
       if (responseContainerRef.current) {
         resizeObserver.unobserve(responseContainerRef.current);
@@ -68,7 +84,7 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
         setTimeout(scrollToBottom, 50);
       }
     };
-    
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -89,37 +105,41 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
     if (!prompt.trim()) return;
 
     const newMessage = { role: 'user', content: prompt };
-    const updatedMessages = [...messages, newMessage, { role: 'assistant', content: "Loading response..." }];
-    
+    const updatedMessages = [
+      ...messages,
+      newMessage,
+      { role: 'assistant', content: 'Loading response...' },
+    ];
+
     // Update local state
     setMessages(updatedMessages);
-    
+
     // Immediately notify parent component
     onSaveMessages(updatedMessages);
-    
+
     setGptInputQuery('');
 
     try {
       const response = await doOpenAICall([{ role: 'user', content: prompt }]);
       const assistantMessage = { role: 'assistant', content: response.choices[0].message.content };
       const finalMessages = [...updatedMessages.slice(0, -1), assistantMessage];
-      
+
       // Update local state
       setMessages(finalMessages);
-      
+
       // Immediately notify parent component
       onSaveMessages(finalMessages);
     } catch (error) {
-      const errorMessage = { role: 'assistant', content: "Error: " + error.message };
+      const errorMessage = { role: 'assistant', content: 'Error: ' + error.message };
       const errorMessages = [...updatedMessages.slice(0, -1), errorMessage];
-      
+
       // Update local state
       setMessages(errorMessages);
-      
+
       // Immediately notify parent component
       onSaveMessages(errorMessages);
     }
-    
+
     // Scroll to bottom after new message
     setTimeout(scrollToBottom, 100);
   };
@@ -163,14 +183,24 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
     return (
       <div className={styles[role === 'user' ? 'userMessage' : 'assistantMessage']}>
         {parts.map((part, index) => {
-          if (index % 2 === 1) { // Code block
+          if (index % 2 === 1) {
+            // Code block
             return (
-              <SyntaxHighlighter key={index} language="c" style={syntaxStyle} className={styles.syntaxHighlighter}>
+              <SyntaxHighlighter
+                key={index}
+                language="c"
+                style={syntaxStyle}
+                className={styles.syntaxHighlighter}
+              >
                 {part.trim()}
               </SyntaxHighlighter>
             );
           }
-          return <span key={index} style={{ whiteSpace: 'pre-wrap' }}>{part}</span>; // Regular text with role-based styling
+          return (
+            <span key={index} style={{ whiteSpace: 'pre-wrap' }}>
+              {part}
+            </span>
+          ); // Regular text with role-based styling
         })}
       </div>
     );
@@ -182,24 +212,45 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
       case 'code':
         return (
           <>
-            {code && (<button
-              onClick={() => handleSuggestionClick(`Explain the following code:\n\n${wrapInBackticks(code)}`, 'code')}
-              className={styles.suggestionButton}
-            >
-              Explain the code
-            </button>)}
-            {code && (<button
-              onClick={() => handleSuggestionClick(`What are some improvements that can be made to the following code:\n\n${wrapInBackticks(code)}`, 'code')}
-              className={styles.suggestionButton}
-            >
-              Suggest improvements
-            </button>)}
-            {code && (<button
-              onClick={() => handleSuggestionClick(`Are there any bugs in the following code:\n\n${wrapInBackticks(code)}`, 'code')}
-              className={styles.suggestionButton}
-            >
-              Find bugs
-            </button>)}
+            {code && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Explain the following code:\n\n${wrapInBackticks(code)}`,
+                    'code'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Explain the code
+              </button>
+            )}
+            {code && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `What are some improvements that can be made to the following code:\n\n${wrapInBackticks(code)}`,
+                    'code'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Suggest improvements
+              </button>
+            )}
+            {code && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Are there any bugs in the following code:\n\n${wrapInBackticks(code)}`,
+                    'code'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Find bugs
+              </button>
+            )}
           </>
         );
       case 'graphs':
@@ -208,46 +259,79 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
             {Object.keys(graphs).map(graph => (
               <button
                 key={graph}
-                onClick={() => handleSuggestionClick(`Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`, 'graph')}
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`,
+                    'graph'
+                  )
+                }
                 className={styles.suggestionButton}
               >
                 Explain {graph}
               </button>
             ))}
-            {code && (<button
-              onClick={() => handleSuggestionClick(`Looking at the graphs, can I make any improvements to the code?\n\n${wrapInBackticks(code)}`, 'graph')}
-              className={styles.suggestionButton}
-            >
-              Improvements from graphs
-            </button>)}
-            {code && (<button
-              onClick={() => handleSuggestionClick(`Are there any dead functions in my code?\n\n${wrapInBackticks(code)}`, 'graph')}
-              className={styles.suggestionButton}
-            >
-              Find dead functions
-            </button>)}
+            {code && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Looking at the graphs, can I make any improvements to the code?\n\n${wrapInBackticks(code)}`,
+                    'graph'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Improvements from graphs
+              </button>
+            )}
+            {code && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Are there any dead functions in my code?\n\n${wrapInBackticks(code)}`,
+                    'graph'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Find dead functions
+              </button>
+            )}
           </>
         );
       case 'terminal':
         return (
           <>
-            {terminalOutput !== 'Run the code to see the terminal output here' && (<button
-              onClick={() => handleSuggestionClick(`Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`, 'terminal')}
-              className={styles.suggestionButton}
-            >
-              Explain terminal output
-            </button>)}
+            {terminalOutput !== 'Run the code to see the terminal output here' && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`,
+                    'terminal'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Explain terminal output
+              </button>
+            )}
           </>
         );
       case 'llvm':
         return (
           <>
-            {llvmIR !== 'Run the code to see the LLVM IR of your here' && (<button
-              onClick={() => handleSuggestionClick(`Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`, 'llvm')}
-              className={styles.suggestionButton}
-            >
-              Explain LLVM IR
-            </button>)}
+            {llvmIR !== 'Run the code to see the LLVM IR of your here' && (
+              <button
+                onClick={() =>
+                  handleSuggestionClick(
+                    `Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`,
+                    'llvm'
+                  )
+                }
+                className={styles.suggestionButton}
+              >
+                Explain LLVM IR
+              </button>
+            )}
           </>
         );
       default:
@@ -262,11 +346,7 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
           <RefreshIcon />
         </button>
       </div>
-      <div 
-        className={styles.codegptResponse} 
-        ref={responseContainerRef}
-        onScroll={handleScroll}
-      >
+      <div className={styles.codegptResponse} ref={responseContainerRef} onScroll={handleScroll}>
         {messages.map((message, index) => (
           <div key={index} className={`${styles.message} ${styles[message.role]}`}>
             {message.role === 'assistant' && <div className={styles.assistantLabel}>CodeGPT</div>}
@@ -274,11 +354,11 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
           </div>
         ))}
       </div>
-      
+
       {/* Scroll to bottom button */}
       {showScrollToBottom && (
-        <button 
-          className={styles.scrollToBottomButton} 
+        <button
+          className={styles.scrollToBottomButton}
           onClick={scrollToBottom}
           title="Jump to bottom"
         >
@@ -313,16 +393,14 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
             LLVM IR
           </button>
         </div>
-        <div className={styles.suggestions}>
-          {renderSuggestions()}
-        </div>
+        <div className={styles.suggestions}>{renderSuggestions()}</div>
         <div className={styles.codegptInputContainer}>
           <textarea
             ref={textareaRef}
             rows={1}
             placeholder="Enter your query here..."
             value={gptInputQuery}
-            onChange={(e) => setGptInputQuery(e.target.value)}
+            onChange={e => setGptInputQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             className={styles.codegptTextarea}
           />
@@ -341,4 +419,3 @@ const CodeGPT = ({ code, graphs = {}, terminalOutput, llvmIR, savedMessages, onS
 };
 
 export default CodeGPT;
-

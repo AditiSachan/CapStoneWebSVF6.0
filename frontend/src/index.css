@@ -87,7 +87,7 @@ button:focus-visible {
 }
 
 /* Dark mode */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --background-color: #121212;
   --text-color: #ffffff;
   --navbar-bg-color: #333333;

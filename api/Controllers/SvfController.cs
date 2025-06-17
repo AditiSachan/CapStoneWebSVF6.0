@@ -74,14 +74,14 @@ namespace api.Controllers
 
         private static async Task SetCompileOptions(RequestBody requestBody)
         {
-            var clangScript = "clang " + requestBody.CompileOptions + " example.c -o example.ll";
-            var executablesScript = "/home/SVF-tools/SVF/Release-build/bin/svf-ex example.ll";
+            var clangScript = "clang " + requestBody.CompileOptions + " -emit-llvm -S example.c -o example.ll";
+            var executablesScript = "/home/SVF-tools/SVF/Release-build/bin/svf-ex -dump-callgraph -dump-icfg -dump-pag -dump-vfg -dump-constraint-graph example.ll";
 
             if (requestBody.ExtraExecutables != null)
             {
                 foreach (var executable in requestBody.ExtraExecutables)
                 {
-                    executablesScript += $"\n/home/SVF-tools/SVF/Release-build/bin/{executable} example.ll";
+                    executablesScript += $"\n/home/SVF-tools/SVF/Release-build/bin/{executable} -dump-callgraph -dump-icfg -dump-pag -dump-vfg -dump-constraint-graph example.ll";
                 }
             }
 
