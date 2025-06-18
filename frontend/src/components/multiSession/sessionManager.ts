@@ -8,34 +8,34 @@ export interface Session {
   code: string;
   selectedCompileOptions: any[];
   selectedExecutableOptions: any[];
-  lineNumDetails: { [key: string]: { nodeOrllvm: string[], colour: string } };
+  lineNumDetails: { [key: string]: { nodeOrllvm: string[]; colour: string } };
   graphs: any;
   terminalOutput: string;
   llvmIR: string;
-  savedMessages: { role: string, content: string }[];
+  savedMessages: { role: string; content: string }[];
   currentOutput: OutputType; // Now using the defined type
   lineNumToHighlight: number[];
   tabPositions: Record<OutputType, string>;
 }
-  
-  const SessionManager = {
-    // Get all sessions
-    getSessions: (): Session[] => {
-      const sessions = localStorage.getItem('websvf-sessions');
-      return sessions ? JSON.parse(sessions) : [];
-    },
-    
-    // Get a specific session
-    getSession: (sessionId: string): Session | null => {
-      const sessions = SessionManager.getSessions();
-      return sessions.find(s => s.id === sessionId) || null;
-    },
-    
-    // Create a new session
-    createSession: (title: string = 'New Project'): Session => {
-      const sessions = SessionManager.getSessions();
-      
-      const defaultCode = `#include <stdio.h>
+
+const SessionManager = {
+  // Get all sessions
+  getSessions: (): Session[] => {
+    const sessions = localStorage.getItem('websvf-sessions');
+    return sessions ? JSON.parse(sessions) : [];
+  },
+
+  // Get a specific session
+  getSession: (sessionId: string): Session | null => {
+    const sessions = SessionManager.getSessions();
+    return sessions.find(s => s.id === sessionId) || null;
+  },
+
+  // Create a new session
+  createSession: (title: string = 'New Project'): Session => {
+    const sessions = SessionManager.getSessions();
+
+    const defaultCode = `#include <stdio.h>
   #include <stdlib.h>
   
   typedef struct {
@@ -69,64 +69,63 @@ export interface Session {
   
       return 0;
   }`;
-  
-      const newSession: Session = {
-        id: `session-${Date.now()}`,
-        title,
-        code: defaultCode,
-        selectedCompileOptions: [
-          { value: '-g', label: '-g' },
-          { value: '-c', label: '-c' },
-          { value: '-S', label: '-S' },
-          { value: '-fno-discard-value-names', label: '-fno-discard-value-names' },
-          { value: '-emit-llvm', label: '-emit-llvm' }
-        ],
-        selectedExecutableOptions: [],
-        lineNumDetails: {},
-        graphs: {},
-        terminalOutput: 'Run the code to see the terminal output here',
-        llvmIR: 'Run the code to see the LLVM IR of your here',
-        savedMessages: [], // Initialize empty messages
+
+    const newSession: Session = {
+      id: `session-${Date.now()}`,
+      title,
+      code: defaultCode,
+      selectedCompileOptions: [
+        { value: '-g', label: '-g' },
+        { value: '-c', label: '-c' },
+        { value: '-S', label: '-S' },
+        { value: '-fno-discard-value-names', label: '-fno-discard-value-names' },
+        { value: '-emit-llvm', label: '-emit-llvm' },
+      ],
+      selectedExecutableOptions: [],
+      lineNumDetails: {},
+      graphs: {},
+      terminalOutput: 'Run the code to see the terminal output here',
+      llvmIR: 'Run the code to see the LLVM IR of your here',
+      savedMessages: [], // Initialize empty messages
+      lastUpdated: Date.now(),
+      currentOutput: 'Graph',
+      lineNumToHighlight: [],
+      tabPositions: {
+        Graph: 'main',
+        'Terminal Output': 'main',
+        CodeGPT: 'main',
+        LLVMIR: 'main',
+      },
+    };
+
+    sessions.unshift(newSession);
+    localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
+    return newSession;
+  },
+
+  // Update an existing session
+  updateSession: (sessionId: string, updates: Partial<Session>): Session | null => {
+    const sessions = SessionManager.getSessions();
+    const index = sessions.findIndex(s => s.id === sessionId);
+
+    if (index !== -1) {
+      sessions[index] = {
+        ...sessions[index],
+        ...updates,
         lastUpdated: Date.now(),
-        currentOutput: 'Graph',
-        lineNumToHighlight: [],
-        tabPositions: {
-          Graph: 'main',
-          'Terminal Output': 'main',
-          CodeGPT: 'main',
-          LLVMIR: 'main',
-        }
       };
-      
-      sessions.unshift(newSession);
       localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
-      return newSession;
-    },
-    
-    // Update an existing session
-    updateSession: (sessionId: string, updates: Partial<Session>): Session | null => {
-      const sessions = SessionManager.getSessions();
-      const index = sessions.findIndex(s => s.id === sessionId);
-      
-      if (index !== -1) {
-        sessions[index] = {
-          ...sessions[index],
-          ...updates,
-          lastUpdated: Date.now()
-        };
-        localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
-        return sessions[index];
-      }
-      return null;
-    },
-    
-    // Delete a session
-    deleteSession: (sessionId: string): void => {
-      let sessions = SessionManager.getSessions();
-      sessions = sessions.filter(s => s.id !== sessionId);
-      localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
+      return sessions[index];
     }
-    
-  };
-  
-  export default SessionManager;
+    return null;
+  },
+
+  // Delete a session
+  deleteSession: (sessionId: string): void => {
+    let sessions = SessionManager.getSessions();
+    sessions = sessions.filter(s => s.id !== sessionId);
+    localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
+  },
+};
+
+export default SessionManager;

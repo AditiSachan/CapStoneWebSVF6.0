@@ -12,13 +12,12 @@ import TextField from '@mui/material/TextField';
 import './shareLZSettingsModal.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-
 const Input = styled(MuiInput)`
   width: 42px;
 `;
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '20%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -34,15 +33,14 @@ export default function ShareLZSettingsModal({
   handleClose,
   shareLink,
 }: {
-  open: boolean,
-  handleClose: () => void,
-  shareLink: string,
+  open: boolean;
+  handleClose: () => void;
+  shareLink: string;
 }) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(shareLink).then(() => {
-    });
+    navigator.clipboard.writeText(shareLink).then(() => {});
 
     setShowTooltip(true);
     setTimeout(() => {
@@ -64,14 +62,11 @@ export default function ShareLZSettingsModal({
           </Typography>
           <div id="share-container">
             <textarea id="share-textArea" readOnly value={shareLink} />
-            <div id='copy-icon-container'>
-              <ContentCopyIcon onClick={handleCopy}/>
+            <div id="copy-icon-container">
+              <ContentCopyIcon onClick={handleCopy} />
             </div>
           </div>
           {showTooltip && <div className="tooltip">Link copied to clipboard</div>}
-
-
-   
 
           <Button onClick={handleClose}>Close</Button>
         </Box>

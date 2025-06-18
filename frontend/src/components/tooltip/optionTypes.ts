@@ -25,18 +25,18 @@ export function addDescriptionsToOptions<T extends { value: string; label: strin
 ): (T & { description?: string })[] {
   return options.map(option => ({
     ...option,
-    description: descriptions[option.value] || undefined
+    description: descriptions[option.value] || undefined,
   }));
 }
 
 // Utility function to determine tool type from executable name
 export const getToolType = (executableName: string): 'mta' | 'saber' | 'ae' | undefined => {
   if (!executableName) return undefined;
-  
+
   const name = executableName.toLowerCase();
   if (name.includes('mta') || name.includes('multi-thread')) return 'mta';
   if (name.includes('saber')) return 'saber';
   if (name.includes('ae') || name.includes('abstract')) return 'ae';
-  
+
   return undefined;
 };

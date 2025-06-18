@@ -2,12 +2,11 @@ import React from 'react';
 import './resetDefaultButton.css';
 
 function ResetDefaultButton() {
-
   return (
     <>
-      <button className='reset-button'>Reset Default</button>
+      <button className="reset-button">Reset Default</button>
     </>
-  )
+  );
 }
 
-export default ResetDefaultButton
+export default ResetDefaultButton;

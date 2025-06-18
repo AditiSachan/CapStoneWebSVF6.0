@@ -6,11 +6,11 @@
   background-color: var(--navbar-bg-color);
 }
 
-#settings-icon, #share-icon {
+#settings-icon,
+#share-icon {
   cursor: pointer;
   color: var(--icon-color);
 }
-
 
 #svf-logo {
   width: 4%;
@@ -23,7 +23,6 @@
   color: inherit; */
   display: inline-block;
 }
-
 
 /* Theme Toggle Switch */
 .theme-toggle {
@@ -55,14 +54,16 @@
 
 .theme-slider:before {
   position: absolute;
-  content: "🌞";
+  content: '🌞';
   height: 20px;
   width: 20px;
   left: 5px;
   bottom: 2.5px;
   background-color: white;
   border-radius: 50%;
-  transition: transform 0.4s, content 0.4s;
+  transition:
+    transform 0.4s,
+    content 0.4s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,10 +77,5 @@ input:checked + .theme-slider {
 
 input:checked + .theme-slider:before {
   transform: translateX(25px);
-  content: "🌜";
+  content: '🌜';
 }
-
-
-
-
-

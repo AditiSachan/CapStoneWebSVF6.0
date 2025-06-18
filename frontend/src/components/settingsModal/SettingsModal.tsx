@@ -9,13 +9,12 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import FormatSizeIcon from '@mui/icons-material/FormatSize';
 
-
 const Input = styled(MuiInput)`
   width: 42px;
 `;
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -34,18 +33,17 @@ export default function SettingsModal({
   llvmIRFontSize,
   setLLVMIRFontSize,
   terminalOutputFontSize,
-  setTerminalOutputFontSize
+  setTerminalOutputFontSize,
 }: {
-  open: boolean,
-  handleClose: () => void,
-  codeFontSize: number,
-  setCodeFontSize: (codeFontSize: number) => void,
-  llvmIRFontSize: number,
-  setLLVMIRFontSize: (llvmIRFontSize: number) => void,
-  terminalOutputFontSize: number,
-  setTerminalOutputFontSize: (terminalOutputFontSize: number) => void
+  open: boolean;
+  handleClose: () => void;
+  codeFontSize: number;
+  setCodeFontSize: (codeFontSize: number) => void;
+  llvmIRFontSize: number;
+  setLLVMIRFontSize: (llvmIRFontSize: number) => void;
+  terminalOutputFontSize: number;
+  setTerminalOutputFontSize: (terminalOutputFontSize: number) => void;
 }) {
-
   const handleCodeSliderChange = (event: Event, newValue: number | number[]) => {
     setCodeFontSize(newValue as number);
   };

@@ -8,10 +8,10 @@
 }
 
 #share-textArea {
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
   width: 100%;
   resize: none;
-  font-size: 1.0rem;
+  font-size: 1rem;
   height: 1.8rem;
   white-space: nowrap;
   overflow: hidden;
@@ -41,7 +41,7 @@
 }
 
 #copy-icon-container:hover {
-  background-color: #696969	;
+  background-color: #696969;
   color: white;
 }
 
@@ -52,7 +52,7 @@
   text-align: center;
   padding: 8px;
   border-radius: 4px;
-  font-size: 1.0rem;
+  font-size: 1rem;
   opacity: 0.9;
   margin-top: 1%;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

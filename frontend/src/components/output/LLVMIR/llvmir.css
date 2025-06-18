@@ -4,5 +4,7 @@
   padding: 5px;
   background-color: var(--font-size-container-bg-color); /* Dynamic background color */
   color: var(--font-size-container-text-color); /* Dynamic text color */
-  transition: background-color 0.4s, color 0.4s; /* Smooth transition */
+  transition:
+    background-color 0.4s,
+    color 0.4s; /* Smooth transition */
 }

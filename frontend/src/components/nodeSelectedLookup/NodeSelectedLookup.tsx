@@ -3,7 +3,6 @@
 // import TextDecreaseIcon from '@mui/icons-material/TextDecrease';
 // import './styles.css';
 
-
 // const NodeSelectedLookup = ({nodeIDIndex, handleZoomToNode, nodeIDList}: {nodeIDIndex: number, handleZoomToNode: (newNodeIDIndex: number) => void, nodeIDList: []}) => {
 //   const [isOpen, setIsOpen] = useState(false);
 //   const menuRef = useRef<HTMLDivElement>(null);
@@ -47,7 +46,6 @@
 //           </div>
 //         )}
 //       </div>
-      
 
 //       <div id='font-size-increase' className={`font-size-incDec-button-div ${nodeIDIndex === nodeIDList.length - 1 ? 'disabled' : ''}`} onClick={() => handleZoomToNode(nodeIDIndex + 1)}>
 //         <TextIncreaseIcon fontSize='small'/>

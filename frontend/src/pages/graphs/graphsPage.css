@@ -47,7 +47,7 @@
   transition: background-color 0.2s;
 }
 
-.resizer:hover, 
+.resizer:hover,
 .resizer:active {
   background-color: #1976d2;
   width: 6px;
@@ -116,7 +116,6 @@
   background-color: #aaa;
 }
 
-
 .resizer {
   width: 8px;
   background-color: rgba(0, 0, 0, 0.1);
@@ -131,17 +130,16 @@
 
 .resizer.resizing {
   background-color: #1976d2;
-  width: 8
-  px;
+  width: 8 px;
   opacity: 0.7;
 }
-.resizer:hover, 
+.resizer:hover,
 .resizer:active {
   background-color: #1976d2;
 }
 
 /* Remove borders from containers that might interfere */
-#graph-page-code-container, 
+#graph-page-code-container,
 #graph-page-output-container {
   border: none;
 }
@@ -161,7 +159,6 @@
   display: flex;
   overflow: hidden;
 }
-
 
 /* Add this to your CSS */
 .resizing #graph-page-code-container,

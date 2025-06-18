@@ -120,7 +120,7 @@
 
 .codegptButton {
   padding: 10px 15px;
-  background-color: #4CAF50; /* Change to green */
+  background-color: #4caf50; /* Change to green */
   color: white;
   border: none;
   border-radius: 5px; /* Change to rounded rectangle instead of circular */
@@ -161,7 +161,6 @@
   overflow: auto;
 }
 
-
 .scrollToBottomButton {
   position: fixed;
   bottom: 120px;
@@ -176,17 +175,22 @@
   justify-content: center;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
   z-index: 1000;
   opacity: 0.8;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 0.8; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 0.8;
+    transform: translateY(0);
+  }
 }
 
 .scrollToBottomButton:hover {

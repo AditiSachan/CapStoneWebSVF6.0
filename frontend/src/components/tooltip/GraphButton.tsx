@@ -36,25 +36,27 @@ PTACGs are enhanced call graphs with pointer analysis information, providing mor
 
   tcg: `Here's some background about TCG (Thread Communication Graph) to help with your explanation:
 
-TCGs show communication patterns and interactions in multi-threaded programs, visualizing how threads interact and communicate, including thread synchronization and data sharing patterns. They help understand multi-threaded program behavior and identify potential concurrency issues.`
+TCGs show communication patterns and interactions in multi-threaded programs, visualizing how threads interact and communicate, including thread synchronization and data sharing patterns. They help understand multi-threaded program behavior and identify potential concurrency issues.`,
 };
 
 // Graph descriptions for tooltips
 const GRAPH_DESCRIPTIONS = {
-  'callgraph': 'Call Graph. Directed graph of function calls showing calling relationships between functions. Nodes = Functions, Edges = Function calls.',
-  'icfg': 'Interprocedural Control Flow Graph. Tracks execution order across multiple functions. Nodes = Instructions/Statements, Edges = Control-flow dependencies.',
-  'svfg': 'Sparse Value Flow Graph. Displays def-use chains of pointers and objects, tracking how variables propagate throughout the program.',
-  'vfg': 'Value Flow Graph. Represents the flow of values through program variables, resolving both data and control dependencies.',
-  'ptacg': 'Points-to Analysis Call Graph. Call graph enhanced with pointer analysis information for more precise function relationships.',
-  'pag': 'Program Assignment Graph. Represents assignment constraints between program variables. Nodes = Pointers/objects, Edges = Dependence/constraint relations.',
-  'tcg': 'Thread Communication Graph. Shows communication patterns and interactions in multi-threaded programs.'
+  callgraph:
+    'Call Graph. Directed graph of function calls showing calling relationships between functions. Nodes = Functions, Edges = Function calls.',
+  icfg: 'Interprocedural Control Flow Graph. Tracks execution order across multiple functions. Nodes = Instructions/Statements, Edges = Control-flow dependencies.',
+  svfg: 'Sparse Value Flow Graph. Displays def-use chains of pointers and objects, tracking how variables propagate throughout the program.',
+  vfg: 'Value Flow Graph. Represents the flow of values through program variables, resolving both data and control dependencies.',
+  ptacg:
+    'Points-to Analysis Call Graph. Call graph enhanced with pointer analysis information for more precise function relationships.',
+  pag: 'Program Assignment Graph. Represents assignment constraints between program variables. Nodes = Pointers/objects, Edges = Dependence/constraint relations.',
+  tcg: 'Thread Communication Graph. Shows communication patterns and interactions in multi-threaded programs.',
 };
 
 const GraphButton: React.FC<GraphButtonProps> = ({
   graphKey,
   isSelected,
   onClick,
-  setPassedPrompt
+  setPassedPrompt,
 }) => {
   const displayName = graphKey.replace(/\.dot$/, '');
   const description = GRAPH_DESCRIPTIONS[displayName] || `Analysis graph: ${displayName}`;
@@ -63,10 +65,10 @@ const GraphButton: React.FC<GraphButtonProps> = ({
   const handleGraphGPT = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    
+
     if (setPassedPrompt && displayName) {
       const graphContext = GRAPH_CONTEXTS[displayName] || '';
-      
+
       // Simple approach: include context with instruction not to display it
       const prompt = `${graphContext}
 
@@ -85,10 +87,7 @@ Keep the explanation educational for students learning static analysis visualiza
   return (
     <div className="tooltip-container">
       <div className="tooltip-trigger">
-        <button 
-          className={`graph-button ${isSelected ? 'selected' : ''}`}
-          onClick={onClick}
-        >
+        <button className={`graph-button ${isSelected ? 'selected' : ''}`} onClick={onClick}>
           {displayName}
         </button>
       </div>
@@ -96,10 +95,7 @@ Keep the explanation educational for students learning static analysis visualiza
         <div className="tooltip-content">
           {description}
           <div className="tooltip-button-container">
-            <button
-              onClick={handleGraphGPT}
-              className="tooltip-button"
-            >
+            <button onClick={handleGraphGPT} className="tooltip-button">
               <span style={{ marginRight: '5px' }}>💡</span>
               Ask CodeGPT for more details
             </button>

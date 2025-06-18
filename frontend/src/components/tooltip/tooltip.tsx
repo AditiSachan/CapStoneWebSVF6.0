@@ -29,44 +29,51 @@ It's used for high accuracy with fewer false positives in memory leak detection,
 
 AE is a static analysis tool that analyzes programs by examining variable states at each control point. It follows control flow to understand variable states in each statement and helps gather program semantics to identify potential issues.
 
-It's used to detect various bugs like buffer overflows and null pointer dereferences, helps identify vulnerabilities by understanding data access and changes, and facilitates security checks while optimizing code based on variable usage patterns.`
+It's used to detect various bugs like buffer overflows and null pointer dereferences, helps identify vulnerabilities by understanding data access and changes, and facilitates security checks while optimizing code based on variable usage patterns.`,
 };
 
-const Tooltip: React.FC<TooltipProps> = ({ 
-  content, 
-  children, 
-  optionValue, 
-  optionType, 
+const Tooltip: React.FC<TooltipProps> = ({
+  content,
+  children,
+  optionValue,
+  optionType,
   toolType,
-  setPassedPrompt 
+  setPassedPrompt,
 }) => {
   // Function to handle Ask CodeGPT button click
   const handleAskCodeGPT = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    
+
     if (setPassedPrompt && optionValue && optionType) {
       // Determine context directly from the optionValue being clicked - just like graphs!
       let toolContext = '';
-      
-      console.log('Option clicked:', optionValue);
-      
+
       // Check the optionValue to determine which context to use
-      if (optionValue === 'mta' || optionValue.includes('mta') || optionValue.includes('Multi-Thread')) {
+      if (
+        optionValue === 'mta' ||
+        optionValue.includes('mta') ||
+        optionValue.includes('Multi-Thread')
+      ) {
         toolContext = TOOL_CONTEXTS.mta;
-        console.log('Using MTA context');
-      } else if (optionValue === 'saber' || optionValue.includes('saber') || optionValue.includes('Memory Leak')) {
+      } else if (
+        optionValue === 'saber' ||
+        optionValue.includes('saber') ||
+        optionValue.includes('Memory Leak')
+      ) {
         toolContext = TOOL_CONTEXTS.saber;
-        console.log('Using SABER context');
-      } else if (optionValue === 'ae' || optionValue.includes('ae') || optionValue.includes('Buffer Overflow')) {
+      } else if (
+        optionValue === 'ae' ||
+        optionValue.includes('ae') ||
+        optionValue.includes('Buffer Overflow')
+      ) {
         toolContext = TOOL_CONTEXTS.ae;
-        console.log('Using AE context');
       } else {
         // For compile flags or other options
-        toolContext = 'Here is some general background about static analysis tools to help with your explanation: These tools analyze code to find potential issues, bugs, and optimization opportunities.';
-        console.log('Using general context for:', optionValue);
+        toolContext =
+          'Here is some general background about static analysis tools to help with your explanation: These tools analyze code to find potential issues, bugs, and optimization opportunities.';
       }
-      
+
       const prompt = `${toolContext}
 
 Explain what the ${optionType} "${optionValue}" does. Focus on:
@@ -77,24 +84,18 @@ Explain what the ${optionType} "${optionValue}" does. Focus on:
 
 Keep the explanation concise and practical for students learning static analysis.`;
 
-      console.log('Final prompt with context:', prompt);
       setPassedPrompt(prompt);
     }
   };
 
   return (
     <div className="tooltip-container">
-      <div className="tooltip-trigger">
-        {children}
-      </div>
+      <div className="tooltip-trigger">{children}</div>
       <div className="tooltip-content">
         {content}
         {setPassedPrompt && optionValue && (
           <div className="tooltip-button-container">
-            <button
-              onClick={handleAskCodeGPT}
-              className="tooltip-button"
-            >
+            <button onClick={handleAskCodeGPT} className="tooltip-button">
               <span style={{ marginRight: '5px' }}>💡</span>
               Ask CodeGPT for more details
             </button>

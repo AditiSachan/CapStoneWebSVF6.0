@@ -7,11 +7,11 @@
 
 // const D3Graph: React.FC<GraphProps> = ({ dot }) => {
 //     const svgRef = useRef<SVGSVGElement | null>(null);
-  
+
 //     useEffect(() => {
 //       const svg = d3.select(svgRef.current);
 //       svg.selectAll('*').remove();
-  
+
 //       // Handle empty or invalid DOT string
 //       if (!dot.trim()) {
 //         svg.append('text')
@@ -23,25 +23,25 @@
 //           .style('fill', '#666');
 //         return;
 //       }
-  
+
 //       const { nodes, links } = parseDotToGraph(dot);
-  
+
 //       if (nodes.length === 0) {
 //         console.error('No nodes found in DOT string');
 //         return;
 //       }
-  
+
 //       const width = 500;
 //       const height = 500;
-  
+
 //       svg.attr('width', width).attr('height', height);
-  
+
 //       const simulation = d3
 //         .forceSimulation(nodes)
 //         .force('link', d3.forceLink(links).id((d: any) => d.id))
 //         .force('charge', d3.forceManyBody().strength(-200))
 //         .force('center', d3.forceCenter(width / 2, height / 2));
-  
+
 //       svg
 //         .append('g')
 //         .selectAll('line')
@@ -50,7 +50,7 @@
 //         .append('line')
 //         .attr('stroke', '#999')
 //         .attr('stroke-width', 2);
-  
+
 //       const node = svg
 //         .append('g')
 //         .selectAll('circle')
@@ -77,9 +77,9 @@
 //               d.fy = null;
 //             })
 //         );
-  
+
 //       node.append('title').text((d) => d.label);
-  
+
 //       simulation.on('tick', () => {
 //         svg
 //           .selectAll('line')
@@ -87,24 +87,24 @@
 //           .attr('y1', (d) => (d as any).source.y)
 //           .attr('x2', (d) => (d as any).target.x)
 //           .attr('y2', (d) => (d as any).target.y);
-  
+
 //         node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
 //       });
-  
+
 //       // Example: Change color on click
 //       node.on('click', (event, d) => {
 //         d3.select(event.currentTarget).attr('fill', '#ff0000');
 //       });
-  
+
 //       return () => {
 //         simulation.stop();
 //         svg.selectAll('*').remove();
 //       };
 //     }, [dot]);
-  
+
 //     return <svg ref={svgRef}></svg>;
 //   };
-  
+
 //   export default D3Graph;
 
 // // const D3Graph: React.FC<GraphProps> = ({ dot }) => {
@@ -149,7 +149,6 @@
 // //       console.error('No nodes found in DOT string');
 // //       return;
 // //     }
-
 
 // //     const width = 500;
 // //     const height = 500;
@@ -233,7 +232,7 @@
 // // Helper function to parse DOT data
 // const parseDotToGraph = (dot: string) => {
 //     console.log('parseDotToGraph dot is ', dot);
-//     const nodes: { id: string; label: string; color: string }[] = [];  
+//     const nodes: { id: string; label: string; color: string }[] = [];
 //     const links: { source: string; target: string }[] = [];
 //     let match;
 
@@ -256,13 +255,9 @@
 //     console.log('nodes', nodes);
 //     console.log('links', links);
 
-
 //     // const nodePattern = /(\w+)\s+\[.*label=\"([^\"]*)\".*color=([^,]*)/g;
-    
+
 //     // const nodePattern = /Node([0-9]+([A-Za-z][0-9]+)+).*\[shape=.*,.*label=".*\]/g;
-
-
-
 
 //     // while ((match = nodePattern.exec(dot))) {
 //     //     console.log('match', match);
@@ -277,4 +272,3 @@
 
 //     return { nodes, links };
 // };
-
