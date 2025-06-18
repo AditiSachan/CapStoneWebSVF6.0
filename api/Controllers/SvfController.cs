@@ -152,9 +152,45 @@ namespace api.Controllers
         private static List<api.models.DotGraph> GetDotGraphs()
         {
             var dotFiles = new List<api.models.DotGraph>();
+            
+            // Mapping from new SVF output names to simplified names (without .dot extension)
+            var fileNameMappings = new Dictionary<string, string>
+            {
+                {"svfir_initial.dot", "pag"},
+                {"svfir_final.dot", "pag"},  // Use the final version as pag
+                {"callgraph_initial.dot", "callgraph"},
+                {"callgraph_final.dot", "callgraph"},  // Use the final version
+                {"icfg_initial.dot", "icfg"},
+                {"icfg_final.dot", "icfg"},  // Use the final version
+                {"svfg_final.dot", "svfg"},
+                {"consCG_initial.dot", "vfg"},  // Map constraint graph to vfg
+                {"consCG_final.dot", "vfg"}  // Use the final version
+            };
+            
+            // Track which simplified names we've already added (to avoid duplicates)
+            var addedNames = new HashSet<string>();
+            
             foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dot"))
             {
-                dotFiles.Add(new api.models.DotGraph { Name = file.Substring(file.LastIndexOf('/') + 1), Graph = System.IO.File.ReadAllText(file) });
+                var fileName = file.Substring(file.LastIndexOf('/') + 1);
+                
+                // Check if this file should be mapped to a simpler name
+                if (fileNameMappings.TryGetValue(fileName, out string simplifiedName))
+                {
+                    // For duplicate mappings (initial vs final), prefer the final version
+                    if (fileName.Contains("final") || !addedNames.Contains(simplifiedName))
+                    {
+                        dotFiles.RemoveAll(d => d.Name == simplifiedName); // Remove any previous version
+                        dotFiles.Add(new api.models.DotGraph { Name = simplifiedName, Graph = System.IO.File.ReadAllText(file) });
+                        addedNames.Add(simplifiedName);
+                    }
+                }
+                else
+                {
+                    // For any unmapped files, keep the original name but remove .dot extension
+                    var nameWithoutExtension = fileName.EndsWith(".dot") ? fileName.Substring(0, fileName.Length - 4) : fileName;
+                    dotFiles.Add(new api.models.DotGraph { Name = nameWithoutExtension, Graph = System.IO.File.ReadAllText(file) });
+                }
             }
 
             return dotFiles;
