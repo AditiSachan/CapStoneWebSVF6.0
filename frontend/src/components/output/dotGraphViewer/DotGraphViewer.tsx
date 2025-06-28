@@ -375,6 +375,21 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
               break; // Found the node, no need to check other nodeIds for this originalNode
             }
           }
+          // highlight null-dereference related nodes
+      if (
+        originalNode.toLowerCase().includes("null") ||
+        originalNode.toLowerCase().includes("nullptr") ||
+        originalNode.toLowerCase().includes("null-deref")
+      ) {
+        const addingNullHighlight = `, style=filled, fillcolor="red"];`;
+        const modifiedString =
+          originalNode.substring(0, originalNode.length - 2) + addingNullHighlight;
+        modifiedNodes.push({
+          original: originalNode,
+          modified: modifiedString,
+        }); 
+      }
+
         }
       });
 

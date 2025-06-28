@@ -37,6 +37,7 @@ export const getToolType = (executableName: string): 'mta' | 'saber' | 'ae' | un
   if (name.includes('mta') || name.includes('multi-thread')) return 'mta';
   if (name.includes('saber')) return 'saber';
   if (name.includes('ae') || name.includes('abstract')) return 'ae';
+  if (name.includes('null-deref')) return 'ae';
 
   return undefined;
 };

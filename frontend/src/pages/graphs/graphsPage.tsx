@@ -48,6 +48,7 @@ const executableOptions = [
   { value: 'mta', label: 'mta (Multi-Thread Analysis)' },
   { value: 'saber', label: 'saber (Memory Leak Detector)' },
   { value: 'ae -overflow', label: 'ae (Buffer Overflow Detector)' },
+  { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' }
 ];
 
 function GraphsPage() {
@@ -100,7 +101,7 @@ function GraphsPage() {
   const [draggedTab, setDraggedTab] = useState<OutputType | null>(null);
 
   // Add new state for resizable panes
-  const [leftWidth, setLeftWidth] = useState(50); // percentage
+  const [leftWidth, setLeftWidth] = useState(57); // percentage
   const containerRef = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef<boolean>(false);

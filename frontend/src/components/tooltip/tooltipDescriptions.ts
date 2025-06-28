@@ -21,6 +21,8 @@ export const executableOptionDescriptions: Record<string, string> = {
     'Memory Leak Detector. Identifies memory that is allocated but never freed, causing memory leaks in your program.',
   'ae -overflow':
     'Buffer Overflow Detector. Identifies potential buffer overflow vulnerabilities where a program writes data beyond the allocated memory buffer.',
+  'ae -null-deref': 'Null Dereference Detector. Identifies places where a null pointer could be dereferenced in your program, helping prevent crashes and undefined behavior.',
+
 };
 
 // Helper function to add descriptions to option objects

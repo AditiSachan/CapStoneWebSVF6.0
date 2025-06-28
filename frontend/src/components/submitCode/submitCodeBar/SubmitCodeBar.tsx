@@ -72,7 +72,7 @@ const SubmitCodeBar: React.FC<SubmitCodeBarProps> = ({
       // Hide loading state after a short delay
       setTimeout(() => {
         setIsLoading(false);
-      }, 500);
+      }, 5000);
     }
   };
 

@@ -1,8 +1,5 @@
 const submitCodeFetch = async (code: string, compileOptions: string, executables: string[]) => {
-  // Use proxy for development, remote URL for production
-  const url = import.meta.env.DEV
-    ? '/api/controller'
-    : 'https://api-broken-moon-5814.fly.dev/api/controller';
+ const url = 'https://api-broken-moon-5814.fly.dev/api/controller';
 
   // Define the request body with correct field names (lowercase to match backend)
   const requestBody = {
