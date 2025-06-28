@@ -75,13 +75,13 @@ namespace api.Controllers
         private static async Task SetCompileOptions(RequestBody requestBody)
         {
             var clangScript = "clang " + requestBody.CompileOptions + " -emit-llvm -S example.c -o example.ll";
-            var executablesScript = "/home/SVF-tools/SVF/Release-build/bin/svf-ex -dump-callgraph -dump-icfg -dump-pag -dump-vfg -dump-constraint-graph example.ll";
+            var executablesScript = "/home/SVF-tools/SVF/Release-build/bin/svf-ex -dump-callgraph -dump-icfg -dump-pag -dump-vfg example.ll";
 
             if (requestBody.ExtraExecutables != null)
             {
                 foreach (var executable in requestBody.ExtraExecutables)
                 {
-                    executablesScript += $"\n/home/SVF-tools/SVF/Release-build/bin/{executable} -dump-callgraph -dump-icfg -dump-pag -dump-vfg -dump-constraint-graph example.ll";
+                    executablesScript += $"\n/home/SVF-tools/SVF/Release-build/bin/{executable} -dump-callgraph -dump-icfg -dump-pag -dump-vfg example.ll";
                 }
             }
 
@@ -163,8 +163,6 @@ namespace api.Controllers
                 {"icfg_initial.dot", "icfg"},
                 {"icfg_final.dot", "icfg"},  // Use the final version
                 {"svfg_final.dot", "svfg"},
-                {"consCG_initial.dot", "vfg"},  // Map constraint graph to vfg
-                {"consCG_final.dot", "vfg"}  // Use the final version
             };
             
             // Track which simplified names we've already added (to avoid duplicates)
