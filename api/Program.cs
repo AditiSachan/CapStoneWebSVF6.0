@@ -5,38 +5,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add CORS services
+// ✅ Add CORS services
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins(
-            "http://localhost:5173",
-            "https://websvf-comp6131.vercel.app/",
-            "https://capstonewebsvf-5-0-aditi.vercel.app"
-
-            ) // Change this to your frontend's URL
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+        builder.WithOrigins(
+                "http://localhost:5173",
+                "https://websvf-comp6131.vercel.app",
+                "https://capstonewebsvf-5-0-aditi.vercel.app"
+            )
             .AllowAnyHeader()
-            .AllowAnyMethod());
+            .AllowAnyMethod()
+            .AllowCredentials() // Optional: if you're using cookies or auth headers
+    );
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ✅ Enable CORS early in the pipeline
+app.UseCors("AllowSpecificOrigin");
+
+// Enable Swagger only in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// if (!app.Environment.IsDevelopment())
-// {
-//     app.UseHttpsRedirection();
-// }
+// Optional: Redirect HTTP to HTTPS if enabled
+// app.UseHttpsRedirection();
 
 app.UseRouting();
-
-// Enable CORS
-app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 
