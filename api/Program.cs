@@ -6,19 +6,30 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // ✅ Add CORS services
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowSpecificOrigin", builder =>
+//         builder.WithOrigins(
+//                 "http://localhost:5173",
+//                 "https://websvf-comp6131.vercel.app",
+//                 "https://capstonewebsvf-5-0-aditi.vercel.app"
+//             )
+//             .AllowAnyHeader()
+//             .AllowAnyMethod()
+//             .AllowCredentials() // Optional: if you're using cookies or auth headers
+//     );
+// });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", builder =>
-        builder.WithOrigins(
-                "http://localhost:5173",
-                "https://websvf-comp6131.vercel.app",
-                "https://capstonewebsvf-5-0-aditi.vercel.app"
-            )
+        builder
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials() // Optional: if you're using cookies or auth headers
     );
 });
+
 
 var app = builder.Build();
 
