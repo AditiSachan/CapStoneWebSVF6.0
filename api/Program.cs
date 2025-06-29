@@ -33,8 +33,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ✅ Enable CORS early in the pipeline
-app.UseCors("AllowSpecificOrigin");
 
 // Enable Swagger only in development
 if (app.Environment.IsDevelopment())
@@ -43,13 +41,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Optional: Redirect HTTP to HTTPS if enabled
-// app.UseHttpsRedirection();
-
 app.UseRouting();
-
+app.UseCors("AllowSpecificOrigin"); // ✅ Called BETWEEN UseRouting and UseAuthorization
 app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
