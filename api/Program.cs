@@ -44,3 +44,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseCors("AllowSpecificOrigin"); // ✅ Called BETWEEN UseRouting and UseAuthorization
 app.UseAuthorization();
+
+app.MapControllers();
+app.Run();
+
