@@ -33,8 +33,6 @@ const submitCodeFetch = async (code: string, compileOptions: string, executables
     });
 };
 
-export default submitCodeFetch;
-
 // Sample response data commented out to fix parsing errors
 /*
 const sampleResponse = {
