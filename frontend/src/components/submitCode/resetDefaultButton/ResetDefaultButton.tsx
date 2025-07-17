@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not needed with new JSX transform
 import './resetDefaultButton.css';
 
 function ResetDefaultButton() {

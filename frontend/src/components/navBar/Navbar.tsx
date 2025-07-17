@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import SettingsIcon from '@mui/icons-material/Settings';
+import { useState, useEffect } from 'react';
 import ShareIcon from '@mui/icons-material/Share';
 import './navbar.css';
 

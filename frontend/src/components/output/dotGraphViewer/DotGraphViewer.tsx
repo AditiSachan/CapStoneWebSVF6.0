@@ -256,8 +256,8 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
           addFillColorToNode(nodeIDColour, rawGraphString);
           setLineNumDetails(lineNumToNodes);
         } else {
-          // No line numbers found, just set the graph string without colors
-          setGraphString(rawGraphString);
+          // No line numbers found, but still apply default SVF colors
+          addFillColorToNode({}, rawGraphString);
         }
       }
     }
@@ -363,33 +363,53 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
       nodesOnly.forEach(originalNode => {
         if (originalNode.includes('shape')) {
+          let nodeModified = false;
+          let currentNode = originalNode;
+
+          // First, ensure the node has basic color styling if it doesn't already
+          if (!currentNode.includes('color=') && !currentNode.includes('fillcolor=')) {
+            // Add default styling to preserve original appearance
+            const defaultColor = getDefaultNodeColor(currentNode);
+            if (defaultColor) {
+              const styleAddition = `, color=${defaultColor}, style=filled, fillcolor="${defaultColor}"`;
+              currentNode = currentNode.substring(0, currentNode.length - 2) + styleAddition + '];';
+              nodeModified = true;
+            }
+          }
+
+          // Apply line-based highlighting colors
           for (const nodeId in nodeIDColour) {
-            if (originalNode.includes(nodeId)) {
-              const addingFillColour = `, style=filled, fillcolor="${nodeIDColour[nodeId]}"];`;
-              const modifiedString =
-                originalNode.substring(0, originalNode.length - 2) + addingFillColour;
-              modifiedNodes.push({
-                original: originalNode,
-                modified: modifiedString,
-              });
+            if (currentNode.includes(nodeId)) {
+              const fillColorStyle = currentNode.includes('fillcolor=')
+                ? ''
+                : `, fillcolor="${nodeIDColour[nodeId]}"`;
+              const styleAttribute = currentNode.includes('style=') ? '' : ', style=filled';
+              const addingFillColour = `${styleAttribute}${fillColorStyle}];`;
+
+              currentNode = currentNode.substring(0, currentNode.length - 2) + addingFillColour;
+              nodeModified = true;
               break; // Found the node, no need to check other nodeIds for this originalNode
             }
           }
-          // highlight null-dereference related nodes
-      if (
-        originalNode.toLowerCase().includes("null") ||
-        originalNode.toLowerCase().includes("nullptr") ||
-        originalNode.toLowerCase().includes("null-deref")
-      ) {
-        const addingNullHighlight = `, style=filled, fillcolor="red"];`;
-        const modifiedString =
-          originalNode.substring(0, originalNode.length - 2) + addingNullHighlight;
-        modifiedNodes.push({
-          original: originalNode,
-          modified: modifiedString,
-        }); 
-      }
 
+          // highlight null-dereference related nodes
+          if (
+            originalNode.toLowerCase().includes('null') ||
+            originalNode.toLowerCase().includes('nullptr') ||
+            originalNode.toLowerCase().includes('null-deref')
+          ) {
+            const nullStyleAttribute = currentNode.includes('style=') ? '' : ', style=filled';
+            const addingNullHighlight = `${nullStyleAttribute}, fillcolor="red"];`;
+            currentNode = currentNode.substring(0, currentNode.length - 2) + addingNullHighlight;
+            nodeModified = true;
+          }
+
+          if (nodeModified) {
+            modifiedNodes.push({
+              original: originalNode,
+              modified: currentNode,
+            });
+          }
         }
       });
 
@@ -401,8 +421,57 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
       if (modifiedNodes.length > 0) {
         setGraphString(newGraphString);
+      } else {
+        // If no modifications were made, still set the graph string to ensure rendering
+        setGraphString(graphString);
       }
     }
+  };
+
+  // Helper function to determine default node colors based on SVF node types
+  const getDefaultNodeColor = (nodeString: string): string | null => {
+    // Parse common SVF node patterns and assign appropriate colors
+    if (nodeString.includes('FunEntryBlockNode') || nodeString.includes('FormalParmVFGNode')) {
+      return 'yellow';
+    }
+    if (nodeString.includes('FunExitBlockNode') || nodeString.includes('FormalRetVFGNode')) {
+      return 'green';
+    }
+    if (nodeString.includes('CallBlockNode') || nodeString.includes('ActualParmVFGNode')) {
+      return 'red';
+    }
+    if (nodeString.includes('RetBlockNode') || nodeString.includes('ActualRetVFGNode')) {
+      return 'blue';
+    }
+    if (nodeString.includes('LoadVFGNode')) {
+      return 'red';
+    }
+    if (nodeString.includes('StoreVFGNode')) {
+      return 'blue';
+    }
+    if (nodeString.includes('AddrVFGNode')) {
+      return 'green';
+    }
+    if (nodeString.includes('GepVFGNode')) {
+      return 'purple';
+    }
+    if (nodeString.includes('CopyVFGNode')) {
+      return 'black';
+    }
+    if (nodeString.includes('NullPtrVFGNode')) {
+      return 'grey';
+    }
+    if (nodeString.includes('PHIVFGNode')) {
+      return 'black';
+    }
+    if (
+      nodeString.includes('BinaryOPVFGNode') ||
+      nodeString.includes('UnaryOPVFGNode') ||
+      nodeString.includes('CmpVFGNode')
+    ) {
+      return 'black';
+    }
+    return null;
   };
 
   const getNodes = (matchedDigraph: RegExpExecArray) => {
@@ -508,16 +577,6 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     }
   }, [graphvizInstance]);
 
-  useEffect(() => {
-    if (graphRef.current) {
-      graphvizInstance.current = graphviz(graphRef.current)
-        .height(graphHeight)
-        .width(graphWidth)
-        .zoom(true)
-        .renderDot(graphString);
-    }
-  }, [graphString]);
-
   // Zoom to node work in progreess
   // Can zoom to node but zoom needs work
   // Graphs could appear in different sizes making it hard
@@ -574,12 +633,15 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
           <div ref={graphRef} id="graphviz-container">
             {graphString ? (
               <Graphviz
+                key={currentGraph + graphString.length}
+                ref={graphvizInstance}
                 dot={graphString}
                 options={{
                   zoom: true,
                   width: graphWidth,
                   height: graphHeight,
                   useWorker: false,
+                  fit: true,
                   // zoomScaleExtent: [0.5, 2],
                   // zoomTranslateExtent: [[-1000, -1000], [1000, 1000]],
                 }}

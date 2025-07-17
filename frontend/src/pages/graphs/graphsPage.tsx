@@ -10,6 +10,7 @@ import LLVMIR from '../../components/output/LLVMIR/LLVMIR';
 import submitCodeFetch from '../../api.ts';
 import NavBar from '../../components/navBar/Navbar.tsx';
 import SettingsModal from '../../components/settingsModal/SettingsModal.tsx';
+import { useToast } from '../../hooks/useToast';
 import './graphsPage.css';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import ShareLZSettingsModal from '../../components/shareLZSettingsModal/shareLZSettingsModal.tsx';
@@ -48,10 +49,12 @@ const executableOptions = [
   { value: 'mta', label: 'mta (Multi-Thread Analysis)' },
   { value: 'saber', label: 'saber (Memory Leak Detector)' },
   { value: 'ae -overflow', label: 'ae (Buffer Overflow Detector)' },
-  { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' }
+  { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' },
 ];
 
 function GraphsPage() {
+  // Initialize toast hook
+  const { showError, showSuccess } = useToast();
   // Add session management state
   const [sessions, setSessions] = useState<Session[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
@@ -467,7 +470,9 @@ function GraphsPage() {
       );
 
       if (!response) {
-        setTerminalOutputString('Error: No response received from API');
+        const errorMessage = 'No response received from API';
+        setTerminalOutputString('Error: ' + errorMessage);
+        showError(errorMessage);
         return;
       }
 
@@ -477,6 +482,7 @@ function GraphsPage() {
       const responseLLVM = response.llvm || response.Llvm;
       const responseOutput = response.output || response.Output;
       const responseError = response.error || response.Error;
+      console.log('Response is: ', response);
 
       if (responseName) {
         if (responseName == 'Resultant Graphs') {
@@ -500,18 +506,26 @@ function GraphsPage() {
           setTerminalOutputString(responseOutput || '');
 
           setCodeError(formatErrorLogs(responseError || ''));
+          // Show success message if code processed successfully
+          showSuccess('Code processed successfully!');
 
           // Save session after code submission
           saveCurrentSession();
         } else if (responseName == 'Clang Error') {
-          setTerminalOutputString(responseError || 'Unknown error');
-          setCodeError(formatClangErrors(responseError || ''));
+          const errorMessage = responseError || 'Unknown error';
+          setTerminalOutputString(errorMessage);
+          setCodeError(formatClangErrors(errorMessage));
+          showError('Compilation failed: ' + errorMessage.split('\n')[0]); // Show first line of error
         }
       } else {
-        setTerminalOutputString('Error: Invalid response from API');
+        const errorMessage = 'Invalid response from API';
+        setTerminalOutputString('Error: ' + errorMessage);
+        showError(errorMessage);
       }
     } catch (error) {
-      setTerminalOutputString(`Error: ${error.message || 'Failed to submit code'}`);
+      const errorMessage = error.message || 'Failed to submit code';
+      setTerminalOutputString(`Error: ${errorMessage}`);
+      showError('Backend Error: ' + errorMessage);
     }
   };
 
@@ -545,12 +559,26 @@ function GraphsPage() {
   // It formats the Error messages it receives
   // This is used when the code is compiled by clang
   const formatErrorLogs = (stdErr: string) => {
+    console.log(stdErr);
     const errorList = stdErr.split('\n');
     const formattedErrors = [];
     let i = 0;
     let numOverflow = 0;
     while (i < errorList.length) {
-      if (errorList[i].includes('NeverFree')) {
+      // Enhanced memory leak detection patterns
+      if (
+        errorList[i].includes('NeverFree') ||
+        errorList[i].includes('memory leak') ||
+        errorList[i].includes('Memory leak') ||
+        errorList[i].includes('MEMORY LEAK') ||
+        errorList[i].includes('leak detected') ||
+        errorList[i].includes('Leak detected') ||
+        errorList[i].includes('never freed') ||
+        errorList[i].includes('Never freed') ||
+        (errorList[i].includes('malloc') && errorList[i].includes('not freed')) ||
+        (errorList[i].includes('alloc') && errorList[i].includes('leak')) ||
+        (errorList[i].includes('saber') && errorList[i].includes('leak'))
+      ) {
         formattedErrors.push('MEMORY LEAK: ' + errorList[i]);
       } else if (errorList[i].includes('######################Buffer Overflow')) {
         numOverflow = parseInt(errorList[i].match(/\d+/)[0], 10);
@@ -664,7 +692,7 @@ function GraphsPage() {
         // Error parsing URL data - silently ignore
       }
     }
-  }, []);
+  }, [currentSessionId, navigate, saveCurrentSession]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -732,7 +760,7 @@ function GraphsPage() {
         // Error parsing URL data - silently ignore
       }
     }
-  }, []);
+  }, [currentSessionId, saveCurrentSession]);
 
   const [openShareModal, setOpenShareModal] = React.useState(false);
   const handleOpenShareModal = () => setOpenShareModal(true);
@@ -743,7 +771,7 @@ function GraphsPage() {
     if (openShareModal === true) {
       setShareLink(createLZStringUrl());
     }
-  }, [openShareModal]);
+  }, [createLZStringUrl, openShareModal]);
 
   const handleShareSession = (sessionId: string) => {
     // First ensure all sessions are saved
