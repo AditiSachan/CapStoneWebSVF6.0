@@ -19,12 +19,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV HOME=/home/SVF-tools
 
 # Install dependencies for SVF
+# Install dependencies for SVF
 RUN apt-get update --fix-missing && \
     apt-get install -y \
     cmake g++ gcc git zlib1g-dev libncurses5-dev libtinfo6 \
     build-essential libssl-dev libpcre2-dev zip libzstd-dev \
-    wget xz-utils tcl software-properties-common curl && \
+    wget xz-utils tcl software-properties-common curl \
+    bsdutils && \
     rm -rf /var/lib/apt/lists/*
+
 
 # Add deadsnakes PPA and install Python 3.10
 RUN add-apt-repository ppa:deadsnakes/ppa && \
@@ -80,3 +83,4 @@ ENV LD_LIBRARY_PATH=${Z3_DIR}/bin:${LLVM_DIR}/lib:$LD_LIBRARY_PATH
 
 # Set entrypoint
 ENTRYPOINT ["dotnet", "api.dll"]
+

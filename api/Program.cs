@@ -41,6 +41,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Enable WebSocket support
+app.UseWebSockets(new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2),
+    ReceiveBufferSize = 4 * 1024
+});
 app.UseRouting();
 app.UseCors("AllowSpecificOrigin"); // ✅ Called BETWEEN UseRouting and UseAuthorization
 app.UseAuthorization();

@@ -36,6 +36,14 @@ const highlightColours = [
   '#FFF8CF',
 ];
 
+function ensureHierarchical(dot: string): string {
+  // Inject 'rankdir=TB' inside the top-level block if it's not already present
+  if (!dot.includes('rankdir')) {
+    return dot.replace(/(digraph\s+[^{]+{)/, '$1\n  rankdir=TB;');
+  }
+  return dot;
+}
+
 const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
   dotGraphString,
   lineNumToHighlight,
@@ -376,20 +384,19 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
             }
           }
           // highlight null-dereference related nodes
-      if (
-        originalNode.toLowerCase().includes("null") ||
-        originalNode.toLowerCase().includes("nullptr") ||
-        originalNode.toLowerCase().includes("null-deref")
-      ) {
-        const addingNullHighlight = `, style=filled, fillcolor="red"];`;
-        const modifiedString =
-          originalNode.substring(0, originalNode.length - 2) + addingNullHighlight;
-        modifiedNodes.push({
-          original: originalNode,
-          modified: modifiedString,
-        }); 
-      }
-
+          if (
+            originalNode.toLowerCase().includes('null') ||
+            originalNode.toLowerCase().includes('nullptr') ||
+            originalNode.toLowerCase().includes('null-deref')
+          ) {
+            const addingNullHighlight = `, style=filled, fillcolor="red"];`;
+            const modifiedString =
+              originalNode.substring(0, originalNode.length - 2) + addingNullHighlight;
+            modifiedNodes.push({
+              original: originalNode,
+              modified: modifiedString,
+            });
+          }
         }
       });
 
@@ -518,6 +525,29 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     }
   }, [graphString]);
 
+  // chg
+  const exportGraphAsSVG = () => {
+    const svgElement = graphRef.current?.querySelector('svg');
+    if (!svgElement) return;
+
+    const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
+
+    // Ensure full dimensions are preserved (even if it's bigger than the view)
+    const bbox = svgElement.getBBox(); // Gets the true size of all visible elements
+    clonedSvg.setAttribute('viewBox', `0 0 ${bbox.width} ${bbox.height}`);
+    clonedSvg.removeAttribute('width');
+    clonedSvg.removeAttribute('height');
+
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(clonedSvg);
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(svgBlob);
+    link.download = `${(currentGraph || 'graph').replace(/[^a-z0-9_\-]/gi, '_')}.svg`;
+    link.click();
+  };
+
   // Zoom to node work in progreess
   // Can zoom to node but zoom needs work
   // Graphs could appear in different sizes making it hard
@@ -569,6 +599,9 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
         <div id="graph-container">
           <div id="graphcontainer-menu-bar">
             <button onClick={resetZoom}>Reset Zoom</button>
+            {/* // chg */}
+            <button onClick={exportGraphAsSVG}>Export as SVG</button>
+
             {/* <NodeSelectedLookup nodeIDIndex={nodeIDIndex} handleZoomToNode={handleZoomToNode} nodeIDList={nodeIDList}/> */}
           </div>
           <div ref={graphRef} id="graphviz-container">

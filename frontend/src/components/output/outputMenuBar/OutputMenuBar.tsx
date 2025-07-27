@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './outputMenuBar.module.css';
-
-type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output';
+import type { OutputType } from '../../multiSession/sessionManager'; 
 
 interface OutputMenuBarProps {
   currentOutput: OutputType;
@@ -48,6 +47,14 @@ const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
           onDragStart={() => onDragStartTab('LLVMIR')}
         >
           LLVMIR
+        </li>
+        <li
+          className={`${styles.navItem} ${currentOutput === 'Terminal' ? styles.active : ''}`}
+          onClick={() => setCurrentOutput('Terminal')}
+          draggable
+          onDragStart={() => onDragStartTab('Terminal')}
+        >
+          Terminal
         </li>
       </ul>
     </nav>
