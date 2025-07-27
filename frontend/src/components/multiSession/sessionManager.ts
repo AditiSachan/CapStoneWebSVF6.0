@@ -1,4 +1,6 @@
 // SessionManager.ts
+import CacheService from '../services/cacheService';
+
 export type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output';
 
 export interface Session {
@@ -125,6 +127,10 @@ const SessionManager = {
     let sessions = SessionManager.getSessions();
     sessions = sessions.filter(s => s.id !== sessionId);
     localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
+    
+    // Clear cache for the deleted session
+    const cacheService = CacheService.getInstance();
+    cacheService.clearSessionCache(sessionId);
   },
 };
 
