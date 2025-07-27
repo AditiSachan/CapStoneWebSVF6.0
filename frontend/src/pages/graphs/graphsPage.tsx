@@ -772,7 +772,7 @@ function GraphsPage() {
         handleClose={handleCloseShareModal}
         shareLink={shareLink}
       />
-      <NavBar openShare={handleOpenShareModal} />
+      <NavBar openShare={handleOpenShareModal} setCode={setCode} code={code} />
       <div className="app-layout">
         {/* Sessions Sidebar */}
         <SessionsSidebar
