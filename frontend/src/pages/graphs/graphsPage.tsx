@@ -67,7 +67,7 @@ function GraphsPage() {
     const loadedSessions = SessionManager.getSessions();
     setSessions(loadedSessions);
 
-    let sessionToLoad;
+    let sessionToLoad: Session;
 
     if (routeSessionId) {
       // Try to load the session from the URL parameter

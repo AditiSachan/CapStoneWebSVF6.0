@@ -163,13 +163,12 @@ def compile_c_to_llvm(c_code: str, compile_options: str = "") -> tuple[bool, str
         # Output LLVM file
         ll_file = c_file.replace('.c', '.ll')
 
-        # Use LLVM 16's clang for compatibility with SVF
+        # Use system clang in Docker container, or LLVM 16 on macOS
         clang_path = "/opt/homebrew/opt/llvm@16/bin/clang"
 
         # Check if LLVM 16 is available, otherwise fall back to system clang
         if not os.path.exists(clang_path):
-            raise FileNotFoundError("Warning: LLVM 16 not found at expected path, "
-                                  "using system clang")
+            clang_path = "clang"  # Use system clang
 
         # Compile command
         cmd = f"{clang_path} {compile_options} -emit-llvm -S {c_file} -o {ll_file}"
