@@ -7,6 +7,7 @@ import OutputMenuBar from '../../components/output/outputMenuBar/OutputMenuBar';
 import TerminalOutput from '../../components/output/terminalOutput/TerminalOutput';
 import CodeGPT from '../../components/output/codeGPT/CodeGPT';
 import LLVMIR from '../../components/output/LLVMIR/LLVMIR';
+import RealTerminal from '../../components/output/realTerminal/RealTerminal.tsx';
 import submitCodeFetch from '../../api.ts';
 import NavBar from '../../components/navBar/Navbar.tsx';
 import SettingsModal from '../../components/settingsModal/SettingsModal.tsx';
@@ -17,7 +18,7 @@ import SessionsSidebar from '../../components/multiSession/sessionsSidebar/sessi
 import SessionManager, { Session } from '../../components/multiSession/sessionManager.ts';
 import { Share } from '@mui/icons-material';
 
-type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output';
+type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output' | 'Terminal';
 
 interface DecompressedSettings {
   code?: string;
@@ -48,7 +49,10 @@ const executableOptions = [
   { value: 'mta', label: 'mta (Multi-Thread Analysis)' },
   { value: 'saber', label: 'saber (Memory Leak Detector)' },
   { value: 'ae -overflow', label: 'ae (Buffer Overflow Detector)' },
-  { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' }
+  { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' },
+  { value: 'wpa', label: 'wpa (Whole Program Pointer Analysis)' },
+  { value: 'cfl', label: 'cfl (CFL-Reachability Analysis)' },
+  { value: 'dvf', label: 'dvf (On-Demand Value Flow Analysis)' }
 ];
 
 function GraphsPage() {
@@ -252,7 +256,9 @@ function GraphsPage() {
     'Terminal Output': 'main',
     CodeGPT: 'main',
     LLVMIR: 'main',
+    Terminal: 'main', // ✅ Add this
   });
+
 
   // Session Management Functions
   const loadSessions = () => {
@@ -288,6 +294,7 @@ function GraphsPage() {
         'Terminal Output': 'main',
         CodeGPT: 'main',
         LLVMIR: 'main',
+        Terminal: 'main',
       }
     );
   };
@@ -436,6 +443,9 @@ function GraphsPage() {
             setLineNumDetails={setLineNumDetails}
           />
         );
+      case 'Terminal':
+        return <RealTerminal key={`realterminal-${currentSessionId}`} />;
+
       default:
         return null;
     }
