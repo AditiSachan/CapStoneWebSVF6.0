@@ -569,13 +569,18 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
   };
 
   // Keep a reference of the graphviz component to be able to use its built in functions such as resetZoom
-  const graphvizInstance = useRef(null);
+  const graphvizInstance = useRef<any>(null);
 
   const resetZoom = useCallback(() => {
     if (graphvizInstance.current) {
       graphvizInstance.current.resetZoom();
     }
   }, [graphvizInstance]);
+
+  // Callback ref to capture the Graphviz component instance
+  const setGraphvizRef = useCallback((node: any) => {
+    graphvizInstance.current = node;
+  }, []);
 
   // Zoom to node work in progreess
   // Can zoom to node but zoom needs work
@@ -634,7 +639,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
             {graphString ? (
               <Graphviz
                 key={currentGraph + graphString.length}
-                ref={graphvizInstance}
+                ref={setGraphvizRef}
                 dot={graphString}
                 options={{
                   zoom: true,

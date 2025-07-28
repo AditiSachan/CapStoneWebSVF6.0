@@ -1,5 +1,8 @@
 const submitCodeFetch = async (code: string, compileOptions: string, executables: string[]) => {
-  const url = 'http://localhost:8080/api/controller';
+  // Configure API URL based on environment
+  const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
+  const baseUrl = isDevelopment ? 'http://localhost:8080' : 'https://api-morning-dawn-9144.fly.dev';
+  const url = `${baseUrl}/api/controller`;
 
   // Define the request body with correct field names (lowercase to match backend)
   const requestBody = {
