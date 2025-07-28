@@ -1,0 +1,214 @@
+.debugPanel {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 400px;
+  max-height: 80vh;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.toggleButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.toggleButton:hover {
+  background: #0056b3;
+}
+
+.stats {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.stats h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #666;
+}
+
+.statValue {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.actions {
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.actionButton {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  flex: 1;
+}
+
+.actionButton:hover {
+  background: #218838;
+}
+
+.sessionEntries {
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.sessionEntries h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.entriesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.noEntries {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+}
+
+.entryItem {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.entryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.entryTimestamp {
+  font-size: 11px;
+  color: #666;
+}
+
+.entryQuestion,
+.entryAnswer {
+  font-size: 12px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.entryQuestion strong,
+.entryAnswer strong {
+  color: #495057;
+}
+
+.entryQuestion {
+  color: #007bff;
+}
+
+.entryAnswer {
+  color: #28a745;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .debugPanel {
+  background: #2d2d2d;
+  border-color: #555;
+  color: #fff;
+}
+
+[data-theme='dark'] .header {
+  background: #3d3d3d;
+  border-bottom-color: #555;
+}
+
+[data-theme='dark'] .header h3 {
+  color: #fff;
+}
+
+[data-theme='dark'] .stats {
+  border-bottom-color: #555;
+}
+
+[data-theme='dark'] .stats h4 {
+  color: #fff;
+}
+
+[data-theme='dark'] .statLabel {
+  color: #ccc;
+}
+
+[data-theme='dark'] .statValue {
+  color: #fff;
+}
+
+[data-theme='dark'] .actions {
+  border-bottom-color: #555;
+}
+
+[data-theme='dark'] .sessionEntries h4 {
+  color: #fff;
+}
+
+[data-theme='dark'] .entryItem {
+  background: #3d3d3d;
+  border-color: #555;
+}
+
+[data-theme='dark'] .entryQuestion strong,
+[data-theme='dark'] .entryAnswer strong {
+  color: #ccc;
+}

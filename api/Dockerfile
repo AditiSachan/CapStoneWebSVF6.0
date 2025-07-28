@@ -15,7 +15,7 @@ RUN apt-get update --fix-missing && \
     build-essential libssl-dev libpcre2-dev zip libzstd-dev \
     wget xz-utils tcl software-properties-common curl \
     python3.10 python3.10-dev python3-pip pybind11-dev ninja-build \
-    patchelf clang llvm && \
+    patchelf clang llvm bsdutils && \
     update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 && \
     rm -rf /var/lib/apt/lists/*
 
