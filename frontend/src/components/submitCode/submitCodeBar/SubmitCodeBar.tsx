@@ -6,11 +6,7 @@ import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ExecutableOptionsMenu from '../executablesOptionsMenu/executablesOptionsMenu';
-import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
-import TextDecreaseIcon from '@mui/icons-material/TextDecrease';
-import FontSizeMenu from '../../fontSizeMenu/FontSizeMenu';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
 
 interface CompileOption {
   value: string;
@@ -76,10 +72,6 @@ const SubmitCodeBar: React.FC<SubmitCodeBarProps> = ({
     }
   };
 
-  // Handle error message close
-  const handleCloseError = () => {
-    setError(null);
-  };
   return (
     <>
       <div id="submit-codeBar-container">

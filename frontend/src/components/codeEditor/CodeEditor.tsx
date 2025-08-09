@@ -14,21 +14,6 @@ interface CodeEditorProps {
   setPassedPrompt: (prompt: string) => void;
 }
 
-const highlightColours = [
-  'd9f0e9',
-  'ffffe3',
-  'e9e8f1',
-  'ffd6d2',
-  'd4e5ee',
-  'd5e4ef',
-  'ffe5c9',
-  'e5f4cd',
-  'f2f2f0',
-  'e9d6e7',
-  'edf8ea',
-  'fff8cf',
-];
-
 const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
   setCode,
@@ -40,10 +25,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [fontSize, setFontSize] = useState(16);
-  const [decorations, setDecorations] = useState<string[]>([]);
-  const [oldHighlight, setOldHighlight] = useState<Set<number>>(new Set<number>());
-  const [decorationCollection, setDecorationsCollection] =
-    useState<monaco.editor.IEditorDecorationsCollection | null>(null);
+  useState<monaco.editor.IEditorDecorationsCollection | null>(null);
   const decorationsRef = useRef(null);
   const [editorKey, setEditorKey] = useState(0); // State variable for the key
 
@@ -56,7 +38,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     const model = monaco.editor.createModel(code, 'c', monaco.Uri.parse('inmemory://test_script'));
     editor.setModel(model);
     decorationsRef.current = editor.createDecorationsCollection();
-    setDecorationsCollection(editor.createDecorationsCollection());
     editor.updateOptions({
       fontSize: fontSize,
       renderValidationDecorations: 'on',
@@ -77,17 +58,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     });
     const markers = applyMarkers();
     monaco.editor.setModelMarkers(model, 'c', markers);
-    // editor.updateOptions({
-    //   lightbulb: {
-    //     enabled: true
-    //   },
-    // });
 
     // Register the ask code gpt command
     monaco.editor.registerCommand('askCodeGPTCommand', (accessor, ...args) => {
       const [uri, range, problemMessage, lineCode] = args;
       askCodeGPT(uri, range, problemMessage, lineCode);
     });
+
     // Dispose of the previous code action provider if it exists
     // This prevents adding multiple ask codeGPT action into quick fix
     if (codeActionProviderRef.current) {
@@ -95,7 +72,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
 
     codeActionProviderRef.current = monaco.languages.registerCodeActionProvider('c', {
-      provideCodeActions: (model, range, context, token) => {
+      provideCodeActions: (model, range) => {
         const markers = monaco.editor.getModelMarkers({ resource: model.uri });
         const relevantMarker = markers.find(
           (marker) => marker.startLineNumber === range.startLineNumber
@@ -185,9 +162,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       // Clear any previous markers
       monaco.editor.setModelMarkers(model, 'c', []);
 
-      const lnRegex = /ln:\s*(\d+)/g;
-      const lnJsonRegex = /ln":\s*(\d+)/g;
-      const clRegex = /cl:\s*(\d+)/g;
       const lnRegexcl = /ln:\s*(\d+)\s*cl:\s*(\d+)/;
       const quotedRegex = /"ln":\s*(\d+),\s*"cl":\s*(\d+)/;
       const clangRegex = /example.c:(\d+):(\d+)/;
@@ -196,7 +170,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         let match;
         let lnNum = 0;
         let clNum = 1;
-        let severity = monaco.MarkerSeverity.Error;
         match = error.match(lnRegexcl);
         if (match) {
           lnNum = parseInt(match[1], 10);
@@ -212,9 +185,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         if (match) {
           lnNum = parseInt(match[1], 10);
           clNum = parseInt(match[2], 10);
-          if (error.includes('warning:')) {
-            severity = monaco.MarkerSeverity.Warning;
-          }
         }
 
         if (lnNum !== 0) {
@@ -235,41 +205,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     return [];
   };
 
-  const memoryLeakError = (errorMsg: string) => {
-    const lnRegex = /ln:\s*(\d+)/g;
-    const lnJsonRegex = /ln":\s*(\d+)/g;
-    const clRegex = /cl:\s*(\d+)/g;
-    let match;
-    let lnNum = 0;
-    let clNum = 1;
-
-    match = errorMsg.match(lnRegex);
-    if (match) {
-      const lineAndNum = match[0].split(' ');
-      lnNum = parseInt(lineAndNum[1], 10);
-    }
-
-    match = errorMsg.match(clRegex);
-    if (match) {
-      const lineAndNum = match[0].split(' ');
-      clNum = parseInt(lineAndNum[1], 10);
-    }
-    return {
-      lineNum: lnNum,
-      columnNum: clNum,
-    };
-  };
-
   useEffect(() => {
     if (editorRef.current) {
       const model = editorRef.current.getModel();
       if (model) {
-        // model.onDidChangeContent(() => {
         const markers = applyMarkers();
         monaco.editor.setModelMarkers(model, 'c', markers);
         setEditorKey((prevKey) => prevKey + 1);
-
-        // });
       }
     }
   }, [codeError]);
@@ -302,7 +244,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             },
           };
           if (editorRef.current) {
-            // editorRef.current.setPosition({lineNumber: parseInt(lineNum), column: 1})
             editorRef.current.revealLine(parseInt(lineNum));
           }
         } else {
@@ -336,27 +277,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         };
         newDecorations.push(decoration);
       }
-      // oldLineHighlights.add(parseInt(lineNum));
       decorationsRef.current.set(newDecorations);
     }
   }, [lineNumDetails]);
 
-  /*
-  d9f0e9
-Ffffe3
-e9e8f1
-ffd6d2
-d4e5ee
-d5e4ef
-ffe5c9
-e5f4cd
-f2f2f0
-e9d6e7
-edf8ea
-Fff8cf
-
-d5f1ec
-  */
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `

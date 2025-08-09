@@ -9,15 +9,14 @@ interface TerminalOutputProps {
 
 const TerminalOutput: React.FC<TerminalOutputProps> = ({ terminalOutputString }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [decorations, setDecorations] = useState<string[]>([]);
   const [fontSize, setFontSize] = useState(16);
 
-  const handleEditorDidMount: OnMount = (editor, monaco) => {
+  const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
     editor.updateOptions({ readOnly: true });
 
     editor.onDidChangeModelContent(() => {
-      const value = editor.getValue();
+      editor.getValue();
     });
   };
 

@@ -55,7 +55,6 @@ const Tooltip: React.FC<TooltipProps> = ({
   children,
   optionValue,
   optionType,
-  toolType,
   setPassedPrompt,
 }) => {
   // Function to handle Ask CodeGPT button click

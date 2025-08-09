@@ -1,5 +1,4 @@
 // optionTypes.ts - Updated with toolType utility
-import { GroupBase } from 'react-select';
 
 export interface OptionWithDescription {
   value: string;

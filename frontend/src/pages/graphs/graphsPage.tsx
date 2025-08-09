@@ -10,13 +10,11 @@ import LLVMIR from '../../components/output/LLVMIR/LLVMIR';
 import RealTerminal from '../../components/output/realTerminal/RealTerminal.tsx';
 import submitCodeFetch from '../../api.ts';
 import NavBar from '../../components/navBar/Navbar.tsx';
-import SettingsModal from '../../components/settingsModal/SettingsModal.tsx';
 import './graphsPage.css';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import ShareLZSettingsModal from '../../components/shareLZSettingsModal/shareLZSettingsModal.tsx';
 import SessionsSidebar from '../../components/multiSession/sessionsSidebar/sessionsSidebar.tsx';
 import SessionManager, { Session } from '../../components/multiSession/sessionManager.ts';
-import { Share } from '@mui/icons-material';
 
 type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output' | 'Terminal';
 
@@ -37,12 +35,10 @@ const compileOptions = [
   { value: '-S', label: '-S' },
   { value: '-fno-discard-value-names', label: '-fno-discard-value-names' },
   { value: '-emit-llvm', label: '-emit-llvm' },
-  // { value: '-pass-exit-codes', label: '-pass-exit-codes' }, // This argument is causing an error in clang
   { value: '-E', label: '-E' },
   { value: '-v', label: '-v' },
   { value: '-pipe', label: '-pipe' },
   { value: '--help', label: '--help' },
-  // { value: '-fcanon-prefix-map', label: '-fcanon-prefix-map' }, // This argument is causing an error in clang
 ];
 
 const executableOptions = [
@@ -207,8 +203,6 @@ function GraphsPage() {
     e.currentTarget.classList.remove('drag-over');
 
     const target = e.currentTarget.id;
-    const draggedItem = e.dataTransfer.getData('draggedItem');
-
     if (draggedElement && draggedElement !== target) {
       if (
         (draggedElement === 'code' && target === 'graph-page-output-container') ||
@@ -298,21 +292,8 @@ function GraphsPage() {
     );
   };
 
-  const handleSaveMessages = (newMessages: { role: string; content: string }[]) => {
-    setSavedMessages(newMessages);
-    // Optionally save the session immediately to ensure messages are persisted
-    if (currentSessionId) {
-      SessionManager.updateSession(currentSessionId, {
-        savedMessages: newMessages,
-      });
-    }
-  };
-
   const handleSessionSelect = (sessionId: string) => {
-    // Save current session
     saveCurrentSession();
-
-    // Navigate to the new session URL
     navigate(`/session/${sessionId}`, { replace: true });
   };
 
@@ -396,15 +377,12 @@ function GraphsPage() {
     return () => clearTimeout(timeoutId);
   }, [code, selectedCompileOptions, selectedExecutableOptions]);
 
-  // In your renderComponent function in GraphsPage.tsx
-  const renderComponent = (tab: OutputType) => {
+  const renderComponent = () => {
     switch (currentOutput) {
       case 'Graph':
         return (
           <DotGraphViewer
             key={`graph-${currentSessionId}`} // Add this key
-            dotGraphString={graphs['call'] || ''}
-            lineNumToHighlight={lineNumToHighlight}
             setlineNumToHighlight={setlineNumToHighlight}
             graphObj={graphs}
             setLineNumDetails={setLineNumDetails}
@@ -435,15 +413,7 @@ function GraphsPage() {
           />
         );
       case 'LLVMIR':
-        return (
-          <LLVMIR
-            key={`llvmir-${currentSessionId}`}
-            LLVMIRString={llvmIRString}
-            code={code}
-            lineNumDetails={lineNumDetails}
-            setLineNumDetails={setLineNumDetails}
-          />
-        );
+        return <LLVMIR LLVMIRString={llvmIRString} />;
       case 'Terminal':
         return <RealTerminal key={`realterminal-${currentSessionId}`} />;
 
@@ -455,7 +425,7 @@ function GraphsPage() {
   useEffect(() => {
     if (passedPrompt !== '') {
       setCurrentOutput('CodeGPT');
-      renderComponent('CodeGPT');
+      renderComponent();
 
       // Reset passedPrompt after it's been used
       setTimeout(() => {
@@ -590,25 +560,7 @@ function GraphsPage() {
     setSelectedExecutableOptions([]);
   };
 
-  const [openSettings, setOpenSettings] = React.useState(false);
-  const handleOpenSettings = () => setOpenSettings(true);
-  const handleCloseSettings = () => setOpenSettings(false);
-  const [codeFontSize, setCodeFontSize] = useState(16);
-
-  // const createLZStringUrl = () => {
-  //   const url = window.location.href;
-  //   const currRoute = url.split('?')[0];
-  //   const savedSettings = {
-  //     code: code,
-  //     selectedCompileOptions: selectedCompileOptions,
-  //     selectedExecutableOptions: selectedExecutableOptions,
-  //   };
-  //   const compressed = compressToEncodedURIComponent(JSON.stringify(savedSettings));
-  //   return currRoute + '?data=' + compressed;
-  // };
-
   const createLZStringUrl = () => {
-    // Get the base URL of your application
     const baseUrl = window.location.origin;
 
     // Create a shareable settings object for the current session only
@@ -861,7 +813,7 @@ function GraphsPage() {
               onDrop={(e) => handleDrop(e)}
               onDragOver={(e) => e.preventDefault()}
             >
-              {renderComponent(currentOutput)}
+              {renderComponent()}
             </div>
 
             {/* Third Window (will appear when a tab is dragged into it) */}
@@ -879,7 +831,7 @@ function GraphsPage() {
                 {Object.entries(tabPositions).map(([tab, position]) =>
                   position === 'third' ? (
                     <div key={tab} draggable>
-                      {renderComponent(tab as OutputType)}
+                      {renderComponent()}
                     </div>
                   ) : null
                 )}

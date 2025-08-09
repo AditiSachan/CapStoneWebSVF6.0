@@ -172,7 +172,7 @@ const CodeGPT = ({
     return `\`\`\`\n${content}\n\`\`\``;
   };
 
-  const handleSuggestionClick = (suggestion: string, suggestionGroup: string) => {
+  const handleSuggestionClick = (suggestion: string) => {
     setGptInputQuery(suggestion);
   };
 
@@ -221,9 +221,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following code:\n\n${wrapInBackticks(code)}`,
-                    'code'
-                  )
+                    `Explain the following code:\n\n${wrapInBackticks(code)}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -234,9 +232,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `What are some improvements that can be made to the following code:\n\n${wrapInBackticks(code)}`,
-                    'code'
-                  )
+                    `What are some improvements that can be made to the following code:\n\n${wrapInBackticks(code)}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -247,9 +243,8 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Are there any bugs in the following code:\n\n${wrapInBackticks(code)}`,
-                    'code'
-                  )
+                    `Are there any bugs in the following code:\n\n${wrapInBackticks(code)}`)
+                 
                 }
                 className={styles.suggestionButton}
               >
@@ -266,9 +261,7 @@ const CodeGPT = ({
                 key={graph}
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`,
-                    'graph'
-                  )
+                    `Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -279,9 +272,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Looking at the graphs, can I make any improvements to the code?\n\n${wrapInBackticks(code)}`,
-                    'graph'
-                  )
+                    `Looking at the graphs, can I make any improvements to the code?\n\n${wrapInBackticks(code)}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -292,9 +283,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Are there any dead functions in my code?\n\n${wrapInBackticks(code)}`,
-                    'graph'
-                  )
+                    `Are there any dead functions in my code?\n\n${wrapInBackticks(code)}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -310,9 +299,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`,
-                    'terminal'
-                  )
+                    `Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -328,9 +315,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`,
-                    'llvm'
-                  )
+                    `Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`)
                 }
                 className={styles.suggestionButton}
               >

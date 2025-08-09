@@ -54,7 +54,6 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
 
   const handleShareClick = (sessionId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    // Call the onShareSession prop
     onShareSession(sessionId);
   };
 

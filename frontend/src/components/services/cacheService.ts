@@ -105,7 +105,7 @@ class CacheService {
   private evictOldestForSession(cache: Map<string, CacheEntry>, sessionId: string): void {
     // Get all entries for this session
     const sessionEntries = Array.from(cache.entries())
-      .filter(([key, entry]) => entry.sessionId === sessionId)
+      .filter(([_, entry]) => entry.sessionId === sessionId)
       .sort((a, b) => a[1].timestamp - b[1].timestamp); // Sort by timestamp (oldest first)
 
     // Remove oldest entries if we exceed the limit
@@ -169,7 +169,7 @@ class CacheService {
    * Clear cache for a specific session
    */
   public clearSessionCache(sessionId: string): void {
-    let cache = this.getAllCacheEntries();
+    const cache = this.getAllCacheEntries();
 
     // Remove all entries for this session
     for (const [key, entry] of cache.entries()) {

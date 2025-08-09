@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ShareIcon from '@mui/icons-material/Share';
 import './navbar.css';
-import { ImportExport, SettingsCellOutlined, Publish } from '@mui/icons-material';
+import { ImportExport, Publish } from '@mui/icons-material';
 import readFile from '../importExport/importExport';
 
 function Navbar({
