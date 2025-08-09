@@ -13,6 +13,6 @@ export const readFile = (file: File): Promise<string> => {
     };
     reader.readAsText(file);
   });
-}
+};
 
 export default readFile;

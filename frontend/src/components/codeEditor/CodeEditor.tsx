@@ -71,7 +71,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     });
 
     // Sets the current line number when the cursor position changes
-    editor.onDidChangeCursorPosition(event => {
+    editor.onDidChangeCursorPosition((event) => {
       const lineNum = event.position.lineNumber;
       setCurrCodeLineNum(lineNum);
     });
@@ -98,7 +98,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       provideCodeActions: (model, range, context, token) => {
         const markers = monaco.editor.getModelMarkers({ resource: model.uri });
         const relevantMarker = markers.find(
-          marker => marker.startLineNumber === range.startLineNumber
+          (marker) => marker.startLineNumber === range.startLineNumber
         );
 
         if (!relevantMarker) {
@@ -192,7 +192,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       const quotedRegex = /"ln":\s*(\d+),\s*"cl":\s*(\d+)/;
       const clangRegex = /example.c:(\d+):(\d+)/;
       const markers: monaco.editor.IMarkerData[] = [];
-      codeError.map(error => {
+      codeError.map((error) => {
         let match;
         let lnNum = 0;
         let clNum = 1;
@@ -267,7 +267,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         // model.onDidChangeContent(() => {
         const markers = applyMarkers();
         monaco.editor.setModelMarkers(model, 'c', markers);
-        setEditorKey(prevKey => prevKey + 1);
+        setEditorKey((prevKey) => prevKey + 1);
 
         // });
       }
@@ -281,7 +281,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       const model = editorRef.current.getModel();
       if (model && model.getValue() !== code) {
         model.setValue(code);
-        setEditorKey(prevKey => prevKey + 1);
+        setEditorKey((prevKey) => prevKey + 1);
       }
     }
   }, [code, editorRef.current]);

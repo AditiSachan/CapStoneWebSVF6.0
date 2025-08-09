@@ -52,7 +52,7 @@ const executableOptions = [
   { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' },
   { value: 'wpa', label: 'wpa (Whole Program Pointer Analysis)' },
   { value: 'cfl', label: 'cfl (CFL-Reachability Analysis)' },
-  { value: 'dvf', label: 'dvf (On-Demand Value Flow Analysis)' }
+  { value: 'dvf', label: 'dvf (On-Demand Value Flow Analysis)' },
 ];
 
 function GraphsPage() {
@@ -218,7 +218,7 @@ function GraphsPage() {
       }
       setDraggedElement(null);
     } else if (draggedTab) {
-      setTabPositions(prev => ({
+      setTabPositions((prev) => ({
         ...prev,
         [draggedTab]: target === 'third-dropzone' ? 'third' : 'main',
       }));
@@ -258,7 +258,6 @@ function GraphsPage() {
     LLVMIR: 'main',
     Terminal: 'main', // ✅ Add this
   });
-
 
   // Session Management Functions
   const loadSessions = () => {
@@ -330,7 +329,9 @@ function GraphsPage() {
   const handleRenameSession = (sessionId: string, newTitle: string) => {
     const updatedSession = SessionManager.updateSession(sessionId, { title: newTitle });
     if (updatedSession) {
-      setSessions(prevSessions => prevSessions.map(s => (s.id === sessionId ? updatedSession : s)));
+      setSessions((prevSessions) =>
+        prevSessions.map((s) => (s.id === sessionId ? updatedSession : s))
+      );
     }
   };
 
@@ -342,7 +343,7 @@ function GraphsPage() {
     }
 
     SessionManager.deleteSession(sessionId);
-    const updatedSessions = sessions.filter(s => s.id !== sessionId);
+    const updatedSessions = sessions.filter((s) => s.id !== sessionId);
     setSessions(updatedSessions);
 
     // If the current session is deleted, load the first available session
@@ -465,9 +466,9 @@ function GraphsPage() {
 
   const submitCode = async () => {
     const selectedCompileOptionString = selectedCompileOptions
-      .map(option => option.value)
+      .map((option) => option.value)
       .join(' ');
-    const selectedExecutableOptionsList = selectedExecutableOptions.map(option => option.value);
+    const selectedExecutableOptionsList = selectedExecutableOptions.map((option) => option.value);
 
     try {
       const response = await submitCodeFetch(
@@ -494,7 +495,7 @@ function GraphsPage() {
 
           const graphObj = {};
           if (Array.isArray(respGraphs) && respGraphs.length > 0) {
-            respGraphs.forEach(graph => {
+            respGraphs.forEach((graph) => {
               const graphName = graph.name || graph.Name;
               const graphData = graph.graph || graph.Graph;
               if (graphName && graphData) {
@@ -801,7 +802,7 @@ function GraphsPage() {
           <div
             id="graph-page-code-container"
             draggable
-            onDragStart={e => handleDragStart(e, 'code')}
+            onDragStart={(e) => handleDragStart(e, 'code')}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -841,7 +842,7 @@ function GraphsPage() {
           <div
             id="graph-page-output-container"
             draggable
-            onDragStart={e => handleDragStart(e, 'output')}
+            onDragStart={(e) => handleDragStart(e, 'output')}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -851,14 +852,14 @@ function GraphsPage() {
             <OutputMenuBar
               currentOutput={currentOutput}
               setCurrentOutput={setCurrentOutput}
-              onDragStartTab={tab => (e: React.DragEvent<HTMLDivElement>) =>
+              onDragStartTab={(tab) => (e: React.DragEvent<HTMLDivElement>) =>
                 handleDragStart(e, tab)
               }
             />
             <div
               style={{ flexGrow: 1 }}
-              onDrop={e => handleDrop(e)}
-              onDragOver={e => e.preventDefault()}
+              onDrop={(e) => handleDrop(e)}
+              onDragOver={(e) => e.preventDefault()}
             >
               {renderComponent(currentOutput)}
             </div>
@@ -868,7 +869,7 @@ function GraphsPage() {
               <div
                 id="graph-page-output-container"
                 draggable
-                onDragStart={e => handleDragStart(e, 'output')}
+                onDragStart={(e) => handleDragStart(e, 'output')}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}

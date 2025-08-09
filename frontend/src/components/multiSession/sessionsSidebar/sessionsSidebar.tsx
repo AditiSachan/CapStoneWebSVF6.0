@@ -103,21 +103,21 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
       </div>
 
       <div className="sessions-list">
-        {sessions.map(session => (
+        {sessions.map((session) => (
           <div
             key={session.id}
             className={`session-item ${session.id === currentSessionId ? 'active' : ''}`}
             onClick={() => onSessionSelect(session.id)}
           >
             {editSessionId === session.id ? (
-              <div className="session-edit" onClick={e => e.stopPropagation()}>
+              <div className="session-edit" onClick={(e) => e.stopPropagation()}>
                 <input
                   type="text"
                   value={newSessionTitle}
                   onChange={handleTitleChange}
                   autoFocus
                   onBlur={() => handleTitleSave(session.id)}
-                  onKeyDown={e => e.key === 'Enter' && handleTitleSave(session.id)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleTitleSave(session.id)}
                 />
               </div>
             ) : (
@@ -132,17 +132,17 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
                   <EditIcon
                     fontSize="small"
                     className="edit-icon"
-                    onClick={e => handleEditClick(session.id, session.title, e)}
+                    onClick={(e) => handleEditClick(session.id, session.title, e)}
                   />
                   <ShareIcon
                     fontSize="small"
                     className="share-icon"
-                    onClick={e => handleShareClick(session.id, e)}
+                    onClick={(e) => handleShareClick(session.id, e)}
                   />
                   <DeleteIcon
                     fontSize="small"
                     className="delete-icon"
-                    onClick={e => handleDeleteClick(session.id, e)}
+                    onClick={(e) => handleDeleteClick(session.id, e)}
                   />
                 </div>
               </>

@@ -1,5 +1,5 @@
 const submitCodeFetch = async (code: string, compileOptions: string, executables: string[]) => {
- const url = 'https://api-broken-moon-5814.fly.dev/api/controller';
+  const url = 'https://api-broken-moon-5814.fly.dev/api/controller';
 
   // Define the request body with correct field names (lowercase to match backend)
   const requestBody = {
@@ -17,17 +17,17 @@ const submitCodeFetch = async (code: string, compileOptions: string, executables
     },
     body: JSON.stringify(requestBody),
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
       }
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       // Handle the response data here
       return data;
     })
-    .catch(error => {
+    .catch((error) => {
       // Handle any errors here
     });
 

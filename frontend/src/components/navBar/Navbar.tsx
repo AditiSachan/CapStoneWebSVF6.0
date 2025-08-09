@@ -2,9 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import ShareIcon from '@mui/icons-material/Share';
 import './navbar.css';
 import { ImportExport, SettingsCellOutlined, Publish } from '@mui/icons-material';
-import readFile from "../importExport/importExport";
+import readFile from '../importExport/importExport';
 
-function Navbar({ openShare, setCode, code }: { openShare: () => void, setCode: (code: string) => void, code: string }) {
+function Navbar({
+  openShare,
+  setCode,
+  code,
+}: {
+  openShare: () => void;
+  setCode: (code: string) => void;
+  code: string;
+}) {
   const [theme, setTheme] = useState('light');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -23,13 +31,15 @@ function Navbar({ openShare, setCode, code }: { openShare: () => void, setCode: 
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
-  }
+  };
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const userConfirmed = window.confirm(`Are you sure you want to import "${file.name}"? This will replace the current code.`);
+    const userConfirmed = window.confirm(
+      `Are you sure you want to import "${file.name}"? This will replace the current code.`
+    );
 
     if (!userConfirmed) {
       event.target.value = '';
@@ -47,41 +57,43 @@ function Navbar({ openShare, setCode, code }: { openShare: () => void, setCode: 
   };
 
   const handleExportClick = async () => {
-  if ('showSaveFilePicker' in window) {
-    try {
-      const opts = {
-        types: [{
-          description: 'C Source Files',
-          accept: { 'text/plain': ['.c'] }
-        }]
-      };
+    if ('showSaveFilePicker' in window) {
+      try {
+        const opts = {
+          types: [
+            {
+              description: 'C Source Files',
+              accept: { 'text/plain': ['.c'] },
+            },
+          ],
+        };
 
-      const handle = await (window as any).showSaveFilePicker(opts);
-      const writable = await handle.createWritable();
-      await writable.write(code);
-      await writable.close();
+        const handle = await (window as any).showSaveFilePicker(opts);
+        const writable = await handle.createWritable();
+        await writable.write(code);
+        await writable.close();
+        return;
+      } catch (err) {
+        console.error('File save canceled or failed', err);
+      }
       return;
-    } catch (err) {
-      console.error("File save canceled or failed", err);
     }
-    return;
-  }
 
-  // Fallback for unsupported browsers
-  const defaultFilename = "exported_code.c";
-  const fileName = window.prompt("Enter filename to save as:", defaultFilename);
-  if (!fileName) return;
+    // Fallback for unsupported browsers
+    const defaultFilename = 'exported_code.c';
+    const fileName = window.prompt('Enter filename to save as:', defaultFilename);
+    if (!fileName) return;
 
-  const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
+    const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
 
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName.endsWith(".c") ? fileName : `${fileName}.c`;
-  a.click();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName.endsWith('.c') ? fileName : `${fileName}.c`;
+    a.click();
 
-  URL.revokeObjectURL(url);
-};
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div id="navbar">

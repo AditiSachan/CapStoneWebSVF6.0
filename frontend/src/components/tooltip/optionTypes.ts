@@ -23,14 +23,16 @@ export function addDescriptionsToOptions<T extends { value: string; label: strin
   options: T[],
   descriptions: Record<string, string>
 ): (T & { description?: string })[] {
-  return options.map(option => ({
+  return options.map((option) => ({
     ...option,
     description: descriptions[option.value] || undefined,
   }));
 }
 
 // Utility function to determine tool type from executable name
-export const getToolType = (executableName: string): 'mta' | 'saber' | 'ae' | 'wpa' | 'cfl' | 'dvf' | undefined => {
+export const getToolType = (
+  executableName: string
+): 'mta' | 'saber' | 'ae' | 'wpa' | 'cfl' | 'dvf' | undefined => {
   if (!executableName) return undefined;
 
   const name = executableName.toLowerCase();
@@ -41,7 +43,8 @@ export const getToolType = (executableName: string): 'mta' | 'saber' | 'ae' | 'w
   // Updated checks:
   if (name.includes('wpa') || name.includes('pointer analysis')) return 'wpa';
   if (name.includes('cfl') || name.includes('reachability')) return 'cfl';
-  if (name.includes('dvf') || name.includes('on-demand') || name.includes('value flow')) return 'dvf';
+  if (name.includes('dvf') || name.includes('on-demand') || name.includes('value flow'))
+    return 'dvf';
 
   return undefined;
 };

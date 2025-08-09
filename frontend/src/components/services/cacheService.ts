@@ -18,11 +18,11 @@ class CacheService {
   private readonly CACHE_KEY = 'websvf-codegpt-cache';
   private readonly MAX_CACHE_SIZE = 100; // Maximum number of entries per session
   private readonly CACHE_EXPIRY_DAYS = 7; // Cache entries expire after 7 days
-  
+
   // In-memory stats (not persisted)
   private stats = {
     totalHits: 0,
-    totalMisses: 0
+    totalMisses: 0,
   };
 
   private constructor() {}
@@ -121,18 +121,18 @@ class CacheService {
   public getCachedResponse(question: string, sessionId: string): string | null {
     const cacheKey = this.generateCacheKey(question, sessionId);
     let cache = this.getAllCacheEntries();
-    
+
     // Clean expired entries
     cache = this.cleanExpiredEntries(cache);
-    
+
     const entry = cache.get(cacheKey);
-    
+
     if (entry) {
       this.stats.totalHits++;
       console.log('Cache HIT for question:', question.substring(0, 50) + '...');
       return entry.answer;
     }
-    
+
     this.stats.totalMisses++;
     console.log('Cache MISS for question:', question.substring(0, 50) + '...');
     return null;
@@ -144,24 +144,24 @@ class CacheService {
   public setCachedResponse(question: string, answer: string, sessionId: string): void {
     const cacheKey = this.generateCacheKey(question, sessionId);
     let cache = this.getAllCacheEntries();
-    
+
     // Clean expired entries
     cache = this.cleanExpiredEntries(cache);
-    
+
     // Evict oldest entries for this session if needed
     this.evictOldestForSession(cache, sessionId);
-    
+
     // Add new entry
     const entry: CacheEntry = {
       question,
       answer,
       timestamp: Date.now(),
-      sessionId
+      sessionId,
     };
-    
+
     cache.set(cacheKey, entry);
     this.saveAllCacheEntries(cache);
-    
+
     console.log('Cached response for question:', question.substring(0, 50) + '...');
   }
 
@@ -170,14 +170,14 @@ class CacheService {
    */
   public clearSessionCache(sessionId: string): void {
     let cache = this.getAllCacheEntries();
-    
+
     // Remove all entries for this session
     for (const [key, entry] of cache.entries()) {
       if (entry.sessionId === sessionId) {
         cache.delete(key);
       }
     }
-    
+
     this.saveAllCacheEntries(cache);
     console.log('Cleared cache for session:', sessionId);
   }
@@ -196,12 +196,12 @@ class CacheService {
   public getCacheStats(): CacheStats {
     const cache = this.getAllCacheEntries();
     const totalRequests = this.stats.totalHits + this.stats.totalMisses;
-    
+
     return {
       totalEntries: cache.size,
       hitRate: totalRequests > 0 ? (this.stats.totalHits / totalRequests) * 100 : 0,
       totalHits: this.stats.totalHits,
-      totalMisses: this.stats.totalMisses
+      totalMisses: this.stats.totalMisses,
     };
   }
 
@@ -211,7 +211,7 @@ class CacheService {
   public getSessionCacheEntries(sessionId: string): CacheEntry[] {
     const cache = this.getAllCacheEntries();
     return Array.from(cache.values())
-      .filter(entry => entry.sessionId === sessionId)
+      .filter((entry) => entry.sessionId === sessionId)
       .sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
   }
 }

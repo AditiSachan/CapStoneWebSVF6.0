@@ -65,7 +65,7 @@ const FontSizeMenu = ({
         </button>
         {isOpen && (
           <div id="font-size-dropdown-menu">
-            {allowedFontSizes().map(fontSizeNum => (
+            {allowedFontSizes().map((fontSizeNum) => (
               <div
                 key={fontSizeNum}
                 className={`font-size-drop-menu-item ${fontSizeNum === fontSize ? 'selected' : ''}`}

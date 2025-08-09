@@ -123,7 +123,10 @@ const CodeGPT = ({
 
     try {
       const response = await doOpenAICall([{ role: 'user', content: prompt }]);
-      const assistantMessage = { role: 'assistant', content: response.choices[0].message.content };
+      const assistantMessage = {
+        role: 'assistant',
+        content: response.choices[0].message.content,
+      };
       const finalMessages = [...updatedMessages.slice(0, -1), assistantMessage];
 
       // Update local state
@@ -258,7 +261,7 @@ const CodeGPT = ({
       case 'graphs':
         return (
           <>
-            {Object.keys(graphs).map(graph => (
+            {Object.keys(graphs).map((graph) => (
               <button
                 key={graph}
                 onClick={() =>
@@ -351,15 +354,15 @@ const CodeGPT = ({
           onToggle={() => setShowCacheDebug(!showCacheDebug)}
         />
       )}
-      
+
       <div className={styles.stickyHeader}>
         <button onClick={handleReset} className={styles.resetButton}>
           <RefreshIcon />
         </button>
         {/* Add cache debug toggle button in development */}
         {import.meta.env.DEV && (
-          <button 
-            onClick={() => setShowCacheDebug(!showCacheDebug)} 
+          <button
+            onClick={() => setShowCacheDebug(!showCacheDebug)}
             className={styles.debugButton}
             title="Toggle Cache Debug Panel"
           >
@@ -421,7 +424,7 @@ const CodeGPT = ({
             rows={1}
             placeholder="Enter your query here..."
             value={gptInputQuery}
-            onChange={e => setGptInputQuery(e.target.value)}
+            onChange={(e) => setGptInputQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             className={styles.codegptTextarea}
           />
