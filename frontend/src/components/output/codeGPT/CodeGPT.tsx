@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { doOpenAICall } from '../../services/openAIService';
 import styles from './codeGPT.module.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -15,14 +15,16 @@ const CodeGPT = ({
   savedMessages,
   onSaveMessages,
   passedPrompt,
+  sessionId,
 }: {
   code: string;
-  graphs: any;
+  graphs: Record<string, string>;
   terminalOutput: string;
   llvmIR: string;
-  savedMessages: any;
-  onSaveMessages: any;
+  savedMessages: { role: string; content: string }[];
+  onSaveMessages: (messages: { role: string; content: string }[]) => void;
   passedPrompt: string;
+  sessionId?: string;
 }) => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [gptInputQuery, setGptInputQuery] = useState('');
@@ -65,15 +67,16 @@ const CodeGPT = ({
       scrollToBottom();
     });
 
-    if (responseContainerRef.current) {
-      resizeObserver.observe(responseContainerRef.current);
-      responseContainerRef.current.addEventListener('scroll', handleScroll);
+    const containerEl = responseContainerRef.current;
+    if (containerEl) {
+      resizeObserver.observe(containerEl);
+      containerEl.addEventListener('scroll', handleScroll);
     }
 
     return () => {
-      if (responseContainerRef.current) {
-        resizeObserver.unobserve(responseContainerRef.current);
-        responseContainerRef.current.removeEventListener('scroll', handleScroll);
+      if (containerEl) {
+        resizeObserver.unobserve(containerEl);
+        containerEl.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);
@@ -100,60 +103,67 @@ const CodeGPT = ({
   }, [messages]);
 
   const handleSubmit = async () => {
-    callChatGPT(gptInputQuery);
+    await callChatGPT(gptInputQuery);
   };
 
-  const callChatGPT = async (prompt: string) => {
-    if (!prompt.trim()) return;
+  const callChatGPT = useCallback(
+    async (prompt: string) => {
+      if (!prompt.trim()) return;
 
-    const newMessage = { role: 'user', content: prompt };
-    const updatedMessages = [
-      ...messages,
-      newMessage,
-      { role: 'assistant', content: 'Loading response...' },
-    ];
-
-    // Update local state
-    setMessages(updatedMessages);
-
-    // Immediately notify parent component
-    onSaveMessages(updatedMessages);
-
-    setGptInputQuery('');
-
-    try {
-      const response = await doOpenAICall([{ role: 'user', content: prompt }]);
-      const assistantMessage = {
-        role: 'assistant',
-        content: response.choices[0].message.content,
-      };
-      const finalMessages = [...updatedMessages.slice(0, -1), assistantMessage];
+      const newMessage = { role: 'user', content: prompt };
+      const updatedMessages = [
+        ...messages,
+        newMessage,
+        { role: 'assistant', content: 'Loading response...' },
+      ];
 
       // Update local state
-      setMessages(finalMessages);
+      setMessages(updatedMessages);
 
       // Immediately notify parent component
-      onSaveMessages(finalMessages);
-    } catch (error) {
-      const errorMessage = { role: 'assistant', content: 'Error: ' + error.message };
-      const errorMessages = [...updatedMessages.slice(0, -1), errorMessage];
+      onSaveMessages(updatedMessages);
 
-      // Update local state
-      setMessages(errorMessages);
+      setGptInputQuery('');
 
-      // Immediately notify parent component
-      onSaveMessages(errorMessages);
-    }
+      try {
+        const response = await doOpenAICall([{ role: 'user', content: prompt }]);
+        const assistantMessage = {
+          role: 'assistant',
+          content: response.choices[0].message.content,
+        };
+        const finalMessages = [...updatedMessages.slice(0, -1), assistantMessage];
 
-    // Scroll to bottom after new message
-    setTimeout(scrollToBottom, 100);
-  };
+        // Update local state
+        setMessages(finalMessages);
+
+        // Immediately notify parent component
+        onSaveMessages(finalMessages);
+      } catch (error: unknown) {
+        const err = error as { message?: string };
+        const errorMessage = {
+          role: 'assistant',
+          content: 'Error: ' + (err?.message || 'Unknown error'),
+        };
+        const errorMessages = [...updatedMessages.slice(0, -1), errorMessage];
+
+        // Update local state
+        setMessages(errorMessages);
+
+        // Immediately notify parent component
+        onSaveMessages(errorMessages);
+      }
+
+      // Scroll to bottom after new message
+      setTimeout(scrollToBottom, 100);
+    },
+    [messages, onSaveMessages]
+  );
 
   useEffect(() => {
     if (passedPrompt !== '') {
       callChatGPT(passedPrompt);
     }
-  }, [passedPrompt]);
+  }, [passedPrompt, callChatGPT]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {

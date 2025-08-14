@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CodeEditor from '../../components/codeEditor/CodeEditor';
 import DotGraphViewer from '../../components/output/dotGraphViewer/DotGraphViewer';
@@ -11,8 +11,10 @@ import RealTerminal from '../../components/output/realTerminal/RealTerminal.tsx'
 import submitCodeFetch from '../../api.ts';
 import NavBar from '../../components/navBar/Navbar.tsx';
 import SettingsModal from '../../components/settingsModal/SettingsModal.tsx';
+// import SettingsModal from '../../components/settingsModal/SettingsModal.tsx';
 import { useToast } from '../../hooks/useToast';
 import './graphsPage.css';
+import { llvmHighlight } from '../../components/output/LLVMIR/llvmIRIdentifier';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import ShareLZSettingsModal from '../../components/shareLZSettingsModal/shareLZSettingsModal.tsx';
 import SessionsSidebar from '../../components/multiSession/sessionsSidebar/sessionsSidebar.tsx';
@@ -30,6 +32,42 @@ interface compileOption {
   value: string;
   label: string;
 }
+
+// Fallback default code for empty sessions (matches SessionManager)
+const DEFAULT_CODE = `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int *data;
+    int size;
+} IntArray;
+
+IntArray* createIntArray(int size) {
+    IntArray *arr = malloc(sizeof(IntArray));
+    arr->size = size;
+    arr->data = malloc(size * sizeof(int));
+    for (int i = 0; i < size; i++) {
+        arr->data[i] = i; // Initialize the array
+    }
+    return arr;
+}
+
+void useIntArray(IntArray *arr) {
+    for (int i = 0; i < arr->size; i++) {
+        printf("%d ", arr->data[i]);
+    }
+    printf("\\n");
+}
+
+int main() {
+    IntArray *array1 = createIntArray(5);
+    IntArray *array2 = createIntArray(10);
+
+    useIntArray(array1);
+    useIntArray(array2);
+
+    return 0;
+}`;
 
 const compileOptions = [
   { value: '-g', label: '-g' },
@@ -49,7 +87,6 @@ const executableOptions = [
   { value: 'ae -overflow', label: 'ae (Buffer Overflow Detector)' },
   { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' },
   { value: 'wpa', label: 'wpa (Whole Program Pointer Analysis)' },
-  { value: 'cfl', label: 'cfl (CFL-Reachability Analysis)' },
   { value: 'dvf', label: 'dvf (On-Demand Value Flow Analysis)' },
 ];
 
@@ -63,36 +100,172 @@ function GraphsPage() {
   const { sessionId: routeSessionId } = useParams();
   const navigate = useNavigate();
 
-  // Load the session specified in the URL or default to the first session
-  useEffect(() => {
+  const [codeError, setCodeError] = useState([]);
+  const [currCodeLineNum, setCurrCodeLineNum] = useState(0);
+  const [currentOutput, setCurrentOutput] = useState<OutputType>('Graph');
+  const [selectedCompileOptions, setSelectedCompileOptions] = useState([
+    compileOptions[0],
+    compileOptions[1],
+    compileOptions[2],
+    compileOptions[3],
+    compileOptions[4],
+  ]);
+  const [selectedExecutableOptions, setSelectedExecutableOptions] = useState([]);
+
+  const [lineNumDetails, setLineNumDetails] = useState<{
+    [key: string]: { nodeOrllvm: string[]; colour: string };
+  }>({});
+  const [code, setCode] = useState(DEFAULT_CODE);
+  const [lineNumToHighlight, setlineNumToHighlight] = useState<Set<number>>(new Set());
+  const setlineNumToHighlightGuard = useCallback((next: Set<number>) => {
+    setlineNumToHighlight((prev) => {
+      if (prev.size === next.size) {
+        let same = true;
+        for (const v of next) {
+          if (!prev.has(v)) {
+            same = false;
+            break;
+          }
+        }
+        if (same) return prev;
+      }
+      return next;
+    });
+  }, []);
+  const [terminalOutputString, setTerminalOutputString] = useState(
+    'Run the code to see the terminal output here'
+  );
+  const [llvmIRString, setllvmIRString] = useState('Run the code to see the LLVM IR of your here');
+  const [graphs, setGraphs] = useState({});
+  const [savedMessages, setSavedMessages] = useState<{ role: string; content: string }[]>([]);
+  const [passedPrompt, setPassedPrompt] = useState('');
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [codeFontSize, setCodeFontSize] = useState(16);
+  const [llvmIRFontSize, setLLVMIRFontSize] = useState(16);
+  const [terminalOutputFontSize, setTerminalOutputFontSize] = useState(16);
+
+  const [tabPositions, setTabPositions] = useState<Record<OutputType, string>>({
+    Graph: 'main',
+    'Terminal Output': 'main',
+    CodeGPT: 'main',
+    LLVMIR: 'main',
+    Terminal: 'main', // ✅ Add this
+  });
+
+  const createLZStringUrl = useCallback(() => {
+    const baseUrl = window.location.origin;
+
+    // Create a shareable settings object for the current session only
+    const savedSettings: DecompressedSettings = {
+      sessionId: currentSessionId, // Only include the session ID
+    };
+
+    // Compress the settings
+    const compressed = compressToEncodedURIComponent(JSON.stringify(savedSettings));
+
+    // Return a URL that points directly to the session
+    return `${baseUrl}/session/${currentSessionId}?data=${compressed}`;
+  }, [currentSessionId]);
+
+  const saveCurrentSession = useCallback(() => {
+    if (currentSessionId) {
+      SessionManager.updateSession(currentSessionId, {
+        code,
+        selectedCompileOptions,
+        selectedExecutableOptions,
+        lineNumDetails,
+        graphs,
+        terminalOutput: terminalOutputString,
+        llvmIR: llvmIRString,
+        savedMessages, // Add this line,
+        currentOutput,
+        lineNumToHighlight: Array.from(lineNumToHighlight),
+        tabPositions,
+      });
+    }
+  }, [
+    currentSessionId,
+    code,
+    selectedCompileOptions,
+    selectedExecutableOptions,
+    lineNumDetails,
+    graphs,
+    terminalOutputString,
+    llvmIRString,
+    savedMessages,
+    currentOutput,
+    lineNumToHighlight,
+    tabPositions,
+  ]);
+
+  // Session Management Functions
+  const loadSession = useCallback((session: Session) => {
+    setCode(session.code && session.code.trim() !== '' ? session.code : DEFAULT_CODE);
+    setSelectedCompileOptions(session.selectedCompileOptions);
+    setSelectedExecutableOptions(session.selectedExecutableOptions);
+    setLineNumDetails(session.lineNumDetails);
+    setGraphs(session.graphs);
+    setTerminalOutputString(session.terminalOutput);
+    setllvmIRString(session.llvmIR);
+    setSavedMessages(session.savedMessages || []); // Add this line
+    setCurrentOutput(session.currentOutput || 'Graph');
+    setlineNumToHighlight(new Set(session.lineNumToHighlight || []));
+    setTabPositions(
+      session.tabPositions || {
+        Graph: 'main',
+        'Terminal Output': 'main',
+        CodeGPT: 'main',
+        LLVMIR: 'main',
+        Terminal: 'main',
+      }
+    );
+    // Intentional one-time parse of URL params on first mount only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const loadSessions = useCallback(() => {
     const loadedSessions = SessionManager.getSessions();
     setSessions(loadedSessions);
 
-    let sessionToLoad: Session;
-
-    if (routeSessionId) {
-      // Try to load the session from the URL parameter
-      sessionToLoad = SessionManager.getSession(routeSessionId);
-      if (sessionToLoad) {
-        setCurrentSessionId(routeSessionId);
-        loadSession(sessionToLoad);
-      } else {
-        // If session doesn't exist, navigate to default route
-        navigate('/', { replace: true });
+    if (loadedSessions.length > 0) {
+      // If the most recent session has empty code, start a fresh default session
+      const first = loadedSessions[0];
+      if (!first.code || first.code.trim() === '') {
+        const fresh = SessionManager.createSession();
+        setSessions([fresh, ...loadedSessions]);
+        setCurrentSessionId(fresh.id);
+        loadSession(fresh);
+        return;
       }
-    } else if (loadedSessions.length > 0) {
-      // No session ID in URL, load the first session
-      sessionToLoad = loadedSessions[0];
-      setCurrentSessionId(sessionToLoad.id);
-      loadSession(sessionToLoad);
+      setCurrentSessionId(loadedSessions[0].id);
+      loadSession(loadedSessions[0]);
     } else {
-      // No sessions exist, create a new one
+      // Create a new session if none exist
       const newSession = SessionManager.createSession();
       setSessions([newSession]);
       setCurrentSessionId(newSession.id);
       loadSession(newSession);
     }
-  }, [routeSessionId, navigate]);
+  }, [setSessions, loadSession]);
+
+  // Load the session specified in the URL (only when a route param exists)
+  const lastRouteRef = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!routeSessionId) return; // Defer to loadSessions for default case
+    if (lastRouteRef.current === routeSessionId) return;
+    lastRouteRef.current = routeSessionId;
+
+    const loadedSessions = SessionManager.getSessions();
+    setSessions(loadedSessions);
+
+    const sessionToLoad = SessionManager.getSession(routeSessionId);
+    if (sessionToLoad) {
+      setCurrentSessionId(routeSessionId);
+      loadSession(sessionToLoad);
+    } else {
+      navigate('/', { replace: true });
+    }
+  }, [routeSessionId, navigate, loadSession]);
 
   const inlineStyles = {
     container: {
@@ -182,7 +355,7 @@ function GraphsPage() {
     document.removeEventListener('mouseup', stopResize);
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, element: string | OutputType) => {
+  const handleDragStart = (e: React.DragEvent<HTMLElement>, element: string | OutputType) => {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('draggedItem', String(element));
 
@@ -224,151 +397,21 @@ function GraphsPage() {
     }
   };
 
-  const [codeError, setCodeError] = useState([]);
-  const [currCodeLineNum, setCurrCodeLineNum] = useState(0);
-  const [currentOutput, setCurrentOutput] = useState<OutputType>('Graph');
-  const [selectedCompileOptions, setSelectedCompileOptions] = useState([
-    compileOptions[0],
-    compileOptions[1],
-    compileOptions[2],
-    compileOptions[3],
-    compileOptions[4],
-  ]);
-  const [selectedExecutableOptions, setSelectedExecutableOptions] = useState([]);
-
-  const [lineNumDetails, setLineNumDetails] = useState<{
-    [key: string]: { nodeOrllvm: string[]; colour: string };
-  }>({});
-  const [code, setCode] = useState('');
-  const [lineNumToHighlight, setlineNumToHighlight] = useState<Set<number>>(new Set());
-  const [terminalOutputString, setTerminalOutputString] = useState(
-    'Run the code to see the terminal output here'
-  );
-  const [llvmIRString, setllvmIRString] = useState('Run the code to see the LLVM IR of your here');
-  const [graphs, setGraphs] = useState({});
-  const [savedMessages, setSavedMessages] = useState<{ role: string; content: string }[]>([]);
-  const [passedPrompt, setPassedPrompt] = useState('');
-
-  const [tabPositions, setTabPositions] = useState<Record<OutputType, string>>({
-    Graph: 'main',
-    'Terminal Output': 'main',
-    CodeGPT: 'main',
-    LLVMIR: 'main',
-    Terminal: 'main', // ✅ Add this
-  });
-
-  // Session Management Functions
-  const loadSessions = () => {
-    const loadedSessions = SessionManager.getSessions();
-    setSessions(loadedSessions);
-
-    if (loadedSessions.length > 0) {
-      setCurrentSessionId(loadedSessions[0].id);
-      loadSession(loadedSessions[0]);
-    } else {
-      // Create a new session if none exist
-      const newSession = SessionManager.createSession();
-      setSessions([newSession]);
-      setCurrentSessionId(newSession.id);
-      loadSession(newSession);
-    }
-  };
-
-  const loadSession = (session: Session) => {
-    setCode(session.code);
-    setSelectedCompileOptions(session.selectedCompileOptions);
-    setSelectedExecutableOptions(session.selectedExecutableOptions);
-    setLineNumDetails(session.lineNumDetails);
-    setGraphs(session.graphs);
-    setTerminalOutputString(session.terminalOutput);
-    setllvmIRString(session.llvmIR);
-    setSavedMessages(session.savedMessages || []); // Add this line
-    setCurrentOutput(session.currentOutput || 'Graph');
-    setlineNumToHighlight(new Set(session.lineNumToHighlight || []));
-    setTabPositions(
-      session.tabPositions || {
-        Graph: 'main',
-        'Terminal Output': 'main',
-        CodeGPT: 'main',
-        LLVMIR: 'main',
-        Terminal: 'main',
-      }
-    );
-  };
-
-  const handleSessionSelect = (sessionId: string) => {
-    saveCurrentSession();
-    navigate(`/session/${sessionId}`, { replace: true });
-  };
-
-  const handleNewSession = () => {
-    // Save current session before creating a new one
-    saveCurrentSession();
-
-    const newSession = SessionManager.createSession();
-    setSessions([newSession, ...sessions]);
-    setCurrentSessionId(newSession.id);
-    loadSession(newSession);
-  };
-
-  const handleRenameSession = (sessionId: string, newTitle: string) => {
-    const updatedSession = SessionManager.updateSession(sessionId, { title: newTitle });
-    if (updatedSession) {
-      setSessions((prevSessions) =>
-        prevSessions.map((s) => (s.id === sessionId ? updatedSession : s))
-      );
-    }
-  };
-
-  const handleDeleteSession = (sessionId: string) => {
-    if (sessions.length <= 1) {
-      // Don't delete the last session
-      alert('Cannot delete the last project. Create a new one first.');
-      return;
-    }
-
-    SessionManager.deleteSession(sessionId);
-    const updatedSessions = sessions.filter((s) => s.id !== sessionId);
-    setSessions(updatedSessions);
-
-    // If the current session is deleted, load the first available session
-    if (sessionId === currentSessionId && updatedSessions.length > 0) {
-      setCurrentSessionId(updatedSessions[0].id);
-      loadSession(updatedSessions[0]);
-    }
-  };
-
-  const saveCurrentSession = () => {
-    if (currentSessionId) {
-      SessionManager.updateSession(currentSessionId, {
-        code,
-        selectedCompileOptions,
-        selectedExecutableOptions,
-        lineNumDetails,
-        graphs,
-        terminalOutput: terminalOutputString,
-        llvmIR: llvmIRString,
-        savedMessages, // Add this line,
-        currentOutput,
-        lineNumToHighlight: Array.from(lineNumToHighlight),
-        tabPositions,
-      });
-    }
-  };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  // Initial load of sessions
+  // Initial load of sessions (once)
   useEffect(() => {
     loadSessions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    // Set up interval to autosave current session
+  // Auto-save at interval without retriggering loadSessions
+  const saveRef = useRef(saveCurrentSession);
+  useEffect(() => {
+    saveRef.current = saveCurrentSession;
+  }, [saveCurrentSession]);
+  useEffect(() => {
     const intervalId = setInterval(() => {
-      saveCurrentSession();
-    }, 30000); // Auto-save every 30 seconds
-
+      if (saveRef.current) saveRef.current();
+    }, 30000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -379,7 +422,7 @@ function GraphsPage() {
     }, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [code, selectedCompileOptions, selectedExecutableOptions]);
+  }, [code, selectedCompileOptions, selectedExecutableOptions, saveCurrentSession]);
 
   const renderComponent = () => {
     switch (currentOutput) {
@@ -387,7 +430,7 @@ function GraphsPage() {
         return (
           <DotGraphViewer
             key={`graph-${currentSessionId}`} // Add this key
-            setlineNumToHighlight={setlineNumToHighlight}
+            setlineNumToHighlight={setlineNumToHighlightGuard}
             graphObj={graphs}
             setLineNumDetails={setLineNumDetails}
             lineNumDetails={lineNumDetails}
@@ -401,6 +444,7 @@ function GraphsPage() {
           <TerminalOutput
             key={`terminal-${currentSessionId}`}
             terminalOutputString={terminalOutputString}
+            externalFontSize={terminalOutputFontSize}
           />
         );
       case 'CodeGPT':
@@ -414,10 +458,11 @@ function GraphsPage() {
             savedMessages={savedMessages}
             onSaveMessages={setSavedMessages}
             passedPrompt={passedPrompt}
+            sessionId={currentSessionId || ''}
           />
         );
       case 'LLVMIR':
-        return <LLVMIR LLVMIRString={llvmIRString} />;
+        return <LLVMIR LLVMIRString={llvmIRString} externalFontSize={llvmIRFontSize} />;
       case 'Terminal':
         return <RealTerminal key={`realterminal-${currentSessionId}`} />;
 
@@ -429,7 +474,6 @@ function GraphsPage() {
   useEffect(() => {
     if (passedPrompt !== '') {
       setCurrentOutput('CodeGPT');
-      renderComponent();
 
       // Reset passedPrompt after it's been used
       setTimeout(() => {
@@ -486,6 +530,14 @@ function GraphsPage() {
           setGraphs(graphObj);
           setllvmIRString(responseLLVM || '');
           setTerminalOutputString(responseOutput || '');
+
+          // Merge in LLVM-based highlights (e.g., mapping C return lines to LLVM IR ret lines)
+          try {
+            const llvmMapping = llvmHighlight(code.split('\n'), (responseLLVM || '').split('\n'));
+            setLineNumDetails((prev) => ({ ...prev, ...llvmMapping }));
+          } catch (_e) {
+            // No-op: if highlighting fails, continue without blocking
+          }
 
           setCodeError(formatErrorLogs(responseError || ''));
           // Show success message if code processed successfully
@@ -589,23 +641,11 @@ function GraphsPage() {
     setSelectedExecutableOptions([]);
   };
 
-  const createLZStringUrl = () => {
-    const baseUrl = window.location.origin;
-
-    // Create a shareable settings object for the current session only
-    const savedSettings: DecompressedSettings = {
-      sessionId: currentSessionId, // Only include the session ID
-    };
-
-    // Compress the settings
-    const compressed = compressToEncodedURIComponent(JSON.stringify(savedSettings));
-
-    // Return a URL that points directly to the session
-    return `${baseUrl}/session/${currentSessionId}?data=${compressed}`;
-  };
-
   // Add this to your useEffect that handles URL parameters
+  const didParseRef1 = useRef(false);
   useEffect(() => {
+    if (didParseRef1.current) return;
+    didParseRef1.current = true;
     const urlParams = new URLSearchParams(window.location.search);
     let compressedFromURL = urlParams.get('data');
 
@@ -656,9 +696,14 @@ function GraphsPage() {
         // Error parsing URL data - silently ignore
       }
     }
-  }, [currentSessionId, navigate, saveCurrentSession]);
+    // Intentional one-time parse of URL params on first mount only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  const didParseRef2 = useRef(false);
   useEffect(() => {
+    if (didParseRef2.current) return;
+    didParseRef2.current = true;
     const urlParams = new URLSearchParams(window.location.search);
     let compressedFromURL = urlParams.get('data');
 
@@ -724,7 +769,53 @@ function GraphsPage() {
         // Error parsing URL data - silently ignore
       }
     }
-  }, [currentSessionId, saveCurrentSession]);
+  }, [currentSessionId, loadSession, saveCurrentSession]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleSessionSelect = (sessionId: string) => {
+    saveCurrentSession();
+    navigate(`/session/${sessionId}`, { replace: true });
+  };
+
+  const handleNewSession = () => {
+    // Save current session before creating a new one
+    saveCurrentSession();
+
+    const newSession = SessionManager.createSession();
+    setSessions([newSession, ...sessions]);
+    setCurrentSessionId(newSession.id);
+    loadSession(newSession);
+  };
+
+  const handleRenameSession = (sessionId: string, newTitle: string) => {
+    const updatedSession = SessionManager.updateSession(sessionId, { title: newTitle });
+    if (updatedSession) {
+      setSessions((prevSessions) =>
+        prevSessions.map((s) => (s.id === sessionId ? updatedSession : s))
+      );
+    }
+  };
+
+  const handleDeleteSession = (sessionId: string) => {
+    if (sessions.length <= 1) {
+      // Don't delete the last session
+      alert('Cannot delete the last project. Create a new one first.');
+      return;
+    }
+
+    SessionManager.deleteSession(sessionId);
+    const updatedSessions = sessions.filter((s) => s.id !== sessionId);
+    setSessions(updatedSessions);
+
+    // If the current session is deleted, load the first available session
+    if (sessionId === currentSessionId && updatedSessions.length > 0) {
+      setCurrentSessionId(updatedSessions[0].id);
+      loadSession(updatedSessions[0]);
+    }
+  };
 
   const [openShareModal, setOpenShareModal] = React.useState(false);
   const handleOpenShareModal = () => setOpenShareModal(true);
@@ -764,7 +855,22 @@ function GraphsPage() {
         handleClose={handleCloseShareModal}
         shareLink={shareLink}
       />
-      <NavBar openShare={handleOpenShareModal} setCode={setCode} code={code} />
+      <NavBar
+        openShare={handleOpenShareModal}
+        setCode={setCode}
+        code={code}
+        openSettings={() => setSettingsOpen(true)}
+      />
+      <SettingsModal
+        open={settingsOpen}
+        handleClose={() => setSettingsOpen(false)}
+        codeFontSize={codeFontSize}
+        setCodeFontSize={setCodeFontSize}
+        llvmIRFontSize={llvmIRFontSize}
+        setLLVMIRFontSize={setLLVMIRFontSize}
+        terminalOutputFontSize={terminalOutputFontSize}
+        setTerminalOutputFontSize={setTerminalOutputFontSize}
+      />
       <div className="app-layout">
         {/* Sessions Sidebar */}
         <SessionsSidebar
@@ -809,6 +915,7 @@ function GraphsPage() {
               setCurrCodeLineNum={setCurrCodeLineNum}
               codeError={codeError}
               setPassedPrompt={setPassedPrompt}
+              externalFontSize={codeFontSize}
             />
           </div>
           {/* Resizer element */}
@@ -833,9 +940,7 @@ function GraphsPage() {
             <OutputMenuBar
               currentOutput={currentOutput}
               setCurrentOutput={setCurrentOutput}
-              onDragStartTab={(tab) => (e: React.DragEvent<HTMLDivElement>) =>
-                handleDragStart(e, tab)
-              }
+              onDragStartTab={(tab, e) => handleDragStart(e, tab)}
             />
             <div
               style={{ flexGrow: 1 }}

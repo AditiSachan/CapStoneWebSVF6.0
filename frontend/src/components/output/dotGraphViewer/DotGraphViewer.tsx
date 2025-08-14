@@ -1,16 +1,73 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { graphviz } from 'd3-graphviz';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Graphviz } from 'graphviz-react';
 import './dotGraphViewer.css';
 import GraphButton from '../../tooltip/GraphButton';
+
+// Helper function to determine default node colors based on SVF node types
+const getDefaultNodeColor = (nodeString: string): string | null => {
+  if (nodeString.includes('FunEntryBlockNode') || nodeString.includes('FormalParmVFGNode')) {
+    return 'yellow';
+  }
+  if (nodeString.includes('FunExitBlockNode') || nodeString.includes('FormalRetVFGNode')) {
+    return 'green';
+  }
+  if (nodeString.includes('CallBlockNode') || nodeString.includes('ActualParmVFGNode')) {
+    return 'red';
+  }
+  if (nodeString.includes('RetBlockNode') || nodeString.includes('ActualRetVFGNode')) {
+    return 'blue';
+  }
+  if (nodeString.includes('LoadVFGNode')) {
+    return 'red';
+  }
+  if (nodeString.includes('StoreVFGNode')) {
+    return 'blue';
+  }
+  if (nodeString.includes('AddrVFGNode')) {
+    return 'green';
+  }
+  if (nodeString.includes('GepVFGNode')) {
+    return 'purple';
+  }
+  if (nodeString.includes('CopyVFGNode')) {
+    return 'black';
+  }
+  if (nodeString.includes('NullPtrVFGNode')) {
+    return 'grey';
+  }
+  if (nodeString.includes('PHIVFGNode')) {
+    return 'black';
+  }
+  if (
+    nodeString.includes('BinaryOPVFGNode') ||
+    nodeString.includes('UnaryOPVFGNode') ||
+    nodeString.includes('CmpVFGNode')
+  ) {
+    return 'black';
+  }
+  return null;
+};
+
+const getNodes = (matchedDigraph: RegExpExecArray) => {
+  const graphContent = matchedDigraph[1].trim();
+  const splitGraphContent = graphContent.split('\n\t');
+
+  const removedEmptyStrings = splitGraphContent.filter((part) => part.trim() !== '');
+  removedEmptyStrings.shift();
+
+  const edgePattern = /(\w+:)+\s+->\s+(\w+:)+/g;
+  return removedEmptyStrings.filter((item) => !edgePattern.test(item));
+};
 
 interface DotGraphViewerProps {
   setlineNumToHighlight: (newLineNumToHighlight: Set<number>) => void;
   graphObj: { [key: string]: string };
   lineNumDetails: { [lineNum: string]: { nodeOrllvm: string[]; colour: string } };
-  setLineNumDetails: (newLineNumDetails: {
-    [lineNum: string]: { nodeOrllvm: string[]; colour: string };
-  }) => void;
+  setLineNumDetails: React.Dispatch<
+    React.SetStateAction<{
+      [lineNum: string]: { nodeOrllvm: string[]; colour: string };
+    }>
+  >;
   currCodeLineNum: number;
   code: string;
   setPassedPrompt?: (prompt: string) => void;
@@ -61,13 +118,15 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
       setCurrentGraph(defaultGraphKey);
       setGraphString(graphObj[defaultGraphKey]);
     }
-  }, [graphObj]); // This will run when graphObj is updated
+  }, [graphObj, currentGraph]); // This will run when graphObj is updated
 
   // Used to set the width and height of the DotGraphViewer
   const graphWidth = window.innerWidth * 0.5;
   const graphHeight = window.innerHeight * 0.85;
 
   const graphRef = useRef(null);
+  const processedKeyRef = useRef<string>('');
+  const lastHighlightSigRef = useRef<string>('');
 
   /*
     The use effect below is used to add an event listener to each node in the graph
@@ -77,437 +136,358 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     The event is: When a node is clicked, the line numbers of the code that the node represents will be highlighted
   */
   useEffect(() => {
-    const graphvizContainer = graphRef.current;
+    let attachedSvg: SVGSVGElement | null = null;
+    let attachAttempts = 0;
+    const maxAttempts = 20;
 
-    if (graphvizContainer) {
-      const svg = graphvizContainer.querySelector('svg');
-      if (svg) {
-        if (currentGraph === 'callgraph' || currentGraph === 'ptacg' || currentGraph === 'tcg') {
-          svg.addEventListener('click', (event) => {
-            const node = event.target.closest('g.node');
-            if (node) {
-              const nodeTextList = node.querySelectorAll('text');
-              const nodeTextContentList: string[] = [];
-              nodeTextList.forEach((nodeText) => {
-                nodeTextContentList.push(nodeText.textContent);
-              });
-              const funcPattern = /fun:\s*([^}]+)/;
-              // Finds the first function name then breaks
-              let funcTofind = '';
-              for (const callNodeText of nodeTextContentList) {
-                const match = funcPattern.exec(callNodeText);
-                if (match) {
-                  const funcString = match[0];
-                  const removeFun = funcString.replace('fun: ', '');
-                  funcTofind = removeFun;
-                  break;
-                }
-              }
-              const newlineNumToHighlight: Set<number> = new Set<number>();
+    const handleClickGeneral = (event: MouseEvent) => {
+      const target = event.target as Element | null;
+      const node = target?.closest('g.node');
+      if (!node) return;
+      const nodeTextList = node.querySelectorAll('text');
+      const nodeTextContentList: string[] = [];
+      nodeTextList.forEach((nodeText: { textContent: string }) => {
+        nodeTextContentList.push(nodeText.textContent);
+      });
 
-              Object.keys(lineNumDetails).forEach((lineNum) => {
-                const nodes = lineNumDetails[lineNum].nodeOrllvm;
-                if (nodes.includes(funcTofind)) {
-                  newlineNumToHighlight.add(parseInt(lineNum, 10));
-                }
-              });
-              setlineNumToHighlight(newlineNumToHighlight);
-            }
-          });
-        } else {
-          svg.addEventListener('click', (event) => {
-            const node = event.target.closest('g.node');
-            if (node) {
-              const nodeId = node.querySelector('title').textContent;
-              // const nodeText = node.querySelector('text').textContent;
-              const nodeTextList = node.querySelectorAll('text');
-              // const nodeTextListContent = nodeTextList.map((node) => {
-
-              // })
-              const nodeTextContentList: string[] = [];
-              nodeTextList.forEach((nodeText) => {
-                nodeTextContentList.push(nodeText.textContent);
-              });
-              /*
-               These are the line regexes used to detect if node has a line number
-              */
-              const lineRegex = /line:\s*(\d+)/g;
-              const lnRegex = /ln:\s*(\d+)/g;
-              const lnJsonRegex = /\\"ln\\":\s*(\d+)/g;
-              const lineJsonRegex = /\\"line\\":\s*(\d+)/g;
-
-              let matchLineNum;
-              const newlineNumToHighlight: Set<number> = new Set<number>();
-
-              // check with svf-ex on how it would spit back out examples from comp6131
-              nodeTextContentList.forEach((nodeText) => {
-                if ((matchLineNum = lineRegex.exec(nodeText)) !== null) {
-                  newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
-                } else if ((matchLineNum = lnRegex.exec(nodeText)) !== null) {
-                  newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
-                } else if ((matchLineNum = lnJsonRegex.exec(nodeText)) !== null) {
-                  newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
-                } else if ((matchLineNum = lineJsonRegex.exec(nodeText)) !== null) {
-                  newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
-                }
-              });
-
-              setlineNumToHighlight(newlineNumToHighlight);
-              // setSelectedNode(nodeId);
-            }
-          });
+      if (currentGraph === 'callgraph' || currentGraph === 'ptacg' || currentGraph === 'tcg') {
+        const funcPattern = /fun:\s*([^}]+)/;
+        let funcTofind = '';
+        for (const callNodeText of nodeTextContentList) {
+          const match = funcPattern.exec(callNodeText);
+          if (match) {
+            const funcString = match[0];
+            funcTofind = funcString.replace('fun: ', '');
+            break;
+          }
         }
+        const newlineNumToHighlight: Set<number> = new Set<number>();
+        Object.keys(lineNumDetails).forEach((lineNum) => {
+          const nodes = lineNumDetails[lineNum].nodeOrllvm;
+          if (nodes.includes(funcTofind)) {
+            newlineNumToHighlight.add(parseInt(lineNum, 10));
+          }
+        });
+        setlineNumToHighlight(newlineNumToHighlight);
+      } else {
+        const lineRegex = /line:\s*(\d+)/g;
+        const lnRegex = /ln:\s*(\d+)/g;
+        const lnJsonRegex = /\\"ln\\":\s*(\d+)/g;
+        const lineJsonRegex = /\\"line\\":\s*(\d+)/g;
+
+        let matchLineNum: RegExpExecArray | null;
+        const newlineNumToHighlight: Set<number> = new Set<number>();
+        nodeTextContentList.forEach((nodeText) => {
+          if ((matchLineNum = lineRegex.exec(nodeText)) !== null) {
+            newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
+          } else if ((matchLineNum = lnRegex.exec(nodeText)) !== null) {
+            newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
+          } else if ((matchLineNum = lnJsonRegex.exec(nodeText)) !== null) {
+            newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
+          } else if ((matchLineNum = lineJsonRegex.exec(nodeText)) !== null) {
+            newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
+          }
+        });
+        setlineNumToHighlight(newlineNumToHighlight);
       }
+    };
+
+    const tryAttach = () => {
+      const container = graphRef.current;
+      if (!container) return;
+      const svg = container.querySelector('svg') as SVGSVGElement | null;
+      if (svg) {
+        attachedSvg = svg;
+        svg.addEventListener('click', handleClickGeneral);
+        return true;
+      }
+      return false;
+    };
+
+    if (!tryAttach()) {
+      const interval = setInterval(() => {
+        attachAttempts++;
+        if (tryAttach() || attachAttempts >= maxAttempts) {
+          clearInterval(interval);
+        }
+      }, 100);
+      return () => {
+        clearInterval(interval);
+        if (attachedSvg) attachedSvg.removeEventListener('click', handleClickGeneral);
+      };
     }
-  }, [graphString]);
 
-  useEffect(() => {
-    if (currentGraph === 'callgraph' || currentGraph === 'ptacg' || currentGraph === 'tcg') {
-      const codeBylines = code.split('\n');
-      addFillColorToCallNode(codeBylines);
-    } else if (currentGraph && graphObj[currentGraph]) {
-      // Process the raw graph string to extract line numbers and assign colors
-      const lineNumToNodes: { [key: string]: { nodeOrllvm: string[]; colour: string } } = {};
-      const rawGraphString = graphObj[currentGraph];
+    return () => {
+      if (attachedSvg) attachedSvg.removeEventListener('click', handleClickGeneral);
+    };
+  }, [currentGraph, lineNumDetails, setlineNumToHighlight]);
 
-      // Extract nodes from the raw graph string
+  const addFillColorToNode = useCallback(
+    (nodeIDColour: { [key: string]: string }, graphString: string) => {
       const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
-      const match = graphContentPattern.exec(rawGraphString);
+      const match = graphContentPattern.exec(graphString);
 
       if (match) {
-        const graphContent = match[1].trim();
-        const lines = graphContent.split('\n');
+        const nodesOnly = getNodes(match);
+        const modifiedNodes: Array<{ original: string; modified: string }> = [];
 
-        lines.forEach((line) => {
-          // Look for node definitions
-          if (line.includes('[') && line.includes('label=')) {
-            // Extract node ID
-            const nodeIdMatch = line.match(/^[\s\t]*(Node\w+)/);
-            if (nodeIdMatch) {
-              const nodeId = nodeIdMatch[1];
+        nodesOnly.forEach((originalNode) => {
+          if (originalNode.includes('shape')) {
+            let nodeModified = false;
+            let currentNode = originalNode;
 
-              // Check for line numbers in the node using all regex patterns
-              const lineRegex = /line:\s*(\d+)/g;
-              const lnRegex = /ln:\s*(\d+)/g;
-              const lnJsonRegex = /\\"ln\\":\s*(\d+)/g;
-              const lineJsonRegex = /\\"line\\":\s*(\d+)/g;
-
-              let matchLineNum;
-              if (
-                (matchLineNum = lineRegex.exec(line)) !== null ||
-                (matchLineNum = lnRegex.exec(line)) !== null ||
-                (matchLineNum = lnJsonRegex.exec(line)) !== null ||
-                (matchLineNum = lineJsonRegex.exec(line)) !== null
-              ) {
-                const lineNumber = matchLineNum[1];
-                if (lineNumber in lineNumToNodes) {
-                  lineNumToNodes[lineNumber]['nodeOrllvm'].push(nodeId);
-                } else {
-                  lineNumToNodes[lineNumber] = {
-                    nodeOrllvm: [nodeId],
-                    colour: '',
-                  };
-                }
+            if (!currentNode.includes('color=') && !currentNode.includes('fillcolor=')) {
+              const defaultColor = getDefaultNodeColor(currentNode);
+              if (defaultColor) {
+                const styleAddition = `, color=${defaultColor}, style=filled, fillcolor="${defaultColor}"`;
+                currentNode =
+                  currentNode.substring(0, currentNode.length - 2) + styleAddition + '];';
+                nodeModified = true;
               }
             }
-          }
-        });
 
-        // Assign colors to line numbers
-        const lineNums = Object.keys(lineNumToNodes);
-        const numericKeys = lineNums.map((key) => parseInt(key, 10));
-        const sortedNumericKeys = numericKeys.sort((a, b) => a - b);
-        const nodeIDColour: { [key: string]: string } = {};
-
-        sortedNumericKeys.forEach((lineNum, index) => {
-          const colour = highlightColours[index % highlightColours.length];
-          lineNumToNodes[lineNum.toString()]['colour'] = colour;
-          lineNumToNodes[lineNum.toString()]['nodeOrllvm'].forEach((nodeId) => {
-            nodeIDColour[nodeId] = colour;
-          });
-        });
-
-        // Apply colors to the graph and update state
-        if (Object.keys(nodeIDColour).length > 0) {
-          addFillColorToNode(nodeIDColour, rawGraphString);
-          setLineNumDetails(lineNumToNodes);
-        } else {
-          // No line numbers found, but still apply default SVF colors
-          addFillColorToNode({}, rawGraphString);
-        }
-      }
-    }
-  }, [currentGraph, graphObj, code]);
-
-  const addFillColorToCallNode = (codeBylines: string[]) => {
-    const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
-
-    // Execute the regex to find a match
-    const match = graphContentPattern.exec(graphString);
-
-    if (match) {
-      const graphContent = match[1].trim();
-      const splitGraphContent = graphContent.split('\n\t');
-
-      // Filter out any empty strings that might occur from the split
-      const removedEmptyStrings = splitGraphContent.filter((part) => part.trim() !== '');
-
-      removedEmptyStrings.shift();
-
-      /*
-      Removing edges from the list
-      */
-      const edgePattern = /([\w:]+)\s+->\s+([\w:]+)/g;
-      const funcs: string[] = [];
-      const nodesOnly = removedEmptyStrings.filter((item) => !edgePattern.test(item));
-      const funcPattern = /fun: ([^\\]+)\\/;
-      nodesOnly.forEach((callNode) => {
-        const match = funcPattern.exec(callNode);
-        if (match) {
-          const funcString = match[0];
-          const removeFun = funcString.replace('fun: ', '');
-          /// TODO: Naive approach. Assumes functions are funcName( i.e there are no spaces between funcName and the bracket
-          const removeBackSlash = removeFun.replace('\\', '(');
-          funcs.push(removeBackSlash);
-        }
-      });
-      const funcLineColor: { [func: string]: { line: Set<number>; colour: string } } = {};
-      const lineNumToNodes: { [key: string]: { nodeOrllvm: string[]; colour: string } } = {};
-      const funcToColour: { [func: string]: string } = {};
-
-      codeBylines.forEach((codeLine, index) => {
-        funcs.forEach((func) => {
-          // Need to account for comments
-          if (codeLine.includes(func)) {
-            const funcWithSlash = func.replace('(', '\\');
-            const funcName = func.replace('(', '');
-            if (func in funcLineColor) {
-              funcLineColor[func].line.add(index + 1);
-              lineNumToNodes[index + 1] = {
-                nodeOrllvm: [funcName],
-                colour: funcLineColor[func].colour,
-              };
-            } else {
-              const lineNumbers = new Set<number>();
-              lineNumbers.add(index + 1);
-              const currSizeFunc: number = Object.keys(funcLineColor).length;
-              funcLineColor[func] = {
-                line: lineNumbers,
-                colour: highlightColours[currSizeFunc % highlightColours.length],
-              };
-              // line num to nodes
-              lineNumToNodes[index + 1] = {
-                nodeOrllvm: [funcName],
-                colour: highlightColours[currSizeFunc % highlightColours.length],
-              };
-              funcToColour[funcWithSlash] =
-                highlightColours[currSizeFunc % highlightColours.length];
+            for (const nodeId in nodeIDColour) {
+              if (currentNode.includes(nodeId)) {
+                const fillColorStyle = currentNode.includes('fillcolor=')
+                  ? ''
+                  : `, fillcolor="${nodeIDColour[nodeId]}"`;
+                const styleAttribute = currentNode.includes('style=') ? '' : ', style=filled';
+                const addingFillColour = `${styleAttribute}${fillColorStyle}];`;
+                currentNode = currentNode.substring(0, currentNode.length - 2) + addingFillColour;
+                nodeModified = true;
+                break;
+              }
             }
-          }
-        });
-      });
 
-      addFillColorToNode(funcToColour, graphString);
-      setLineNumDetails(lineNumToNodes);
-    }
-  };
-
-  const addFillColorToNode = (nodeIDColour: { [key: string]: string }, graphString: string) => {
-    const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
-
-    // Execute the regex to find a match
-    // Checks if the graphString is a digraph
-    const match = graphContentPattern.exec(graphString);
-
-    if (match) {
-      const nodesOnly = getNodes(match);
-
-      // check with svf-ex on how it would spit back out examples from comp6131
-      const modifiedNodes = [];
-
-      nodesOnly.forEach((originalNode) => {
-        if (originalNode.includes('shape')) {
-          let nodeModified = false;
-          let currentNode = originalNode;
-
-          // First, ensure the node has basic color styling if it doesn't already
-          if (!currentNode.includes('color=') && !currentNode.includes('fillcolor=')) {
-            // Add default styling to preserve original appearance
-            const defaultColor = getDefaultNodeColor(currentNode);
-            if (defaultColor) {
-              const styleAddition = `, color=${defaultColor}, style=filled, fillcolor="${defaultColor}"`;
-              currentNode = currentNode.substring(0, currentNode.length - 2) + styleAddition + '];';
+            if (
+              originalNode.toLowerCase().includes('null') ||
+              originalNode.toLowerCase().includes('nullptr') ||
+              originalNode.toLowerCase().includes('null-deref')
+            ) {
+              const nullStyleAttribute = currentNode.includes('style=') ? '' : ', style=filled';
+              const addingNullHighlight = `${nullStyleAttribute}, fillcolor="red"];`;
+              currentNode = currentNode.substring(0, currentNode.length - 2) + addingNullHighlight;
               nodeModified = true;
             }
-          }
 
-          // Apply line-based highlighting colors
-          for (const nodeId in nodeIDColour) {
-            if (currentNode.includes(nodeId)) {
-              const fillColorStyle = currentNode.includes('fillcolor=')
-                ? ''
-                : `, fillcolor="${nodeIDColour[nodeId]}"`;
-              const styleAttribute = currentNode.includes('style=') ? '' : ', style=filled';
-              const addingFillColour = `${styleAttribute}${fillColorStyle}];`;
-
-              currentNode = currentNode.substring(0, currentNode.length - 2) + addingFillColour;
-              nodeModified = true;
-              break; // Found the node, no need to check other nodeIds for this originalNode
+            if (nodeModified) {
+              modifiedNodes.push({ original: originalNode, modified: currentNode });
             }
           }
+        });
 
-          // highlight null-dereference related nodes
-          if (
-            originalNode.toLowerCase().includes('null') ||
-            originalNode.toLowerCase().includes('nullptr') ||
-            originalNode.toLowerCase().includes('null-deref')
-          ) {
-            const nullStyleAttribute = currentNode.includes('style=') ? '' : ', style=filled';
-            const addingNullHighlight = `${nullStyleAttribute}, fillcolor="red"];`;
-            currentNode = currentNode.substring(0, currentNode.length - 2) + addingNullHighlight;
-            nodeModified = true;
-          }
-
-          if (nodeModified) {
-            modifiedNodes.push({
-              original: originalNode,
-              modified: currentNode,
-            });
-          }
-        }
-      });
-
-      // Apply all modifications to the graph string
-      let newGraphString = graphString;
-      modifiedNodes.forEach((moddedNode) => {
-        newGraphString = newGraphString.replace(moddedNode['original'], moddedNode['modified']);
-      });
-
-      if (modifiedNodes.length > 0) {
-        setGraphString(newGraphString);
-      } else {
-        // If no modifications were made, still set the graph string to ensure rendering
-        setGraphString(graphString);
-      }
-    }
-  };
-
-  // Helper function to determine default node colors based on SVF node types
-  const getDefaultNodeColor = (nodeString: string): string | null => {
-    // Parse common SVF node patterns and assign appropriate colors
-    if (nodeString.includes('FunEntryBlockNode') || nodeString.includes('FormalParmVFGNode')) {
-      return 'yellow';
-    }
-    if (nodeString.includes('FunExitBlockNode') || nodeString.includes('FormalRetVFGNode')) {
-      return 'green';
-    }
-    if (nodeString.includes('CallBlockNode') || nodeString.includes('ActualParmVFGNode')) {
-      return 'red';
-    }
-    if (nodeString.includes('RetBlockNode') || nodeString.includes('ActualRetVFGNode')) {
-      return 'blue';
-    }
-    if (nodeString.includes('LoadVFGNode')) {
-      return 'red';
-    }
-    if (nodeString.includes('StoreVFGNode')) {
-      return 'blue';
-    }
-    if (nodeString.includes('AddrVFGNode')) {
-      return 'green';
-    }
-    if (nodeString.includes('GepVFGNode')) {
-      return 'purple';
-    }
-    if (nodeString.includes('CopyVFGNode')) {
-      return 'black';
-    }
-    if (nodeString.includes('NullPtrVFGNode')) {
-      return 'grey';
-    }
-    if (nodeString.includes('PHIVFGNode')) {
-      return 'black';
-    }
-    if (
-      nodeString.includes('BinaryOPVFGNode') ||
-      nodeString.includes('UnaryOPVFGNode') ||
-      nodeString.includes('CmpVFGNode')
-    ) {
-      return 'black';
-    }
-    return null;
-  };
-
-  const getNodes = (matchedDigraph: RegExpExecArray) => {
-    const graphContent = matchedDigraph[1].trim();
-    const splitGraphContent = graphContent.split('\n\t');
-
-    // Filter out any empty strings that might occur from the split
-    const removedEmptyStrings = splitGraphContent.filter((part) => part.trim() !== '');
-
-    /* Removing title of the graph
-      e.g "label="Call Graph";"
-      */
-    removedEmptyStrings.shift();
-
-    /*
-      Removing edges from the list
-      */
-    // const edgePattern = /(\w+)\s+->\s+(\w+)/g;
-    // Removes most edges, sometimes leaves some edges which can be seen in icfg.dot
-    const edgePattern = /([\w:]+)\s+->\s+([\w:]+)/g;
-
-    const nodesOnly = removedEmptyStrings.filter((item) => !edgePattern.test(item));
-    return nodesOnly;
-  };
-
-  useEffect(() => {
-    if (currCodeLineNum > 0 && currCodeLineNum in lineNumDetails) {
-      changeTextColour();
-    }
-  }, [currCodeLineNum]);
-
-  const changeTextColour = () => {
-    const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
-
-    /*
-      This is used to remove the red font colour from the nodes from previous selections
-      Essentially a reset
-    */
-    let newGraphString = graphString;
-    while (newGraphString.includes(', fontcolor=red')) {
-      newGraphString = newGraphString.replace(', fontcolor=red', '');
-    }
-
-    // Execute the regex to find a match
-    const match = graphContentPattern.exec(graphString);
-
-    if (match) {
-      const nodesOnly = getNodes(match);
-      const modifiedNodes = [];
-      nodesOnly.forEach((originalNode) => {
-        if (originalNode.includes('shape')) {
-          lineNumDetails[currCodeLineNum]['nodeOrllvm'].forEach((nodeId) => {
-            if (originalNode.includes(nodeId)) {
-              const addingFontColour = ', fontcolor=red];';
-              const modifiedString =
-                originalNode.substring(0, originalNode.length - 2) + addingFontColour;
-              modifiedNodes.push({
-                original: originalNode,
-                modified: modifiedString,
-              });
-            }
-          });
-        }
+        let newGraphString = graphString;
         modifiedNodes.forEach((moddedNode) => {
           newGraphString = newGraphString.replace(moddedNode['original'], moddedNode['modified']);
         });
-        if (graphString !== newGraphString) {
+        if (modifiedNodes.length > 0) {
           setGraphString(newGraphString);
         }
-      });
+      }
+    },
+    []
+  );
+
+  const addFillColorToCallNode = useCallback(
+    (codeBylines: string[]) => {
+      const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
+
+      // Execute the regex to find a match
+      const match = graphContentPattern.exec(graphString);
+
+      if (match) {
+        const graphContent = match[1].trim();
+        const splitGraphContent = graphContent.split('\n\t');
+
+        // Filter out any empty strings that might occur from the split
+        const removedEmptyStrings = splitGraphContent.filter((part) => part.trim() !== '');
+
+        removedEmptyStrings.shift();
+
+        /*
+      Removing edges from the list
+      */
+        const edgePattern = /([\w:]+)\s+->\s+([\w:]+)/g;
+        const funcs: string[] = [];
+        const nodesOnly = removedEmptyStrings.filter((item) => !edgePattern.test(item));
+        const funcPattern = /fun: ([^\\]+)\\/;
+        nodesOnly.forEach((callNode) => {
+          const match = funcPattern.exec(callNode);
+          if (match) {
+            const funcString = match[0];
+            const removeFun = funcString.replace('fun: ', '');
+            /// TODO: Naive approach. Assumes functions are funcName( i.e there are no spaces between funcName and the bracket
+            const removeBackSlash = removeFun.replace('\\', '(');
+            funcs.push(removeBackSlash);
+          }
+        });
+        const funcLineColor: { [func: string]: { line: Set<number>; colour: string } } = {};
+        const lineNumToNodes: { [key: string]: { nodeOrllvm: string[]; colour: string } } = {};
+        const funcToColour: { [func: string]: string } = {};
+
+        codeBylines.forEach((codeLine, index) => {
+          funcs.forEach((func) => {
+            // Need to account for comments
+            if (codeLine.includes(func)) {
+              const funcWithSlash = func.replace('(', '\\');
+              const funcName = func.replace('(', '');
+              if (func in funcLineColor) {
+                funcLineColor[func].line.add(index + 1);
+                lineNumToNodes[index + 1] = {
+                  nodeOrllvm: [funcName],
+                  colour: funcLineColor[func].colour,
+                };
+              } else {
+                const lineNumbers = new Set<number>();
+                lineNumbers.add(index + 1);
+                const currSizeFunc: number = Object.keys(funcLineColor).length;
+                funcLineColor[func] = {
+                  line: lineNumbers,
+                  colour: highlightColours[currSizeFunc % highlightColours.length],
+                };
+                // line num to nodes
+                lineNumToNodes[index + 1] = {
+                  nodeOrllvm: [funcName],
+                  colour: highlightColours[currSizeFunc % highlightColours.length],
+                };
+                funcToColour[funcWithSlash] =
+                  highlightColours[currSizeFunc % highlightColours.length];
+              }
+            }
+          });
+        });
+
+        addFillColorToNode(funcToColour, graphString);
+        // Merge with any existing highlights instead of overwriting
+        setLineNumDetails((prev) => ({ ...prev, ...lineNumToNodes }));
+      }
+    },
+    [graphString, addFillColorToNode, setLineNumDetails]
+  );
+
+  useEffect(() => {
+    if (!currentGraph) return;
+    const raw = graphObj[currentGraph];
+    if (!raw) return;
+    const key = `${currentGraph}|${raw.length}|${code.length}`;
+    if (processedKeyRef.current === key) return;
+
+    if (currentGraph === 'callgraph' || currentGraph === 'ptacg' || currentGraph === 'tcg') {
+      const codeBylines = code.split('\n');
+      addFillColorToCallNode(codeBylines);
+      processedKeyRef.current = key;
+      return;
     }
-  };
+
+    // Process the raw graph string to extract line numbers and assign colors
+    const lineNumToNodes: { [key: string]: { nodeOrllvm: string[]; colour: string } } = {};
+    const rawGraphString = raw;
+
+    const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
+    const match = graphContentPattern.exec(rawGraphString);
+    if (!match) return;
+
+    const graphContent = match[1].trim();
+    const lines = graphContent.split('\n');
+    lines.forEach((line) => {
+      if (line.includes('[') && line.includes('label=')) {
+        const nodeIdMatch = line.match(/^[\s\t]*(Node\w+)/);
+        if (nodeIdMatch) {
+          const nodeId = nodeIdMatch[1];
+          const lineRegex = /line:\s*(\d+)/g;
+          const lnRegex = /ln:\s*(\d+)/g;
+          const lnJsonRegex = /\\"ln\\":\s*(\d+)/g;
+          const lineJsonRegex = /\\"line\\":\s*(\d+)/g;
+          const matchLineNum: RegExpExecArray | null =
+            lineRegex.exec(line) ||
+            lnRegex.exec(line) ||
+            lnJsonRegex.exec(line) ||
+            lineJsonRegex.exec(line);
+          if (matchLineNum) {
+            const lineNumber = matchLineNum[1];
+            if (lineNumber in lineNumToNodes) {
+              lineNumToNodes[lineNumber]['nodeOrllvm'].push(nodeId);
+            } else {
+              lineNumToNodes[lineNumber] = { nodeOrllvm: [nodeId], colour: '' };
+            }
+          }
+        }
+      }
+    });
+
+    const lineNums = Object.keys(lineNumToNodes);
+    const numericKeys = lineNums.map((k) => parseInt(k, 10)).sort((a, b) => a - b);
+    const nodeIDColour: { [key: string]: string } = {};
+    numericKeys.forEach((ln, idx) => {
+      const colour = highlightColours[idx % highlightColours.length];
+      lineNumToNodes[ln.toString()].colour = colour;
+      lineNumToNodes[ln.toString()].nodeOrllvm.forEach((nodeId) => {
+        nodeIDColour[nodeId] = colour;
+      });
+    });
+
+    if (Object.keys(nodeIDColour).length > 0) {
+      addFillColorToNode(nodeIDColour, rawGraphString);
+      setLineNumDetails((prev) => ({ ...prev, ...lineNumToNodes }));
+    } else {
+      addFillColorToNode({}, rawGraphString);
+    }
+
+    processedKeyRef.current = key;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentGraph, graphObj, code]);
+
+  const currentLineMapping = lineNumDetails[currCodeLineNum];
+
+  useEffect(() => {
+    // Only run when graphString actually changes or when the mapping for currCodeLineNum changes
+    if (!(currCodeLineNum > 0 && currCodeLineNum in lineNumDetails)) {
+      return;
+    }
+    // Only attempt highlight when a graph is selected and we have content
+    if (!currentGraph || !graphString) return;
+
+    const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
+    setGraphString((prev) => {
+      if (!prev) return prev;
+      const sig = `${currentGraph}|${currCodeLineNum}|${prev.length}`;
+      if (lastHighlightSigRef.current === sig) {
+        return prev;
+      }
+      let next = prev;
+      // Remove previous red highlights once
+      if (next.includes(', fontcolor=red')) {
+        next = next.replace(/, fontcolor=red/g, '');
+      }
+      const match = graphContentPattern.exec(next);
+      if (!match) return prev;
+      const nodesOnly = getNodes(match);
+      let modified = false;
+      const highlightIds = currentLineMapping['nodeOrllvm'];
+      for (const originalNode of nodesOnly) {
+        if (!originalNode.includes('shape')) continue;
+        for (const nodeId of highlightIds) {
+          if (originalNode.includes(nodeId)) {
+            const modifiedString = `${originalNode.substring(0, originalNode.length - 2)}, fontcolor=red];`;
+            const replaced = next.replace(originalNode, modifiedString);
+            if (replaced !== next) {
+              next = replaced;
+              modified = true;
+            }
+            break;
+          }
+        }
+      }
+      // Only trigger a state update if the final string actually differs
+      if (modified && next !== prev) {
+        lastHighlightSigRef.current = sig;
+        return next;
+      }
+      return prev;
+    });
+    // We intentionally depend only on the specific mapping for the current line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentGraph, currCodeLineNum, currentLineMapping]);
 
   const graphBtnClick = (graphKey: string) => {
     if (graphKey !== currentGraph) {
@@ -516,18 +496,11 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     }
   };
 
-  // Keep a reference of the graphviz component to be able to use its built in functions such as resetZoom
-  const graphvizInstance = useRef<any>(null);
+  const [renderVersion, setRenderVersion] = useState(0);
 
   const resetZoom = useCallback(() => {
-    if (graphvizInstance.current) {
-      graphvizInstance.current.resetZoom();
-    }
-  }, [graphvizInstance]);
-
-  // Callback ref to capture the Graphviz component instance
-  const setGraphvizRef = useCallback((node: any) => {
-    graphvizInstance.current = node;
+    // Force a re-render of the Graphviz component to reset zoom/fit
+    setRenderVersion((v) => v + 1);
   }, []);
 
   // chg
@@ -549,7 +522,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(svgBlob);
-    link.download = `${(currentGraph || 'graph').replace(/[^a-z0-9_\-]/gi, '_')}.svg`;
+    link.download = `${(currentGraph || 'graph').replace(/[^a-z0-9_-]/gi, '_')}.svg`;
     link.click();
   };
 
@@ -575,8 +548,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
           <div ref={graphRef} id="graphviz-container">
             {graphString ? (
               <Graphviz
-                key={currentGraph + graphString.length}
-                ref={setGraphvizRef}
+                key={`${currentGraph}-${graphString.length}-${renderVersion}`}
                 dot={graphString}
                 options={{
                   zoom: true,

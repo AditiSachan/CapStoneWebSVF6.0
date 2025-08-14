@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './sessionsSidebar.css';
-import { Session } from '../../multiSession/sessionManager';
+import { Session } from '../sessionManager.ts';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';

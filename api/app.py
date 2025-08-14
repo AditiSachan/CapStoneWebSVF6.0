@@ -9,6 +9,7 @@ import os
 import subprocess
 import tempfile
 from typing import List, Optional
+import shlex
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -123,28 +124,47 @@ def run_svf_tools(ll_file: str, extra_executables: List[str]) -> tuple[str, str]
 
     # Run extra executables if provided
     for executable in extra_executables:
-        exe_lower = executable.lower().split(" ")
-        first_arg = exe_lower[0]  # Get the first part of the executable name
-        if first_arg in TOOL_NAMES:
-            output_lines.append(f"\n=== Running {executable.upper()} Analysis ===")
-            cmd = []
-            # Add dump options based on executable
-            if first_arg == 'saber':
-                cmd.extend(['-leak'])  # Enable leak detection
-            elif first_arg == 'mta':
-                cmd.extend(['-race'])  # Enable race detection
-            elif 'ae' in exe_lower:
-                arg = exe_lower[1] if len(exe_lower) > 1 else None
-                if arg: # Add buffer overflow or null dereference options
-                    cmd.append(arg)
+        # Parse the executable string, allowing additional flags after the tool name
+        parts = shlex.split(executable)
+        if not parts:
+            continue
+        tool = parts[0].lower()
+        args = parts[1:]
+        if tool in TOOL_NAMES:
+            output_lines.append(f"\n=== Running {tool.upper()} Analysis ===")
+            cmd: List[str] = []
+            # Add dump/options based on executable if not provided by user
+            if tool == 'saber':
+                if '-leak' not in args:
+                    cmd.extend(['-leak'])  # Enable leak detection
+            elif tool == 'mta':
+                if '-race' not in args:
+                    cmd.extend(['-race'])  # Enable race detection
+            elif tool == 'wpa':
+                # Ensure a pointer analysis is specified; default to Andersen if none
+                has_pta_flag = any(flag.startswith('-') and ('pta' in flag or flag in ['-ander', '-fspta', '-steens']) for flag in args)
+                if not has_pta_flag:
+                    cmd.append('-ander')
+            elif tool == 'ae':
+                # Pass through AE-specific subtool (e.g., -bo, -nd) if provided
+                # If user provided no extra arg, we will just run base AE
+                pass
+            # Preserve user-provided flags
+            cmd.extend(args)
             cmd.append(ll_file)
-            output, error = pysvf.run_svf_tool(first_arg, cmd)
+            try:
+                output, error = pysvf.run_svf_tool(tool, cmd)
+            except BaseException as e:
+                # Capture tool failures without aborting the request
+                output = ''
+                error = f"{tool} failed: {str(e)}"
             output_lines.append(output)
             errors.append(error)
         else:
             supported_tools = ', '.join(TOOL_NAMES)
-            raise ValueError(f"Warning: Unknown executable '{executable}'. "
-                           f"Supported tools are: {supported_tools}")
+            raise ValueError(
+                f"Warning: Unknown executable '{executable}'. Supported tools are: {supported_tools}"
+            )
 
     return "\n".join(output_lines), "\n".join(errors)
 

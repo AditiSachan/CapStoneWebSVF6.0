@@ -18,21 +18,20 @@ const CacheDebugPanel: React.FC<CacheDebugPanelProps> = ({ sessionId, isVisible,
   const [sessionEntries, setSessionEntries] = useState<CacheEntry[]>([]);
   const cacheService = CacheService.getInstance();
 
-  const refreshData = () => {
+  const refreshData = React.useCallback(() => {
     setStats(cacheService.getCacheStats());
     if (sessionId) {
       setSessionEntries(cacheService.getSessionCacheEntries(sessionId));
     }
-  };
+  }, [sessionId, cacheService]);
 
   useEffect(() => {
     if (isVisible) {
       refreshData();
-      // Refresh every 5 seconds when panel is visible
       const interval = setInterval(refreshData, 5000);
       return () => clearInterval(interval);
     }
-  }, [isVisible, sessionId]);
+  }, [isVisible, refreshData]);
 
   const handleClearSessionCache = () => {
     if (sessionId && confirm('Clear cache for this session?')) {

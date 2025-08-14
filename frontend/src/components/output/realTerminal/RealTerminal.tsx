@@ -8,8 +8,15 @@ const RealTerminal: React.FC = () => {
   const term = useRef<Terminal>();
   const fitAddon = useRef<FitAddon>();
   const socketRef = useRef<WebSocket | null>(null);
+  const initializedRef = useRef<boolean>(false);
 
   useEffect(() => {
+    if (initializedRef.current) {
+      // Avoid double-mount in React 18 StrictMode
+      return;
+    }
+    initializedRef.current = true;
+
     // Initialize terminal
     term.current = new Terminal({
       fontSize: 14,
@@ -28,8 +35,10 @@ const RealTerminal: React.FC = () => {
     fitAddon.current = new FitAddon();
     term.current.loadAddon(fitAddon.current);
 
-    // Open terminal in DOM element
-    term.current.open(terminalRef.current);
+    // Open terminal in DOM element (guard if container not yet ready)
+    if (terminalRef.current) {
+      term.current.open(terminalRef.current);
+    }
 
     // Fit terminal to container after a short delay to ensure DOM is ready
     setTimeout(() => {
@@ -56,17 +65,25 @@ const RealTerminal: React.FC = () => {
 
       ws.onerror = (error) => {
         console.error('WebSocket error:', error);
-        term.current?.writeln('\r\n[WebSocket error occurred]');
+        try {
+          term.current?.writeln('\r\n[WebSocket error occurred]');
+        } catch (_e) {
+          // ignore if terminal not ready
+        }
       };
 
       ws.onclose = (event) => {
         console.log('WebSocket closed:', event.code, event.reason);
-        term.current?.writeln('\r\n[Disconnected from terminal]');
+        try {
+          term.current?.writeln('\r\n[Disconnected from terminal]');
+        } catch (_e) {
+          // ignore if terminal not ready
+        }
 
         // Attempt to reconnect after 3 seconds if it wasn't a normal closure
         if (event.code !== 1000) {
           setTimeout(() => {
-            if (term.current) {
+            if (term.current && initializedRef.current) {
               term.current.writeln('[Attempting to reconnect...]');
               connectWebSocket();
             }
@@ -76,10 +93,14 @@ const RealTerminal: React.FC = () => {
 
       // Handle terminal input
       if (term.current) {
-        term.current.onData((data) => {
+        const onDataDisposable = term.current.onData((data) => {
           if (ws.readyState === WebSocket.OPEN) {
             ws.send(data);
           }
+        });
+        // Dispose handler if we tear down early
+        ws.addEventListener('close', () => {
+          onDataDisposable.dispose();
         });
       }
     };
@@ -105,6 +126,8 @@ const RealTerminal: React.FC = () => {
       if (term.current) {
         term.current.dispose();
       }
+
+      initializedRef.current = false;
     };
   }, []);
 

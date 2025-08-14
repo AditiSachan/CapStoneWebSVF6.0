@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import Editor, { OnMount } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 import './styles.css';
@@ -12,6 +12,7 @@ interface CodeEditorProps {
   setCurrCodeLineNum: (lineNum: number) => void;
   codeError: string[];
   setPassedPrompt: (prompt: string) => void;
+  externalFontSize?: number;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -22,6 +23,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   setCurrCodeLineNum,
   codeError,
   setPassedPrompt,
+  externalFontSize,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [fontSize, setFontSize] = useState(16);
@@ -39,7 +41,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     editor.setModel(model);
     decorationsRef.current = editor.createDecorationsCollection();
     editor.updateOptions({
-      fontSize: fontSize,
+      fontSize: externalFontSize ?? fontSize,
       renderValidationDecorations: 'on',
     });
     monaco.languages.register({ id: 'c' });
@@ -60,7 +62,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     monaco.editor.setModelMarkers(model, 'c', markers);
 
     // Register the ask code gpt command
-    monaco.editor.registerCommand('askCodeGPTCommand', (accessor, ...args) => {
+    monaco.editor.registerCommand('askCodeGPTCommand', (_accessor, ...args) => {
       const [uri, range, problemMessage, lineCode] = args;
       askCodeGPT(uri, range, problemMessage, lineCode);
     });
@@ -107,8 +109,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const askCodeGPT = (
-    uri: monaco.Uri,
-    range: monaco.Range,
+    _uri: monaco.Uri,
+    _range: monaco.Range,
     problemMessage: string,
     lineCode: string
   ) => {
@@ -151,7 +153,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     setPassedPrompt(prompt);
   };
   // Adds the red squigly line on the code editor indicating an error or warning to line of code
-  const applyMarkers = (): monaco.editor.IMarkerData[] => {
+  const applyMarkers = useCallback((): monaco.editor.IMarkerData[] => {
     monaco.languages.register({ id: 'c' });
 
     monaco.languages.setLanguageConfiguration('c', {
@@ -167,7 +169,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       const clangRegex = /example.c:(\d+):(\d+)/;
       const markers: monaco.editor.IMarkerData[] = [];
       codeError.map((error) => {
-        let match;
+        let match: string[];
         let lnNum = 0;
         let clNum = 1;
         match = error.match(lnRegexcl);
@@ -187,14 +189,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           clNum = parseInt(match[2], 10);
         }
 
-        if (lnNum !== 0) {
+        if (lnNum !== 0 && model) {
+          const lineCount = model.getLineCount();
+          if (lnNum < 1 || lnNum > lineCount) {
+            return; // Skip invalid line numbers
+          }
+          const lineLength = model.getLineLength(lnNum);
+          const safeStartColumn = Math.max(1, Math.min(clNum, lineLength));
+          const safeEndColumn = lineLength + 1;
           markers.push({
             code: null,
             source: 'c',
             startLineNumber: lnNum,
-            startColumn: clNum,
+            startColumn: safeStartColumn,
             endLineNumber: lnNum,
-            endColumn: model.getLineLength(lnNum) + 1,
+            endColumn: safeEndColumn,
             message: error,
             severity: monaco.MarkerSeverity.Error,
           });
@@ -203,7 +212,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       return markers;
     }
     return [];
-  };
+  }, [codeError]);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -214,7 +223,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setEditorKey((prevKey) => prevKey + 1);
       }
     }
-  }, [codeError]);
+  }, [codeError, applyMarkers]);
 
   // Used to detect for any changes in code
   // This is needed for when lz string compression calls setcode
@@ -226,29 +235,35 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setEditorKey((prevKey) => prevKey + 1);
       }
     }
-  }, [code, editorRef.current]);
+  }, [code]);
 
   useEffect(() => {
     if (decorationsRef !== null && decorationsRef.current !== null) {
+      const model = editorRef.current?.getModel();
+      const lineCount = model?.getLineCount() ?? 0;
       const newDecorations = [];
 
       for (const lineNum in lineNumDetails) {
         const colour = lineNumDetails[lineNum]['colour'].slice(1).toLowerCase();
         let decoration = {};
-        if (lineNumToHighlight.has(parseInt(lineNum))) {
+        const parsedLineNum = parseInt(lineNum);
+        if (!Number.isFinite(parsedLineNum) || parsedLineNum < 1 || parsedLineNum > lineCount) {
+          continue;
+        }
+        if (lineNumToHighlight.has(parsedLineNum)) {
           decoration = {
-            range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
+            range: new monaco.Range(parsedLineNum, 1, parsedLineNum, 1),
             options: {
               isWholeLine: true,
               inlineClassName: `line-decoration-text-${colour}`,
             },
           };
           if (editorRef.current) {
-            editorRef.current.revealLine(parseInt(lineNum));
+            editorRef.current.revealLine(parsedLineNum);
           }
         } else {
           decoration = {
-            range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
+            range: new monaco.Range(parsedLineNum, 1, parsedLineNum, 1),
             options: {
               isWholeLine: true,
               inlineClassName: `line-decoration-${colour}`,
@@ -260,16 +275,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       }
       decorationsRef.current.set(newDecorations);
     }
-  }, [lineNumToHighlight]);
+  }, [lineNumToHighlight, lineNumDetails]);
 
   useEffect(() => {
     if (decorationsRef !== null && decorationsRef.current !== null) {
+      const model = editorRef.current?.getModel();
+      const lineCount = model?.getLineCount() ?? 0;
       const newDecorations = [];
 
       for (const lineNum in lineNumDetails) {
         const colour = lineNumDetails[lineNum]['colour'].slice(1).toLowerCase();
+        const parsedLineNum = parseInt(lineNum);
+        if (!Number.isFinite(parsedLineNum) || parsedLineNum < 1 || parsedLineNum > lineCount) {
+          continue;
+        }
         const decoration = {
-          range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
+          range: new monaco.Range(parsedLineNum, 1, parsedLineNum, 1),
           options: {
             isWholeLine: true,
             inlineClassName: `line-decoration-${colour}`,
@@ -340,7 +361,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     <>
       <div>
         <div id="codeEditor-fontSize-container">
-          <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize} />
+          <FontSizeMenu fontSize={externalFontSize ?? fontSize} setFontSize={setFontSize} />
         </div>
         <Editor
           key={editorKey}
@@ -349,7 +370,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           theme={theme}
           value={code}
           onMount={handleEditorDidMount}
-          options={{ fontSize: fontSize }}
+          options={{ fontSize: externalFontSize ?? fontSize }}
         />
       </div>
     </>

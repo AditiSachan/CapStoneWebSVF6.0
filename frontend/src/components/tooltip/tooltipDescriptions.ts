@@ -24,7 +24,6 @@ export const executableOptionDescriptions: Record<string, string> = {
   'ae -null-deref':
     'Null Dereference Detector. Identifies places where a null pointer could be dereferenced in your program, helping prevent crashes and undefined behavior.',
   wpa: 'Whole Program Pointer Analysis. Performs comprehensive pointer analysis across the entire program to build accurate points-to relationships.',
-  cfl: 'Context-Free Language Reachability Analysis. Uses CFL-reachability to perform precise program analysis based on context-free grammar rules.',
   dvf: 'On-Demand Value Flow Analysis. Performs value-flow analysis on demand, analyzing only the parts of the program relevant to specific queries for efficiency.',
 };
 

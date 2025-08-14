@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useRef, useEffect, useState } from 'react';
 import Editor, { OnMount } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
@@ -7,9 +8,10 @@ import './llvmir.css';
 
 interface LLVMIRProps {
   LLVMIRString: string;
+  externalFontSize?: number;
 }
 
-const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString }) => {
+const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString, externalFontSize }) => {
   const [fontSize, setFontSize] = useState(16);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const handleEditorDidMount: OnMount = (editor, monaco) => {
@@ -52,7 +54,7 @@ const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString }) => {
           theme={theme}
           value={LLVMIRString}
           onMount={handleEditorDidMount}
-          options={{ fontSize: fontSize }}
+          options={{ fontSize: externalFontSize ?? fontSize }}
         />
       </div>
     </>

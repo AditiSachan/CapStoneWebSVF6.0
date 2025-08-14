@@ -30,7 +30,6 @@
 }
 
 .run-button {
-  flex: display;
   padding: 2px 5px 2px 5px;
   justify-content: center;
   align-items: center;

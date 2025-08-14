@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useState, useEffect } from 'react';
 import ShareIcon from '@mui/icons-material/Share';
+import SettingsIcon from '@mui/icons-material/Settings';
 import './navbar.css';
 import { ImportExport, Publish } from '@mui/icons-material';
 import readFile from '../importExport/importExport';
@@ -9,10 +9,12 @@ function Navbar({
   openShare,
   setCode,
   code,
+  openSettings,
 }: {
   openShare: () => void;
   setCode: (code: string) => void;
   code: string;
+  openSettings: () => void;
 }) {
   const [theme, setTheme] = useState('light');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -69,7 +71,15 @@ function Navbar({
           ],
         };
 
-        const handle = await (window as any).showSaveFilePicker(opts);
+        type FileWriter = { write: (data: string) => Promise<void>; close: () => Promise<void> };
+        type FileHandle = { createWritable: () => Promise<FileWriter> };
+        type SaveFilePicker = {
+          showSaveFilePicker: (o: {
+            types: Array<{ description: string; accept: Record<string, string[]> }>;
+          }) => Promise<FileHandle>;
+        };
+
+        const handle = await (window as unknown as SaveFilePicker).showSaveFilePicker(opts);
         const writable = await handle.createWritable();
         await writable.write(code);
         await writable.close();
@@ -111,6 +121,11 @@ function Navbar({
         </div>
 
         <ShareIcon onClick={openShare} id="share-icon" />
+
+        <div className="icon-container">
+          <SettingsIcon id="import-export-icon" onClick={openSettings} />
+          <span className="tooltip">Settings</span>
+        </div>
 
         <label className="theme-toggle">
           <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} />

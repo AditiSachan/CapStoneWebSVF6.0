@@ -20,13 +20,13 @@ const submitCodeFetch = async (code: string, compileOptions: string, executables
     },
     body: JSON.stringify(requestBody),
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error(`Backend Error: ${response.status} - ${response.statusText}`);
       }
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       return data;
     });
 };

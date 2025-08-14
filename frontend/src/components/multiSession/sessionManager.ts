@@ -1,15 +1,21 @@
 // SessionManager.ts
 export type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output' | 'Terminal';
+import CacheService from '../services/cacheService';
+
+export interface LabeledOption {
+  value: string;
+  label: string;
+}
 
 export interface Session {
   id: string;
   title: string;
   lastUpdated: number;
   code: string;
-  selectedCompileOptions: any[];
-  selectedExecutableOptions: any[];
+  selectedCompileOptions: LabeledOption[];
+  selectedExecutableOptions: LabeledOption[];
   lineNumDetails: { [key: string]: { nodeOrllvm: string[]; colour: string } };
-  graphs: any;
+  graphs: Record<string, string>;
   terminalOutput: string;
   llvmIR: string;
   savedMessages: { role: string; content: string }[];
@@ -21,8 +27,17 @@ export interface Session {
 const SessionManager = {
   // Get all sessions
   getSessions: (): Session[] => {
-    const sessions = localStorage.getItem('websvf-sessions');
-    return sessions ? JSON.parse(sessions) : [];
+    const raw = localStorage.getItem('websvf-sessions');
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      // Ensure we always return an array
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (_e) {
+      // If parsing fails (corrupted storage), reset the key and return [] to avoid crashes
+      localStorage.removeItem('websvf-sessions');
+      return [];
+    }
   },
 
   // Get a specific session

@@ -42,9 +42,9 @@ export const llvmHighlight = (codeByLine: string[], llvmIRByLine: string[]) => {
 };
 
 const findReturn = (
-  codeByLine: string[],
+  _codeByLine: string[],
   llvmIRByLine: string[],
-  codeIndex: number,
+  _codeIndex: number,
   llvmIndex: number
 ) => {
   // Look for return statements in llvm
@@ -53,10 +53,6 @@ const findReturn = (
     const llvmLine: string = llvmIRByLine[i];
     if (llvmLine.match(/^\s+ret\s+/)) {
       return i + 1;
-      // Highlight the return statement
-      // Highlight the code line
-      // Highlight the llvm line
-      // Highlight the return statement
     }
   }
   return llvmIndex;

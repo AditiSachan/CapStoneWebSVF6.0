@@ -5,9 +5,13 @@ import FontSizeMenu from '../../fontSizeMenu/FontSizeMenu';
 import './terminalOutput.css';
 interface TerminalOutputProps {
   terminalOutputString: string;
+  externalFontSize?: number;
 }
 
-const TerminalOutput: React.FC<TerminalOutputProps> = ({ terminalOutputString }) => {
+const TerminalOutput: React.FC<TerminalOutputProps> = ({
+  terminalOutputString,
+  externalFontSize,
+}) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [fontSize, setFontSize] = useState(16);
 
@@ -54,7 +58,7 @@ const TerminalOutput: React.FC<TerminalOutputProps> = ({ terminalOutputString })
           theme={theme}
           value={terminalOutputString}
           onMount={handleEditorDidMount}
-          options={{ fontSize: fontSize }}
+          options={{ fontSize: externalFontSize ?? fontSize }}
         />
       </div>
     </>
