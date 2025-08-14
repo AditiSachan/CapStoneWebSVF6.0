@@ -1,0 +1,32 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* Light mode (default) */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --navbar-bg-color: transparent !important;
+  --second-navbar-bg-color: transparent;
+  --icon-color: #000000;
+  --div-bg-color: #f9f9f9;
+  --submit-codebar-bg-color: #f7f9fb; /* Light mode color */
+  --font-size-container-bg-color: #ffffff; /* Default light background */
+  --font-size-container-text-color: #000000; /* Default black text */
+  --border: black;
+}
+
+/* Dark mode */
+[data-theme='dark'] {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --navbar-bg-color: transparent !important;
+  --second-navbar-bg-color: transparent;
+  --icon-color: #ffffff;
+  --div-bg-color: #222222;
+  --submit-codebar-bg-color: #444444; /* Dark mode grey color */
+  --font-size-container-bg-color: #1e1e1e; /* Black background for dark mode */
+  --font-size-container-text-color: #ffffff; /* White text for dark mode */
+  --border: #f9f9f9;
+}

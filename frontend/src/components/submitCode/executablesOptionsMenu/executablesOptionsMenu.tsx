@@ -43,40 +43,40 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
   );
 
   // Handler for selection changes
-  const handleChange = (selected: any) => {
+  const handleChange = (selected) => {
     setSelectedExecutableOptions(selected || []);
   };
 
   // Custom styles to ensure tooltips are visible
   const customStyles = {
-    option: (provided: any) => ({
+    option: (provided) => ({
       ...provided,
       position: 'relative',
       overflow: 'visible',
     }),
-    menuPortal: (base: any) => ({
+    menuPortal: (base) => ({
       ...base,
       zIndex: 9999,
     }),
-    menu: (provided: any) => ({
+    menu: (provided) => ({
       ...provided,
       overflow: 'visible',
       zIndex: 9999,
     }),
-    menuList: (provided: any) => ({
+    menuList: (provided) => ({
       ...provided,
       overflow: 'visible',
     }),
-    multiValue: (provided: any) => ({
+    multiValue: (provided) => ({
       ...provided,
       position: 'relative',
       overflow: 'visible',
     }),
-    valueContainer: (provided: any) => ({
+    valueContainer: (provided) => ({
       ...provided,
       overflow: 'visible',
     }),
-    control: (provided: any) => ({
+    control: (provided) => ({
       ...provided,
       overflow: 'visible',
     }),
@@ -100,10 +100,8 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
     name: 'executableOptions',
   };
 
-  // Add setPassedPrompt to props if it exists
   if (setPassedPrompt) {
-    // Use type assertion here to bypass TypeScript's type checking
-    (selectProps as any).setPassedPrompt = setPassedPrompt;
+    selectProps.setPassedPrompt = setPassedPrompt;
   }
 
   return <Select {...selectProps} />;

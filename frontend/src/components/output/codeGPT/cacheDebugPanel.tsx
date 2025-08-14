@@ -8,12 +8,13 @@ interface CacheDebugPanelProps {
   onToggle: () => void;
 }
 
-const CacheDebugPanel: React.FC<CacheDebugPanelProps> = ({
-  sessionId,
-  isVisible,
-  onToggle,
-}) => {
-  const [stats, setStats] = useState<CacheStats>({ totalEntries: 0, hitRate: 0, totalHits: 0, totalMisses: 0 });
+const CacheDebugPanel: React.FC<CacheDebugPanelProps> = ({ sessionId, isVisible, onToggle }) => {
+  const [stats, setStats] = useState<CacheStats>({
+    totalEntries: 0,
+    hitRate: 0,
+    totalHits: 0,
+    totalMisses: 0,
+  });
   const [sessionEntries, setSessionEntries] = useState<CacheEntry[]>([]);
   const cacheService = CacheService.getInstance();
 

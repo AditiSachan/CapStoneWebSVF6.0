@@ -123,7 +123,10 @@ const CodeGPT = ({
 
     try {
       const response = await doOpenAICall([{ role: 'user', content: prompt }]);
-      const assistantMessage = { role: 'assistant', content: response.choices[0].message.content };
+      const assistantMessage = {
+        role: 'assistant',
+        content: response.choices[0].message.content,
+      };
       const finalMessages = [...updatedMessages.slice(0, -1), assistantMessage];
 
       // Update local state
@@ -169,7 +172,7 @@ const CodeGPT = ({
     return `\`\`\`\n${content}\n\`\`\``;
   };
 
-  const handleSuggestionClick = (suggestion: string, suggestionGroup: string) => {
+  const handleSuggestionClick = (suggestion: string) => {
     setGptInputQuery(suggestion);
   };
 
@@ -217,10 +220,7 @@ const CodeGPT = ({
             {code && (
               <button
                 onClick={() =>
-                  handleSuggestionClick(
-                    `Explain the following code:\n\n${wrapInBackticks(code)}`,
-                    'code'
-                  )
+                  handleSuggestionClick(`Explain the following code:\n\n${wrapInBackticks(code)}`)
                 }
                 className={styles.suggestionButton}
               >
@@ -231,8 +231,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `What are some improvements that can be made to the following code:\n\n${wrapInBackticks(code)}`,
-                    'code'
+                    `What are some improvements that can be made to the following code:\n\n${wrapInBackticks(code)}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -244,8 +243,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Are there any bugs in the following code:\n\n${wrapInBackticks(code)}`,
-                    'code'
+                    `Are there any bugs in the following code:\n\n${wrapInBackticks(code)}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -258,13 +256,12 @@ const CodeGPT = ({
       case 'graphs':
         return (
           <>
-            {Object.keys(graphs).map(graph => (
+            {Object.keys(graphs).map((graph) => (
               <button
                 key={graph}
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`,
-                    'graph'
+                    `Explain the following graph (${graph}):\n\n${wrapInBackticks(graphs[graph])}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -276,8 +273,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Looking at the graphs, can I make any improvements to the code?\n\n${wrapInBackticks(code)}`,
-                    'graph'
+                    `Looking at the graphs, can I make any improvements to the code?\n\n${wrapInBackticks(code)}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -289,8 +285,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Are there any dead functions in my code?\n\n${wrapInBackticks(code)}`,
-                    'graph'
+                    `Are there any dead functions in my code?\n\n${wrapInBackticks(code)}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -307,8 +302,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`,
-                    'terminal'
+                    `Explain the following terminal output:\n\n${wrapInBackticks(terminalOutput)}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -325,8 +319,7 @@ const CodeGPT = ({
               <button
                 onClick={() =>
                   handleSuggestionClick(
-                    `Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`,
-                    'llvm'
+                    `Explain the following LLVM IR:\n\n${wrapInBackticks(llvmIR)}`
                   )
                 }
                 className={styles.suggestionButton}
@@ -351,15 +344,15 @@ const CodeGPT = ({
           onToggle={() => setShowCacheDebug(!showCacheDebug)}
         />
       )}
-      
+
       <div className={styles.stickyHeader}>
         <button onClick={handleReset} className={styles.resetButton}>
           <RefreshIcon />
         </button>
         {/* Add cache debug toggle button in development */}
         {import.meta.env.DEV && (
-          <button 
-            onClick={() => setShowCacheDebug(!showCacheDebug)} 
+          <button
+            onClick={() => setShowCacheDebug(!showCacheDebug)}
             className={styles.debugButton}
             title="Toggle Cache Debug Panel"
           >
@@ -421,7 +414,7 @@ const CodeGPT = ({
             rows={1}
             placeholder="Enter your query here..."
             value={gptInputQuery}
-            onChange={e => setGptInputQuery(e.target.value)}
+            onChange={(e) => setGptInputQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             className={styles.codegptTextarea}
           />

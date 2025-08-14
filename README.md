@@ -80,4 +80,6 @@ npm run dev
 # Contributors
 Sanjana Dinesh <br />
 Joshua Sy <br />
-Samiksha Anirudh
+Samiksha Anirudh <br />
+Joshua Wills <br />
+Christian Tolentino <br />

@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
-import Slider from '@mui/material/Slider';
-import MuiInput from '@mui/material/Input';
-import FormatSizeIcon from '@mui/icons-material/FormatSize';
-import TextField from '@mui/material/TextField';
 import './shareLZSettingsModal.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-
-const Input = styled(MuiInput)`
-  width: 42px;
-`;
 
 const style = {
   position: 'absolute' as const,

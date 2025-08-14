@@ -31,7 +31,7 @@ AE is a static analysis tool that analyzes programs by examining variable states
 
 It's used to detect various bugs like buffer overflows and null pointer dereferences, helps identify vulnerabilities by understanding data access and changes, and facilitates security checks while optimizing code based on variable usage patterns.`,
 
- wpa: `Here's some background about WPA (Whole Program Pointer Analysis) to help with your explanation:
+  wpa: `Here's some background about WPA (Whole Program Pointer Analysis) to help with your explanation:
 
 WPA is SVF's primary pointer analysis tool that performs comprehensive pointer analysis across the entire program. It builds a complete points-to graph that tracks which memory locations each pointer may point to throughout the program. WPA typically uses Andersen's algorithm, which is flow-insensitive but field-sensitive, making it scalable for large programs while maintaining good precision.
 
@@ -47,7 +47,7 @@ It's used to perform more precise analysis than traditional approaches by consid
 
 DVF performs value-flow analysis on demand, meaning it only analyzes the parts of the program relevant to specific queries rather than analyzing the entire program upfront. This demand-driven approach makes it highly efficient for answering targeted questions about how values flow through the program.
 
-It's used to efficiently answer specific queries about value flow without analyzing the entire program, reduces analysis time and memory usage by focusing only on relevant code paths, and is particularly useful for interactive tools and IDE integrations where quick responses to specific queries are needed.`
+It's used to efficiently answer specific queries about value flow without analyzing the entire program, reduces analysis time and memory usage by focusing only on relevant code paths, and is particularly useful for interactive tools and IDE integrations where quick responses to specific queries are needed.`,
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
@@ -55,7 +55,6 @@ const Tooltip: React.FC<TooltipProps> = ({
   children,
   optionValue,
   optionType,
-  toolType,
   setPassedPrompt,
 }) => {
   // Function to handle Ask CodeGPT button click

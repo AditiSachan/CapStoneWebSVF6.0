@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './outputMenuBar.module.css';
-import type { OutputType } from '../../multiSession/sessionManager'; 
+import type { OutputType } from '../../multiSession/sessionManager';
 
 interface OutputMenuBarProps {
   currentOutput: OutputType;

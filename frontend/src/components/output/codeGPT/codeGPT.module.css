@@ -3,7 +3,6 @@
   flex-direction: column;
   height: 100vh;
   background-color: #ffffff;
-  /* padding: 20px; */
   box-sizing: border-box;
 }
 
@@ -139,14 +138,12 @@
 }
 
 .resetButton {
-  /* padding: 5px 5px; */
   background-color: #ff4d4d;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 10px;
-  /* margin-bottom: 10px; */
 }
 
 .resetButton:hover {

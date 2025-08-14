@@ -28,7 +28,7 @@ const SessionManager = {
   // Get a specific session
   getSession: (sessionId: string): Session | null => {
     const sessions = SessionManager.getSessions();
-    return sessions.find(s => s.id === sessionId) || null;
+    return sessions.find((s) => s.id === sessionId) || null;
   },
 
   // Create a new session
@@ -107,7 +107,7 @@ const SessionManager = {
   // Update an existing session
   updateSession: (sessionId: string, updates: Partial<Session>): Session | null => {
     const sessions = SessionManager.getSessions();
-    const index = sessions.findIndex(s => s.id === sessionId);
+    const index = sessions.findIndex((s) => s.id === sessionId);
 
     if (index !== -1) {
       sessions[index] = {
@@ -124,7 +124,7 @@ const SessionManager = {
   // Delete a session
   deleteSession: (sessionId: string): void => {
     let sessions = SessionManager.getSessions();
-    sessions = sessions.filter(s => s.id !== sessionId);
+    sessions = sessions.filter((s) => s.id !== sessionId);
     localStorage.setItem('websvf-sessions', JSON.stringify(sessions));
 
     // Clear cache for the deleted session

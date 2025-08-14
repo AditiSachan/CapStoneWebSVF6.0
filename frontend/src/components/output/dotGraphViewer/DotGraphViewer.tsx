@@ -1,14 +1,10 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { graphviz } from 'd3-graphviz';
 import { Graphviz } from 'graphviz-react';
-import * as d3 from 'd3';
 import './dotGraphViewer.css';
 import GraphButton from '../../tooltip/GraphButton';
-// import NodeSelectedLookup from "../../nodeSelectedLookup/NodeSelectedLookup";
 
 interface DotGraphViewerProps {
-  dotGraphString: string;
-  lineNumToHighlight: Set<number>;
   setlineNumToHighlight: (newLineNumToHighlight: Set<number>) => void;
   graphObj: { [key: string]: string };
   lineNumDetails: { [lineNum: string]: { nodeOrllvm: string[]; colour: string } };
@@ -36,17 +32,7 @@ const highlightColours = [
   '#FFF8CF',
 ];
 
-function ensureHierarchical(dot: string): string {
-  // Inject 'rankdir=TB' inside the top-level block if it's not already present
-  if (!dot.includes('rankdir')) {
-    return dot.replace(/(digraph\s+[^{]+{)/, '$1\n  rankdir=TB;');
-  }
-  return dot;
-}
-
 const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
-  dotGraphString,
-  lineNumToHighlight,
   setlineNumToHighlight,
   graphObj,
   lineNumDetails,
@@ -83,21 +69,6 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
   const graphRef = useRef(null);
 
-  // const reset = useCallback(() => {
-  //   if (graphRef.current) {
-  //     const { id } = graphRef.current;
-  //     graphviz(`#${id}`).resetZoom();
-  //   }
-  // }, [graphRef]);
-
-  // const resetZoom = () => {
-  //   if (graphRef.current) {
-  //     const svg = d3.select(graphRef.current).select('svg');
-  //     const zoom = d3.zoom().on('zoom', null); // Remove existing zoom behavior
-  //     svg.call(zoom.transform, d3.zoomIdentity); // Reset zoom to identity (no zoom)
-  //   }
-  // };
-
   /*
     The use effect below is used to add an event listener to each node in the graph
     The event listener is used to trigger an event when a node is clicked on.
@@ -112,12 +83,12 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
       const svg = graphvizContainer.querySelector('svg');
       if (svg) {
         if (currentGraph === 'callgraph' || currentGraph === 'ptacg' || currentGraph === 'tcg') {
-          svg.addEventListener('click', event => {
+          svg.addEventListener('click', (event) => {
             const node = event.target.closest('g.node');
             if (node) {
               const nodeTextList = node.querySelectorAll('text');
               const nodeTextContentList: string[] = [];
-              nodeTextList.forEach(nodeText => {
+              nodeTextList.forEach((nodeText) => {
                 nodeTextContentList.push(nodeText.textContent);
               });
               const funcPattern = /fun:\s*([^}]+)/;
@@ -134,7 +105,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
               }
               const newlineNumToHighlight: Set<number> = new Set<number>();
 
-              Object.keys(lineNumDetails).forEach(lineNum => {
+              Object.keys(lineNumDetails).forEach((lineNum) => {
                 const nodes = lineNumDetails[lineNum].nodeOrllvm;
                 if (nodes.includes(funcTofind)) {
                   newlineNumToHighlight.add(parseInt(lineNum, 10));
@@ -144,7 +115,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
             }
           });
         } else {
-          svg.addEventListener('click', event => {
+          svg.addEventListener('click', (event) => {
             const node = event.target.closest('g.node');
             if (node) {
               const nodeId = node.querySelector('title').textContent;
@@ -154,7 +125,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
               // })
               const nodeTextContentList: string[] = [];
-              nodeTextList.forEach(nodeText => {
+              nodeTextList.forEach((nodeText) => {
                 nodeTextContentList.push(nodeText.textContent);
               });
               /*
@@ -169,7 +140,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
               const newlineNumToHighlight: Set<number> = new Set<number>();
 
               // check with svf-ex on how it would spit back out examples from comp6131
-              nodeTextContentList.forEach(nodeText => {
+              nodeTextContentList.forEach((nodeText) => {
                 if ((matchLineNum = lineRegex.exec(nodeText)) !== null) {
                   newlineNumToHighlight.add(parseInt(matchLineNum[1], 10));
                 } else if ((matchLineNum = lnRegex.exec(nodeText)) !== null) {
@@ -189,12 +160,6 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
       }
     }
   }, [graphString]);
-  // useEffect(() => {
-  //   const nodePattern = /Node\w+\s+\[shape=record,color=\w+,label="\{[^"]*\}"\];/g;
-
-  //   const nodes = currentGraph.match(nodePattern) || [];
-
-  // }, [currentGraph]);
 
   useEffect(() => {
     if (currentGraph === 'callgraph' || currentGraph === 'ptacg' || currentGraph === 'tcg') {
@@ -213,7 +178,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
         const graphContent = match[1].trim();
         const lines = graphContent.split('\n');
 
-        lines.forEach(line => {
+        lines.forEach((line) => {
           // Look for node definitions
           if (line.includes('[') && line.includes('label=')) {
             // Extract node ID
@@ -238,7 +203,10 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
                 if (lineNumber in lineNumToNodes) {
                   lineNumToNodes[lineNumber]['nodeOrllvm'].push(nodeId);
                 } else {
-                  lineNumToNodes[lineNumber] = { nodeOrllvm: [nodeId], colour: '' };
+                  lineNumToNodes[lineNumber] = {
+                    nodeOrllvm: [nodeId],
+                    colour: '',
+                  };
                 }
               }
             }
@@ -247,14 +215,14 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
         // Assign colors to line numbers
         const lineNums = Object.keys(lineNumToNodes);
-        const numericKeys = lineNums.map(key => parseInt(key, 10));
+        const numericKeys = lineNums.map((key) => parseInt(key, 10));
         const sortedNumericKeys = numericKeys.sort((a, b) => a - b);
         const nodeIDColour: { [key: string]: string } = {};
 
         sortedNumericKeys.forEach((lineNum, index) => {
           const colour = highlightColours[index % highlightColours.length];
           lineNumToNodes[lineNum.toString()]['colour'] = colour;
-          lineNumToNodes[lineNum.toString()]['nodeOrllvm'].forEach(nodeId => {
+          lineNumToNodes[lineNum.toString()]['nodeOrllvm'].forEach((nodeId) => {
             nodeIDColour[nodeId] = colour;
           });
         });
@@ -271,14 +239,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     }
   }, [currentGraph, graphObj, code]);
 
-  // useEffect(() => {
-  //   setCurrentGraph(graphObj['callgraph.dot']);
-  // }, [graphObj]);
-
   const addFillColorToCallNode = (codeBylines: string[]) => {
-    // const nodePattern = /Node\w+\s*\[\s*shape=record\s*,\s*color=\w+\s*,\s*label="((?:\\.|[^"\\])*)"\s*\];/g;
-    // const nodePattern = /Node\w+\s*\[shape=record,\s*[^,]*,\s*label="([^"]*)"\];/g;
-    // const nodePattern = /Node[\w\d]+?\s*\[shape=+?,[\s\S]*,\slabel="([^"]*)"\];/g;
     const graphContentPattern = /digraph\s*".*?"\s*{([\s\S]*)}/;
 
     // Execute the regex to find a match
@@ -289,23 +250,18 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
       const splitGraphContent = graphContent.split('\n\t');
 
       // Filter out any empty strings that might occur from the split
-      const removedEmptyStrings = splitGraphContent.filter(part => part.trim() !== '');
+      const removedEmptyStrings = splitGraphContent.filter((part) => part.trim() !== '');
 
-      /* Removing title of the graph
-      e.g "label="Call Graph";"
-      */
       removedEmptyStrings.shift();
 
       /*
       Removing edges from the list
       */
-      // const edgePattern = /(\w+)\s+->\s+(\w+)/g;
-      // Removes most edges, sometimes leaves some edges which can be seen in icfg.dot
       const edgePattern = /([\w:]+)\s+->\s+([\w:]+)/g;
       const funcs: string[] = [];
-      const nodesOnly = removedEmptyStrings.filter(item => !edgePattern.test(item));
+      const nodesOnly = removedEmptyStrings.filter((item) => !edgePattern.test(item));
       const funcPattern = /fun: ([^\\]+)\\/;
-      nodesOnly.forEach(callNode => {
+      nodesOnly.forEach((callNode) => {
         const match = funcPattern.exec(callNode);
         if (match) {
           const funcString = match[0];
@@ -320,7 +276,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
       const funcToColour: { [func: string]: string } = {};
 
       codeBylines.forEach((codeLine, index) => {
-        funcs.forEach(func => {
+        funcs.forEach((func) => {
           // Need to account for comments
           if (codeLine.includes(func)) {
             const funcWithSlash = func.replace('(', '\\');
@@ -369,7 +325,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
       // check with svf-ex on how it would spit back out examples from comp6131
       const modifiedNodes = [];
 
-      nodesOnly.forEach(originalNode => {
+      nodesOnly.forEach((originalNode) => {
         if (originalNode.includes('shape')) {
           let nodeModified = false;
           let currentNode = originalNode;
@@ -423,7 +379,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
       // Apply all modifications to the graph string
       let newGraphString = graphString;
-      modifiedNodes.forEach(moddedNode => {
+      modifiedNodes.forEach((moddedNode) => {
         newGraphString = newGraphString.replace(moddedNode['original'], moddedNode['modified']);
       });
 
@@ -487,7 +443,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     const splitGraphContent = graphContent.split('\n\t');
 
     // Filter out any empty strings that might occur from the split
-    const removedEmptyStrings = splitGraphContent.filter(part => part.trim() !== '');
+    const removedEmptyStrings = splitGraphContent.filter((part) => part.trim() !== '');
 
     /* Removing title of the graph
       e.g "label="Call Graph";"
@@ -501,7 +457,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     // Removes most edges, sometimes leaves some edges which can be seen in icfg.dot
     const edgePattern = /([\w:]+)\s+->\s+([\w:]+)/g;
 
-    const nodesOnly = removedEmptyStrings.filter(item => !edgePattern.test(item));
+    const nodesOnly = removedEmptyStrings.filter((item) => !edgePattern.test(item));
     return nodesOnly;
   };
 
@@ -529,10 +485,9 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     if (match) {
       const nodesOnly = getNodes(match);
       const modifiedNodes = [];
-      // let selectedNodeIds = [];
-      nodesOnly.forEach(originalNode => {
+      nodesOnly.forEach((originalNode) => {
         if (originalNode.includes('shape')) {
-          lineNumDetails[currCodeLineNum]['nodeOrllvm'].forEach(nodeId => {
+          lineNumDetails[currCodeLineNum]['nodeOrllvm'].forEach((nodeId) => {
             if (originalNode.includes(nodeId)) {
               const addingFontColour = ', fontcolor=red];';
               const modifiedString =
@@ -541,34 +496,19 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
                 original: originalNode,
                 modified: modifiedString,
               });
-              // const labelContent = getLabel(originalNode);
-              // selectedNodeIds.push({
-              //   title: nodeId,
-              //   label: labelContent
-              // });
             }
           });
         }
-        modifiedNodes.forEach(moddedNode => {
+        modifiedNodes.forEach((moddedNode) => {
           newGraphString = newGraphString.replace(moddedNode['original'], moddedNode['modified']);
         });
         if (graphString !== newGraphString) {
           setGraphString(newGraphString);
         }
-        // setNodeIDList(selectedNodeIds);
       });
     }
   };
 
-  const getLabel = (nodeString: string) => {
-    const labelRegex = /label="()"/;
-    const match = nodeString.match(labelRegex);
-    let labelContent = 'did not find label content';
-    if (match) {
-      labelContent = match[1];
-    }
-    return labelContent;
-  };
   const graphBtnClick = (graphKey: string) => {
     if (graphKey !== currentGraph) {
       setGraphString(graphObj[graphKey]);
@@ -613,45 +553,11 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     link.click();
   };
 
-  // Zoom to node work in progreess
-  // Can zoom to node but zoom needs work
-  // Graphs could appear in different sizes making it hard
-  // const [nodeIDList, setNodeIDList] = useState([]);
-  // const [nodeIDIndex, setNodeIDIndex] = useState(0);
-
-  // const zoomToNode = useCallback((nodeTitle : string) => {
-  //   if (graphRef.current) {
-  //     const svg = d3.select(graphRef.current).select('svg');
-  //     const node = svg.selectAll('g.node').filter(function() {
-  //       return d3.select(this).select('title').text() === nodeTitle;
-  //     });      if (!node.empty()) {
-  //       d3.zoomTransform(svg.node() as Element).rescaleX(d3.scaleLinear().domain([0, graphWidth])).range([0, graphWidth]).domain([0, graphHeight]).range([0, graphHeight]);
-  //       const nodeElement = node.node() as SVGGraphicsElement;
-  //       const nodeBox = nodeElement.getBBox();
-  //       const nodeCenterX = (nodeBox.x + nodeBox.width / 2);
-  //       const nodeCenterY = (nodeBox.y + nodeBox.height / 2);
-  //       const zoomBehavior = d3.zoom().on('zoom', null); // Remove existing zoom behavior
-  //       svg.call(zoomBehavior.transform, d3.zoomIdentity.translate(graphWidth / 2 - nodeCenterX, graphHeight / 2 - nodeCenterY).scale(1));
-  //     } else {
-  //     }
-  //   }
-  // }, [graphWidth, graphHeight]);
-
-  // const handleZoomToNode = (newNodeIDIndex: number) => {
-  //   if (newNodeIDIndex < 0) {
-  //     newNodeIDIndex = nodeIDList.length
-  //   } else if (newNodeIDIndex > nodeIDList.length) {
-  //     newNodeIDIndex = 0;
-  //   }
-  //   setNodeIDIndex(newNodeIDIndex);
-  //   zoomToNode(nodeIDList[newNodeIDIndex].title);
-  // }
-
   return (
     <>
       <div className="graph-container">
         <div id="graph-button-container">
-          {Object.keys(graphObj).map(graphKey => (
+          {Object.keys(graphObj).map((graphKey) => (
             <GraphButton
               key={graphKey}
               graphKey={graphKey}
@@ -664,10 +570,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
         <div id="graph-container">
           <div id="graphcontainer-menu-bar">
             <button onClick={resetZoom}>Reset Zoom</button>
-            {/* // chg */}
             <button onClick={exportGraphAsSVG}>Export as SVG</button>
-
-            {/* <NodeSelectedLookup nodeIDIndex={nodeIDIndex} handleZoomToNode={handleZoomToNode} nodeIDList={nodeIDList}/> */}
           </div>
           <div ref={graphRef} id="graphviz-container">
             {graphString ? (

@@ -48,18 +48,18 @@ const RealTerminal: React.FC = () => {
         // Don't write anything here, let the server send the initial prompt
       };
 
-      ws.onmessage = event => {
+      ws.onmessage = (event) => {
         if (term.current) {
           term.current.write(event.data);
         }
       };
 
-      ws.onerror = error => {
+      ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         term.current?.writeln('\r\n[WebSocket error occurred]');
       };
 
-      ws.onclose = event => {
+      ws.onclose = (event) => {
         console.log('WebSocket closed:', event.code, event.reason);
         term.current?.writeln('\r\n[Disconnected from terminal]');
 
@@ -76,7 +76,7 @@ const RealTerminal: React.FC = () => {
 
       // Handle terminal input
       if (term.current) {
-        term.current.onData(data => {
+        term.current.onData((data) => {
           if (ws.readyState === WebSocket.OPEN) {
             ws.send(data);
           }

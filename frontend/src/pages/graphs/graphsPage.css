@@ -79,12 +79,6 @@
   order: 2;
 }
 
-/* #graph-page-code-container,
-#graph-page-output-container {
-  overflow: auto;
-  transition: width 0.1s ease;
-} */
-
 #graph-page-code-container {
   overflow: auto;
   transition: width 0.1s ease;

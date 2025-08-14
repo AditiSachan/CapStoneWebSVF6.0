@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: stretch;
-  /* padding: 1% 1% 1% 1%; */
   border: 1px solid;
   border-radius: 5px;
 }
@@ -18,15 +17,12 @@
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  /* border-radius: 5px; */
   vertical-align: middle;
   padding-top: 0.8rem;
   padding-left: 0.8rem;
   padding-right: 0.8rem;
   padding-bottom: 0.2rem;
   border: none;
-
-  /* height: rem; */
 }
 
 #copy-icon-container {

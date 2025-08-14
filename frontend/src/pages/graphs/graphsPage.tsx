@@ -17,7 +17,6 @@ import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from
 import ShareLZSettingsModal from '../../components/shareLZSettingsModal/shareLZSettingsModal.tsx';
 import SessionsSidebar from '../../components/multiSession/sessionsSidebar/sessionsSidebar.tsx';
 import SessionManager, { Session } from '../../components/multiSession/sessionManager.ts';
-import { Share } from '@mui/icons-material';
 
 type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output' | 'Terminal';
 
@@ -38,12 +37,10 @@ const compileOptions = [
   { value: '-S', label: '-S' },
   { value: '-fno-discard-value-names', label: '-fno-discard-value-names' },
   { value: '-emit-llvm', label: '-emit-llvm' },
-  // { value: '-pass-exit-codes', label: '-pass-exit-codes' }, // This argument is causing an error in clang
   { value: '-E', label: '-E' },
   { value: '-v', label: '-v' },
   { value: '-pipe', label: '-pipe' },
   { value: '--help', label: '--help' },
-  // { value: '-fcanon-prefix-map', label: '-fcanon-prefix-map' }, // This argument is causing an error in clang
 ];
 
 const executableOptions = [
@@ -53,7 +50,7 @@ const executableOptions = [
   { value: 'ae -null-deref', label: 'ae (Null Dereference Detector)' },
   { value: 'wpa', label: 'wpa (Whole Program Pointer Analysis)' },
   { value: 'cfl', label: 'cfl (CFL-Reachability Analysis)' },
-  { value: 'dvf', label: 'dvf (On-Demand Value Flow Analysis)' }
+  { value: 'dvf', label: 'dvf (On-Demand Value Flow Analysis)' },
 ];
 
 function GraphsPage() {
@@ -210,8 +207,6 @@ function GraphsPage() {
     e.currentTarget.classList.remove('drag-over');
 
     const target = e.currentTarget.id;
-    const draggedItem = e.dataTransfer.getData('draggedItem');
-
     if (draggedElement && draggedElement !== target) {
       if (
         (draggedElement === 'code' && target === 'graph-page-output-container') ||
@@ -221,7 +216,7 @@ function GraphsPage() {
       }
       setDraggedElement(null);
     } else if (draggedTab) {
-      setTabPositions(prev => ({
+      setTabPositions((prev) => ({
         ...prev,
         [draggedTab]: target === 'third-dropzone' ? 'third' : 'main',
       }));
@@ -262,7 +257,6 @@ function GraphsPage() {
     Terminal: 'main', // ✅ Add this
   });
 
-
   // Session Management Functions
   const loadSessions = () => {
     const loadedSessions = SessionManager.getSessions();
@@ -302,21 +296,8 @@ function GraphsPage() {
     );
   };
 
-  const handleSaveMessages = (newMessages: { role: string; content: string }[]) => {
-    setSavedMessages(newMessages);
-    // Optionally save the session immediately to ensure messages are persisted
-    if (currentSessionId) {
-      SessionManager.updateSession(currentSessionId, {
-        savedMessages: newMessages,
-      });
-    }
-  };
-
   const handleSessionSelect = (sessionId: string) => {
-    // Save current session
     saveCurrentSession();
-
-    // Navigate to the new session URL
     navigate(`/session/${sessionId}`, { replace: true });
   };
 
@@ -333,7 +314,9 @@ function GraphsPage() {
   const handleRenameSession = (sessionId: string, newTitle: string) => {
     const updatedSession = SessionManager.updateSession(sessionId, { title: newTitle });
     if (updatedSession) {
-      setSessions(prevSessions => prevSessions.map(s => (s.id === sessionId ? updatedSession : s)));
+      setSessions((prevSessions) =>
+        prevSessions.map((s) => (s.id === sessionId ? updatedSession : s))
+      );
     }
   };
 
@@ -345,7 +328,7 @@ function GraphsPage() {
     }
 
     SessionManager.deleteSession(sessionId);
-    const updatedSessions = sessions.filter(s => s.id !== sessionId);
+    const updatedSessions = sessions.filter((s) => s.id !== sessionId);
     setSessions(updatedSessions);
 
     // If the current session is deleted, load the first available session
@@ -398,15 +381,12 @@ function GraphsPage() {
     return () => clearTimeout(timeoutId);
   }, [code, selectedCompileOptions, selectedExecutableOptions]);
 
-  // In your renderComponent function in GraphsPage.tsx
-  const renderComponent = (tab: OutputType) => {
+  const renderComponent = () => {
     switch (currentOutput) {
       case 'Graph':
         return (
           <DotGraphViewer
             key={`graph-${currentSessionId}`} // Add this key
-            dotGraphString={graphs['call'] || ''}
-            lineNumToHighlight={lineNumToHighlight}
             setlineNumToHighlight={setlineNumToHighlight}
             graphObj={graphs}
             setLineNumDetails={setLineNumDetails}
@@ -437,15 +417,7 @@ function GraphsPage() {
           />
         );
       case 'LLVMIR':
-        return (
-          <LLVMIR
-            key={`llvmir-${currentSessionId}`}
-            LLVMIRString={llvmIRString}
-            code={code}
-            lineNumDetails={lineNumDetails}
-            setLineNumDetails={setLineNumDetails}
-          />
-        );
+        return <LLVMIR LLVMIRString={llvmIRString} />;
       case 'Terminal':
         return <RealTerminal key={`realterminal-${currentSessionId}`} />;
 
@@ -457,7 +429,7 @@ function GraphsPage() {
   useEffect(() => {
     if (passedPrompt !== '') {
       setCurrentOutput('CodeGPT');
-      renderComponent('CodeGPT');
+      renderComponent();
 
       // Reset passedPrompt after it's been used
       setTimeout(() => {
@@ -468,9 +440,9 @@ function GraphsPage() {
 
   const submitCode = async () => {
     const selectedCompileOptionString = selectedCompileOptions
-      .map(option => option.value)
+      .map((option) => option.value)
       .join(' ');
-    const selectedExecutableOptionsList = selectedExecutableOptions.map(option => option.value);
+    const selectedExecutableOptionsList = selectedExecutableOptions.map((option) => option.value);
 
     try {
       const response = await submitCodeFetch(
@@ -500,7 +472,7 @@ function GraphsPage() {
 
           const graphObj = {};
           if (Array.isArray(respGraphs) && respGraphs.length > 0) {
-            respGraphs.forEach(graph => {
+            respGraphs.forEach((graph) => {
               const graphName = graph.name || graph.Name;
               const graphData = graph.graph || graph.Graph;
               if (graphName && graphData) {
@@ -617,25 +589,7 @@ function GraphsPage() {
     setSelectedExecutableOptions([]);
   };
 
-  const [openSettings, setOpenSettings] = React.useState(false);
-  const handleOpenSettings = () => setOpenSettings(true);
-  const handleCloseSettings = () => setOpenSettings(false);
-  const [codeFontSize, setCodeFontSize] = useState(16);
-
-  // const createLZStringUrl = () => {
-  //   const url = window.location.href;
-  //   const currRoute = url.split('?')[0];
-  //   const savedSettings = {
-  //     code: code,
-  //     selectedCompileOptions: selectedCompileOptions,
-  //     selectedExecutableOptions: selectedExecutableOptions,
-  //   };
-  //   const compressed = compressToEncodedURIComponent(JSON.stringify(savedSettings));
-  //   return currRoute + '?data=' + compressed;
-  // };
-
   const createLZStringUrl = () => {
-    // Get the base URL of your application
     const baseUrl = window.location.origin;
 
     // Create a shareable settings object for the current session only
@@ -810,7 +764,7 @@ function GraphsPage() {
         handleClose={handleCloseShareModal}
         shareLink={shareLink}
       />
-      <NavBar openShare={handleOpenShareModal} />
+      <NavBar openShare={handleOpenShareModal} setCode={setCode} code={code} />
       <div className="app-layout">
         {/* Sessions Sidebar */}
         <SessionsSidebar
@@ -829,7 +783,7 @@ function GraphsPage() {
           <div
             id="graph-page-code-container"
             draggable
-            onDragStart={e => handleDragStart(e, 'code')}
+            onDragStart={(e) => handleDragStart(e, 'code')}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -869,7 +823,7 @@ function GraphsPage() {
           <div
             id="graph-page-output-container"
             draggable
-            onDragStart={e => handleDragStart(e, 'output')}
+            onDragStart={(e) => handleDragStart(e, 'output')}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -879,16 +833,16 @@ function GraphsPage() {
             <OutputMenuBar
               currentOutput={currentOutput}
               setCurrentOutput={setCurrentOutput}
-              onDragStartTab={tab => (e: React.DragEvent<HTMLDivElement>) =>
+              onDragStartTab={(tab) => (e: React.DragEvent<HTMLDivElement>) =>
                 handleDragStart(e, tab)
               }
             />
             <div
               style={{ flexGrow: 1 }}
-              onDrop={e => handleDrop(e)}
-              onDragOver={e => e.preventDefault()}
+              onDrop={(e) => handleDrop(e)}
+              onDragOver={(e) => e.preventDefault()}
             >
-              {renderComponent(currentOutput)}
+              {renderComponent()}
             </div>
 
             {/* Third Window (will appear when a tab is dragged into it) */}
@@ -896,7 +850,7 @@ function GraphsPage() {
               <div
                 id="graph-page-output-container"
                 draggable
-                onDragStart={e => handleDragStart(e, 'output')}
+                onDragStart={(e) => handleDragStart(e, 'output')}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -906,7 +860,7 @@ function GraphsPage() {
                 {Object.entries(tabPositions).map(([tab, position]) =>
                   position === 'third' ? (
                     <div key={tab} draggable>
-                      {renderComponent(tab as OutputType)}
+                      {renderComponent()}
                     </div>
                   ) : null
                 )}
