@@ -673,7 +673,7 @@ function GraphsPage() {
           }
         }
 
-        // If no session ID or session not found, update the current session with the URL data
+        // If no session ID or session  found, update the current session with the URL data
         if (decompressedSettings.code) {
           setCode(decompressedSettings.code);
         }
