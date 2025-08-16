@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ShareIcon from '@mui/icons-material/Share';
 import SettingsIcon from '@mui/icons-material/Settings';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import './navbar.css';
 import { ImportExport, Publish } from '@mui/icons-material';
 import readFile from '../importExport/importExport';
@@ -107,9 +108,18 @@ function Navbar({
   };
 
   return (
-    <div id="navbar">
-      <img src="/svfLogo.png" alt="svf-logo" id="svf-logo" />
-      <div>
+    <div id="navbar" className="shadow-md">
+      <a
+        id="webSVF-home-link"
+        href="https://github.com/SVF-tools/SVF"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="SVF on GitHub"
+        aria-label="SVF on GitHub"
+      >
+        <img src="/svfLogo.png" alt="SVF logo" id="svf-logo" />
+      </a>
+      <div className="nav-actions">
         <div className="icon-container">
           <Publish id="import-export-icon" onClick={handleExportClick} />
           <span className="tooltip">Export Code</span>
@@ -120,11 +130,28 @@ function Navbar({
           <span className="tooltip">Import Code</span>
         </div>
 
-        <ShareIcon onClick={openShare} id="share-icon" />
+        <div className="icon-container">
+          <ShareIcon onClick={openShare} id="share-icon" />
+          <span className="tooltip">Share</span>
+        </div>
 
         <div className="icon-container">
-          <SettingsIcon id="import-export-icon" onClick={openSettings} />
+          <SettingsIcon id="settings-icon" onClick={openSettings} />
           <span className="tooltip">Settings</span>
+        </div>
+
+        <div className="icon-container">
+          <a
+            href="https://svf-tools.github.io/WebSVF/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="About WebSVF"
+            title="About WebSVF"
+            style={{ color: 'var(--icon-color)' }}
+          >
+            <InfoOutlinedIcon />
+          </a>
+          <span className="tooltip">About</span>
         </div>
 
         <label className="theme-toggle">

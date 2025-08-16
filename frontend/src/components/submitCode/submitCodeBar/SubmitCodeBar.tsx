@@ -76,20 +76,24 @@ const SubmitCodeBar: React.FC<SubmitCodeBarProps> = ({
     <>
       <div id="submit-codeBar-container">
         <div id="submit-codeBar-compile-options-container">
-          <h5>Enter your compile options: </h5>
-          <CompileOptionsMenu
-            compileOptions={compileOptions}
-            setSelectedCompileOptions={setSelectedCompileOptions}
-            selectedCompileOptions={selectedCompileOptions}
-            setPassedPrompt={setPassedPrompt} // Pass the prop
-          />
-          <h5>Select executable options: </h5>
-          <ExecutableOptionsMenu
-            setSelectedExecutableOptions={setSelectedExecutableOptions}
-            selectedExecutableOptions={selectedExecutableOptions}
-            executableOptions={executableOptions}
-            setPassedPrompt={setPassedPrompt} // Pass the prop
-          />
+          <h4 className="select-heading">Enter your compile options</h4>
+          <div className="select-block">
+            <CompileOptionsMenu
+              compileOptions={compileOptions}
+              setSelectedCompileOptions={setSelectedCompileOptions}
+              selectedCompileOptions={selectedCompileOptions}
+              setPassedPrompt={setPassedPrompt} // Pass the prop
+            />
+          </div>
+          <h4 className="select-heading">Select executable options</h4>
+          <div className="select-block">
+            <ExecutableOptionsMenu
+              setSelectedExecutableOptions={setSelectedExecutableOptions}
+              selectedExecutableOptions={selectedExecutableOptions}
+              executableOptions={executableOptions}
+              setPassedPrompt={setPassedPrompt} // Pass the prop
+            />
+          </div>
           {/* Show inline error if needed */}
           {error && <div className="error-message">{error}</div>}
         </div>

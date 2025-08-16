@@ -914,6 +914,7 @@ function GraphsPage() {
               codeError={codeError}
               setPassedPrompt={setPassedPrompt}
               externalFontSize={codeFontSize}
+              onExternalFontSizeChange={(size) => setCodeFontSize(size)}
             />
           </div>
           {/* Resizer element */}

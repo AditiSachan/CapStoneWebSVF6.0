@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useRef, useEffect, useState } from 'react';
-import Editor, { OnMount } from '@monaco-editor/react';
+import Editor, { OnMount, useMonaco } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 import { llvmIRLanguage } from './llvmIRLanguage';
 import FontSizeMenu from '../../fontSizeMenu/FontSizeMenu';
@@ -9,10 +9,16 @@ import './llvmir.css';
 interface LLVMIRProps {
   LLVMIRString: string;
   externalFontSize?: number;
+  onExternalFontSizeChange?: (size: number) => void;
 }
 
-const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString, externalFontSize }) => {
+const LLVMIR: React.FC<LLVMIRProps> = ({
+  LLVMIRString,
+  externalFontSize,
+  onExternalFontSizeChange,
+}) => {
   const [fontSize, setFontSize] = useState(16);
+  const [useLocalFontSize, setUseLocalFontSize] = useState(false);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -21,12 +27,46 @@ const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString, externalFontSize }) => {
     monaco.languages.setMonarchTokensProvider('llvm-ir', llvmIRLanguage);
   };
 
-  const [theme, setTheme] = useState('vs-light'); // Default to light theme
+  const [theme, setTheme] = useState('websvf-light');
+  const monacoInstance = useMonaco();
+
+  // Create a Monaco theme that follows CSS variables
+  const applyMonacoThemeFromCSSVars = React.useCallback(
+    (mode: 'light' | 'dark') => {
+      if (!monacoInstance) return;
+      const root = getComputedStyle(document.documentElement);
+      const background = (root.getPropertyValue('--surface') || '#ffffff').trim();
+      const foreground = (root.getPropertyValue('--text-color') || '#0f172a').trim();
+      const themeName = mode === 'dark' ? 'websvf-dark' : 'websvf-light';
+      monacoInstance.editor.defineTheme(themeName, {
+        base: mode === 'dark' ? 'vs-dark' : 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': background,
+          'editor.foreground': foreground,
+          'editorCursor.foreground': foreground,
+          'editorLineNumber.foreground': foreground,
+          'editorLineNumber.activeForeground': foreground,
+          'editorGutter.background': background,
+          'editor.selectionBackground': mode === 'dark' ? '#114a6c80' : '#60a5fa55',
+          'editor.inactiveSelectionBackground': mode === 'dark' ? '#114a6c55' : '#93c5fd55',
+          'editor.lineHighlightBackground': mode === 'dark' ? '#0e223a66' : '#e5e7eb',
+          'minimap.background': background,
+        },
+      });
+      monacoInstance.editor.setTheme(themeName);
+      setTheme(themeName);
+    },
+    [monacoInstance]
+  );
+
   // Detect theme change based on the "data-theme" attribute
   useEffect(() => {
     const updateTheme = () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      setTheme(currentTheme === 'dark' ? 'vs-dark' : 'vs-light');
+      const mode =
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      applyMonacoThemeFromCSSVars(mode);
     };
 
     // Initial theme setting
@@ -40,13 +80,29 @@ const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString, externalFontSize }) => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [monacoInstance, applyMonacoThemeFromCSSVars]);
+
+  // Compute effective font size and apply immediately to Monaco
+  const effectiveFontSize = useLocalFontSize ? fontSize : (externalFontSize ?? fontSize);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({ fontSize: effectiveFontSize });
+    }
+  }, [effectiveFontSize]);
 
   return (
     <>
       <div>
         <div id="llvmir-fontSize-container">
-          <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize} />
+          <FontSizeMenu
+            fontSize={effectiveFontSize}
+            setFontSize={(size: number) => {
+              setUseLocalFontSize(true);
+              setFontSize(size);
+              if (onExternalFontSizeChange) onExternalFontSizeChange(size);
+            }}
+          />
         </div>
         <Editor
           height="90vh"
@@ -54,7 +110,7 @@ const LLVMIR: React.FC<LLVMIRProps> = ({ LLVMIRString, externalFontSize }) => {
           theme={theme}
           value={LLVMIRString}
           onMount={handleEditorDidMount}
-          options={{ fontSize: externalFontSize ?? fontSize }}
+          options={{ fontSize: effectiveFontSize }}
         />
       </div>
     </>

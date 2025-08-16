@@ -491,12 +491,21 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
 
   const graphBtnClick = (graphKey: string) => {
     if (graphKey !== currentGraph) {
+      // Clear stale highlights and mappings when switching graphs so the code editor
+      // reflects only the new graph's node→line associations
+      setLineNumDetails({});
+      setlineNumToHighlight(new Set());
+      processedKeyRef.current = '';
+      lastHighlightSigRef.current = '';
       setGraphString(graphObj[graphKey]);
       setCurrentGraph(graphKey);
     }
   };
 
   const [renderVersion, setRenderVersion] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const fsBodyRef = useRef<HTMLDivElement | null>(null);
+  const [fsSize, setFsSize] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
 
   const resetZoom = useCallback(() => {
     // Force a re-render of the Graphviz component to reset zoom/fit
@@ -526,6 +535,25 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
     link.click();
   };
 
+  // Track fullscreen container size to stretch graph to fit
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const el = fsBodyRef.current;
+    if (!el) return;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      setFsSize({ w: Math.floor(rect.width), h: Math.floor(rect.height) });
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener('resize', update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, [isFullscreen]);
+
   return (
     <>
       <div className="graph-container">
@@ -544,6 +572,7 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
           <div id="graphcontainer-menu-bar">
             <button onClick={resetZoom}>Reset Zoom</button>
             <button onClick={exportGraphAsSVG}>Export as SVG</button>
+            <button onClick={() => setIsFullscreen(true)}>Fullscreen</button>
           </div>
           <div ref={graphRef} id="graphviz-container">
             {graphString ? (
@@ -566,6 +595,37 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
           </div>
         </div>
       </div>
+
+      {isFullscreen && (
+        <div className="graph-fullscreen-overlay" onClick={() => setIsFullscreen(false)}>
+          <div className="graph-fullscreen-container" onClick={(e) => e.stopPropagation()}>
+            <div className="graph-fullscreen-header">
+              <div>
+                <button onClick={resetZoom}>Reset Zoom</button>
+                <button onClick={exportGraphAsSVG}>Export as SVG</button>
+                <button onClick={() => setIsFullscreen(false)}>Close</button>
+              </div>
+            </div>
+            <div className="graph-fullscreen-body" ref={fsBodyRef}>
+              {graphString ? (
+                <Graphviz
+                  key={`fs-${currentGraph}-${graphString.length}-${renderVersion}`}
+                  dot={graphString}
+                  options={{
+                    zoom: true,
+                    width: fsSize.w || undefined,
+                    height: fsSize.h || undefined,
+                    useWorker: false,
+                    fit: true,
+                  }}
+                />
+              ) : (
+                <p>No graph to display</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

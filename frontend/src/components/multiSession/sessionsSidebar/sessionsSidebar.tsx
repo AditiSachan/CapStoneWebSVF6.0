@@ -76,28 +76,20 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
     setSessionToDelete(null);
   };
 
-  if (!isOpen) {
-    return (
-      <div className="sessions-sidebar-collapsed">
-        <div
-          className="sessions-sidebar-toggle sessions-sidebar-toggle-collapsed"
-          onClick={toggleSidebar}
-        >
-          ≫
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="sessions-sidebar">
+    <div className={`sessions-sidebar ${!isOpen ? 'collapsed' : ''}`}>
       <div className="sessions-sidebar-header">
         <h3>Projects</h3>
-        <button className="new-session-btn" onClick={onNewSession}>
-          <AddIcon fontSize="small" /> New Project
+        <button
+          className="new-session-btn"
+          onClick={onNewSession}
+          aria-label="Create new project"
+          title="New Project"
+        >
+          <AddIcon fontSize="medium" />
         </button>
         <div className="sessions-sidebar-toggle" onClick={toggleSidebar}>
-          ≪
+          {isOpen ? '≪' : '≫'}
         </div>
       </div>
 
@@ -128,21 +120,30 @@ const SessionsSidebar: React.FC<SessionsSidebarProps> = ({
                   </div>
                 </div>
                 <div className="session-actions">
-                  <EditIcon
-                    fontSize="small"
-                    className="edit-icon"
-                    onClick={(e) => handleEditClick(session.id, session.title, e)}
-                  />
-                  <ShareIcon
-                    fontSize="small"
-                    className="share-icon"
-                    onClick={(e) => handleShareClick(session.id, e)}
-                  />
-                  <DeleteIcon
-                    fontSize="small"
-                    className="delete-icon"
-                    onClick={(e) => handleDeleteClick(session.id, e)}
-                  />
+                  <span title="Rename project">
+                    <EditIcon
+                      titleAccess="Rename project"
+                      fontSize="small"
+                      className="edit-icon"
+                      onClick={(e) => handleEditClick(session.id, session.title, e)}
+                    />
+                  </span>
+                  <span title="Share project">
+                    <ShareIcon
+                      titleAccess="Share project"
+                      fontSize="small"
+                      className="share-icon"
+                      onClick={(e) => handleShareClick(session.id, e)}
+                    />
+                  </span>
+                  <span title="Delete project">
+                    <DeleteIcon
+                      titleAccess="Delete project"
+                      fontSize="small"
+                      className="delete-icon"
+                      onClick={(e) => handleDeleteClick(session.id, e)}
+                    />
+                  </span>
                 </div>
               </>
             )}

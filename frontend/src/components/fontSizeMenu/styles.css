@@ -5,9 +5,6 @@
   border-radius: 5px;
   background-color: var(--font-size-container-bg-color); /* Use same background color */
   color: var(--font-size-container-text-color); /* Use same text color */
-  transition:
-    background-color 0.4s,
-    color 0.4s;
 }
 
 #font-size-dropdown-btn {

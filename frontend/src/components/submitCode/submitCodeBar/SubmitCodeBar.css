@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   height: 12%;
+  border-bottom: 1px solid var(--border-color);
 }
 
 #submit-codeBar-compile-options-container {
@@ -13,12 +14,20 @@
 }
 
 #submit-code-bar-button-container {
-  margin-top: 20px;
+  margin-top: 8px;
   padding: 2% 2% 2% 2%;
   display: flex;
   flex-direction: column; /* Stack items vertically */
-  gap: 10px; /* Space between stacked buttons */
+  gap: 48px; /* Space between stacked buttons */
   align-items: flex-end; /* Align buttons to the right side */
+}
+
+.select-heading {
+  margin: 4px 0;
+}
+
+.select-block {
+  margin-bottom: 20px;
 }
 
 #submit-code-bar-reset-btn-container {
@@ -72,20 +81,35 @@
 .MuiButton-contained,
 .reset-button,
 .run-button {
-  min-width: 110px !important; /* Make buttons wider */
-  height: 36px !important; /* Make buttons taller */
-  font-size: 14px !important; /* Slightly larger font */
-  text-transform: uppercase !important; /* Match the uppercase style in screenshot */
+  min-width: 110px !important;
+  height: 36px !important;
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  width: 140px; /* Fixed width so RUN and RUNNING... match */
 }
 
 /* Style the run button specifically */
 .MuiButton-containedPrimary,
 .run-button {
-  background-color: #1976d2 !important; /* Match the blue in screenshot */
+  background-color: var(--primary) !important;
+  color: var(--primary-contrast) !important;
+}
+
+.MuiButton-containedPrimary:hover,
+.run-button:hover {
+  background-color: var(--primary-hover) !important;
 }
 
 /* Style the reset button specifically */
 .MuiButton-containedSecondary,
 .reset-button {
-  background-color: #9c27b0 !important; /* Match the purple in screenshot */
+  background-color: var(--secondary) !important;
+  color: var(--secondary-contrast) !important;
+}
+
+.MuiButton-containedSecondary:hover,
+.reset-button:hover {
+  background-color: var(--secondary-hover) !important;
 }

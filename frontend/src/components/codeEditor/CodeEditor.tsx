@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import Editor, { OnMount } from '@monaco-editor/react';
+import Editor, { OnMount, useMonaco } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 import './styles.css';
 import FontSizeMenu from '../fontSizeMenu/FontSizeMenu';
@@ -13,6 +13,7 @@ interface CodeEditorProps {
   codeError: string[];
   setPassedPrompt: (prompt: string) => void;
   externalFontSize?: number;
+  onExternalFontSizeChange?: (size: number) => void;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -24,9 +25,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   codeError,
   setPassedPrompt,
   externalFontSize,
+  onExternalFontSizeChange,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [fontSize, setFontSize] = useState(16);
+  const [useLocalFontSize, setUseLocalFontSize] = useState(false);
   useState<monaco.editor.IEditorDecorationsCollection | null>(null);
   const decorationsRef = useRef(null);
   const [editorKey, setEditorKey] = useState(0); // State variable for the key
@@ -41,7 +44,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     editor.setModel(model);
     decorationsRef.current = editor.createDecorationsCollection();
     editor.updateOptions({
-      fontSize: externalFontSize ?? fontSize,
+      fontSize: useLocalFontSize ? fontSize : (externalFontSize ?? fontSize),
       renderValidationDecorations: 'on',
     });
     monaco.languages.register({ id: 'c' });
@@ -305,6 +308,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
+      /* Base (light theme) backgrounds — keep original hues for node→code consistency */
       .line-decoration-d9f0e9 { background: #d9f0e9; }
       .line-decoration-ffffe3 { background: #ffffe3; }
       .line-decoration-e9e8f1 { background: #e9e8f1; }
@@ -317,31 +321,106 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       .line-decoration-e9d6e7 { background: #e9d6e7; }
       .line-decoration-edf8ea { background: #edf8ea; }
       .line-decoration-fff8cf { background: #fff8cf; }
-      .text-color { color: red; }
-      .line-decoration-text-d9f0e9 { background: #d9f0e9; color: red !important; }
-      .line-decoration-text-ffffe3 { background: #ffffe3; color: red !important; }
-      .line-decoration-text-e9e8f1 { background: #e9e8f1; color: red !important; }
-      .line-decoration-text-ffd6d2 { background: #ffd6d2; color: red !important; }
-      .line-decoration-text-d4e5ee { background: #d4e5ee; color: red !important; }
-      .line-decoration-text-d5e4ef { background: #d5e4ef; color: red !important; }
-      .line-decoration-text-ffe5c9 { background: #ffe5c9; color: red !important; }
-      .line-decoration-text-e5f4cd { background: #e5f4cd; color: red !important; }
-      .line-decoration-text-f2f2f0 { background: #f2f2f0; color: red !important; }
-      .line-decoration-text-e9d6e7 { background: #e9d6e7; color: red !important;}
-      .line-decoration-text-edf8ea { background: #edf8ea; color: red !important;}
-      .line-decoration-text-fff8cf { background: #fff8cf; color: red !important;}
+
+      .line-decoration-text-d9f0e9 { background: #d9f0e9; }
+      .line-decoration-text-ffffe3 { background: #ffffe3; }
+      .line-decoration-text-e9e8f1 { background: #e9e8f1; }
+      .line-decoration-text-ffd6d2 { background: #ffd6d2; }
+      .line-decoration-text-d4e5ee { background: #d4e5ee; }
+      .line-decoration-text-d5e4ef { background: #d5e4ef; }
+      .line-decoration-text-ffe5c9 { background: #ffe5c9; }
+      .line-decoration-text-e5f4cd { background: #e5f4cd; }
+      .line-decoration-text-f2f2f0 { background: #f2f2f0; }
+      .line-decoration-text-e9d6e7 { background: #e9d6e7; }
+      .line-decoration-text-edf8ea { background: #edf8ea; }
+      .line-decoration-text-fff8cf { background: #fff8cf; }
+
+      /* Dark theme: keep hue mapping, but reduce fill opacity and add outline for readability */
+      [data-theme='dark'] .line-decoration-d9f0e9 { background: rgba(217, 240, 233, 0.27); }
+      [data-theme='dark'] .line-decoration-ffffe3 { background: rgba(255, 255, 227, 0.27); }
+      [data-theme='dark'] .line-decoration-e9e8f1 { background: rgba(233, 232, 241, 0.27); }
+      [data-theme='dark'] .line-decoration-ffd6d2 { background: rgba(255, 214, 210, 0.27); }
+      [data-theme='dark'] .line-decoration-d4e5ee { background: rgba(212, 229, 238, 0.27); }
+      [data-theme='dark'] .line-decoration-d5e4ef { background: rgba(213, 228, 239, 0.27); }
+      [data-theme='dark'] .line-decoration-ffe5c9 { background: rgba(255, 229, 201, 0.27); }
+      [data-theme='dark'] .line-decoration-e5f4cd { background: rgba(229, 244, 205, 0.27); }
+      [data-theme='dark'] .line-decoration-f2f2f0 { background: rgba(242, 242, 240, 0.27); }
+      [data-theme='dark'] .line-decoration-e9d6e7 { background: rgba(233, 214, 231, 0.27); }
+      [data-theme='dark'] .line-decoration-edf8ea { background: rgba(237, 248, 234, 0.27); }
+      [data-theme='dark'] .line-decoration-fff8cf { background: rgba(255, 248, 207, 0.27); }
+
+      [data-theme='dark'] .line-decoration-text-d9f0e9,
+      [data-theme='dark'] .line-decoration-text-ffffe3,
+      [data-theme='dark'] .line-decoration-text-e9e8f1,
+      [data-theme='dark'] .line-decoration-text-ffd6d2,
+      [data-theme='dark'] .line-decoration-text-d4e5ee,
+      [data-theme='dark'] .line-decoration-text-d5e4ef,
+      [data-theme='dark'] .line-decoration-text-ffe5c9,
+      [data-theme='dark'] .line-decoration-text-e5f4cd,
+      [data-theme='dark'] .line-decoration-text-f2f2f0,
+      [data-theme='dark'] .line-decoration-text-e9d6e7,
+      [data-theme='dark'] .line-decoration-text-edf8ea,
+      [data-theme='dark'] .line-decoration-text-fff8cf,
+      [data-theme='dark'] .line-decoration-d9f0e9,
+      [data-theme='dark'] .line-decoration-ffffe3,
+      [data-theme='dark'] .line-decoration-e9e8f1,
+      [data-theme='dark'] .line-decoration-ffd6d2,
+      [data-theme='dark'] .line-decoration-d4e5ee,
+      [data-theme='dark'] .line-decoration-d5e4ef,
+      [data-theme='dark'] .line-decoration-ffe5c9,
+      [data-theme='dark'] .line-decoration-e5f4cd,
+      [data-theme='dark'] .line-decoration-f2f2f0,
+      [data-theme='dark'] .line-decoration-e9d6e7,
+      [data-theme='dark'] .line-decoration-edf8ea,
+      [data-theme='dark'] .line-decoration-fff8cf {
+        /* Improve legibility of Monaco dark tokens on light highlight without changing token colors */
+        text-shadow: 0 0 2px rgba(0,0,0,0.9), 0 0 1px rgba(0,0,0,0.9);
+      }
     `;
     document.head.appendChild(style);
   }, []);
 
-  const [theme, setTheme] = useState<'vs-light' | 'vs-dark'>('vs-light'); // Theme state for Monaco Editor
+  const [theme, setTheme] = useState<string>('websvf-light'); // Monaco theme name
+  const monacoInstance = useMonaco();
+
+  // Create a Monaco theme that follows CSS variables
+  const applyMonacoThemeFromCSSVars = React.useCallback(
+    (mode: 'light' | 'dark') => {
+      if (!monacoInstance) return;
+      const root = getComputedStyle(document.documentElement);
+      const background = (root.getPropertyValue('--surface') || '#ffffff').trim();
+      const foreground = (root.getPropertyValue('--text-color') || '#0f172a').trim();
+      const themeName = mode === 'dark' ? 'websvf-dark' : 'websvf-light';
+      monacoInstance.editor.defineTheme(themeName, {
+        base: mode === 'dark' ? 'vs-dark' : 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': background,
+          'editor.foreground': foreground,
+          'editorCursor.foreground': foreground,
+          'editorLineNumber.foreground': foreground,
+          'editorLineNumber.activeForeground': foreground,
+          'editorGutter.background': background,
+          'editor.selectionBackground': mode === 'dark' ? '#114a6c80' : '#60a5fa55',
+          'editor.inactiveSelectionBackground': mode === 'dark' ? '#114a6c55' : '#93c5fd55',
+          'editor.lineHighlightBackground': mode === 'dark' ? '#0e223a66' : '#e5e7eb',
+          'minimap.background': background,
+        },
+      });
+      // Ensure the theme is applied immediately (not just via prop)
+      monacoInstance.editor.setTheme(themeName);
+      setTheme(themeName);
+    },
+    [monacoInstance]
+  );
 
   // Effect to handle dynamic theme changes based on the `data-theme` attribute
   useEffect(() => {
     const updateTheme = () => {
-      const currentTheme =
-        document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs-light';
-      setTheme(currentTheme);
+      const mode =
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      applyMonacoThemeFromCSSVars(mode);
     };
 
     // Initial theme setting based on the attribute
@@ -355,13 +434,32 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     });
 
     return () => observer.disconnect(); // Cleanup observer on unmount
-  }, []);
+  }, [monacoInstance, applyMonacoThemeFromCSSVars]);
+
+  // Compute the effective font size: local control wins once user interacts
+  const effectiveFontSize = useLocalFontSize ? fontSize : (externalFontSize ?? fontSize);
+
+  // Ensure font size updates are applied to Monaco immediately
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({ fontSize: effectiveFontSize });
+    }
+  }, [effectiveFontSize]);
 
   return (
     <>
       <div>
         <div id="codeEditor-fontSize-container">
-          <FontSizeMenu fontSize={externalFontSize ?? fontSize} setFontSize={setFontSize} />
+          <FontSizeMenu
+            fontSize={effectiveFontSize}
+            setFontSize={(size: number) => {
+              // Update local immediately for responsiveness
+              setUseLocalFontSize(true);
+              setFontSize(size);
+              // Also update the external settings so the Settings modal reflects the change
+              if (onExternalFontSizeChange) onExternalFontSizeChange(size);
+            }}
+          />
         </div>
         <Editor
           key={editorKey}
@@ -370,7 +468,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           theme={theme}
           value={code}
           onMount={handleEditorDidMount}
-          options={{ fontSize: externalFontSize ?? fontSize }}
+          options={{ fontSize: effectiveFontSize }}
         />
       </div>
     </>
