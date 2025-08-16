@@ -219,8 +219,6 @@ function GraphsPage() {
         Terminal: 'main',
       }
     );
-    // Intentional one-time parse of URL params on first mount only
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadSessions = useCallback(() => {
