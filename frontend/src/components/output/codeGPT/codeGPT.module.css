@@ -153,21 +153,6 @@
   background-color: #fd1b1b;
 }
 
-.debugButton {
-  background-color: #17a2b8;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 10px;
-  padding: 5px 10px;
-}
-
-.debugButton:hover {
-  background-color: #138496;
-}
-
 .syntaxHighlighter {
   background-color: rgb(222, 234, 241) !important; /* Dark grey background */
   color: #f8f8f2; /* Light grey text */

@@ -5,7 +5,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coy as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import CacheDebugPanel from './cacheDebugPanel';
 
 const CodeGPT = ({
   code,
@@ -31,7 +30,6 @@ const CodeGPT = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const responseContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
-  const [showCacheDebug, setShowCacheDebug] = useState(false);
 
   // Load messages from props
   useEffect(() => {
@@ -343,29 +341,10 @@ const CodeGPT = ({
 
   return (
     <div className={styles.codegptContainer}>
-      {/* Cache Debug Panel - only show in development or when explicitly enabled */}
-      {(import.meta.env.DEV || showCacheDebug) && (
-        <CacheDebugPanel
-          sessionId={sessionId}
-          isVisible={showCacheDebug}
-          onToggle={() => setShowCacheDebug(!showCacheDebug)}
-        />
-      )}
-      
       <div className={styles.stickyHeader}>
         <button onClick={handleReset} className={styles.resetButton}>
           <RefreshIcon />
         </button>
-        {/* Add cache debug toggle button in development */}
-        {import.meta.env.DEV && (
-          <button 
-            onClick={() => setShowCacheDebug(!showCacheDebug)} 
-            className={styles.debugButton}
-            title="Toggle Cache Debug Panel"
-          >
-            🔍
-          </button>
-        )}
       </div>
       <div className={styles.codegptResponse} ref={responseContainerRef} onScroll={handleScroll}>
         {messages.map((message, index) => (
