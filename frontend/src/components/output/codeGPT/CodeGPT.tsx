@@ -21,7 +21,6 @@ const CodeGPT = ({
   savedMessages,
   onSaveMessages,
   passedPrompt,
-  sessionId,
 }: {
   code: string;
   graphs: Record<string, string>;
@@ -30,7 +29,6 @@ const CodeGPT = ({
   savedMessages: { role: string; content: string }[];
   onSaveMessages: (messages: { role: string; content: string }[]) => void;
   passedPrompt: string;
-  sessionId?: string;
 }) => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [gptInputQuery, setGptInputQuery] = useState('');
@@ -179,8 +177,10 @@ const CodeGPT = ({
 
       try {
         const combinedContext = pendingAttachments.map((a) => a.context).join('\n\n');
+        // Include full history (without the temporary loading message)
+        const history = messages.filter((m) => m.content !== 'Loading response...');
         const response = await doOpenAICall(
-          [{ role: 'user', content: visiblePrompt }],
+          [...history, { role: 'user', content: visiblePrompt }],
           undefined,
           combinedContext
         );
@@ -234,8 +234,10 @@ const CodeGPT = ({
       setGptInputQuery('');
 
       try {
+        // Include full history (without the temporary loading message)
+        const history = messages.filter((m) => m.content !== 'Loading response...');
         const response = await doOpenAICall(
-          userInput ? [{ role: 'user', content: userInput }] : [],
+          userInput ? [...history, { role: 'user', content: userInput }] : [...history],
           undefined,
           context
         );

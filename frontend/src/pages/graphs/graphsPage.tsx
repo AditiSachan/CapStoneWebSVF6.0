@@ -456,7 +456,6 @@ function GraphsPage() {
             savedMessages={savedMessages}
             onSaveMessages={setSavedMessages}
             passedPrompt={passedPrompt}
-            sessionId={currentSessionId || ''}
           />
         );
       case 'LLVMIR':

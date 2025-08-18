@@ -1,6 +1,5 @@
 // SessionManager.ts
 export type OutputType = 'Graph' | 'CodeGPT' | 'LLVMIR' | 'Terminal Output' | 'Terminal';
-import CacheService from '../services/cacheService';
 
 export interface LabeledOption {
   value: string;

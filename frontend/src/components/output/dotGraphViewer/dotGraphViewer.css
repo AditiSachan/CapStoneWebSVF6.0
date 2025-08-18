@@ -37,6 +37,37 @@
   stroke: var(--text-color);
 }
 
+/* Themed empty state for when there is no graph */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 280px;
+  width: 100%;
+  background: var(--surface);
+  color: var(--text-color);
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+}
+
+.empty-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.empty-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.empty-subtitle {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 0.95em;
+}
+
 #graphviz-container svg g.edge polygon[fill='black'],
 #graphviz-container svg g.edge polygon[fill='#000'],
 #graphviz-container svg g.edge polygon[fill='#000000'] {
