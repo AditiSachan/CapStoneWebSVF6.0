@@ -21,7 +21,6 @@ const CodeGPT = ({
   savedMessages,
   onSaveMessages,
   passedPrompt,
-  sessionId,
 }: {
   code: string;
   graphs: Record<string, string>;
@@ -30,7 +29,6 @@ const CodeGPT = ({
   savedMessages: { role: string; content: string }[];
   onSaveMessages: (messages: { role: string; content: string }[]) => void;
   passedPrompt: string;
-  sessionId?: string;
 }) => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [gptInputQuery, setGptInputQuery] = useState('');

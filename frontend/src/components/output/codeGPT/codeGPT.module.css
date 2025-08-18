@@ -249,7 +249,6 @@
   background-color: var(--primary-hover);
 }
 
-
 .syntaxHighlighter {
   background-color: var(--chat-code-bg, var(--surface-2)) !important;
   color: var(--text-color) !important;
