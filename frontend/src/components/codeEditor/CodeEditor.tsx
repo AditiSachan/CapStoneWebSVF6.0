@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-import Editor, { OnMount } from '@monaco-editor/react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import Editor, { OnMount, useMonaco } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 import './styles.css';
 import FontSizeMenu from '../fontSizeMenu/FontSizeMenu';
@@ -12,22 +12,9 @@ interface CodeEditorProps {
   setCurrCodeLineNum: (lineNum: number) => void;
   codeError: string[];
   setPassedPrompt: (prompt: string) => void;
+  externalFontSize?: number;
+  onExternalFontSizeChange?: (size: number) => void;
 }
-
-const highlightColours = [
-  'd9f0e9',
-  'ffffe3',
-  'e9e8f1',
-  'ffd6d2',
-  'd4e5ee',
-  'd5e4ef',
-  'ffe5c9',
-  'e5f4cd',
-  'f2f2f0',
-  'e9d6e7',
-  'edf8ea',
-  'fff8cf',
-];
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
@@ -37,13 +24,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   setCurrCodeLineNum,
   codeError,
   setPassedPrompt,
+  externalFontSize,
+  onExternalFontSizeChange,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [fontSize, setFontSize] = useState(16);
-  const [decorations, setDecorations] = useState<string[]>([]);
-  const [oldHighlight, setOldHighlight] = useState<Set<number>>(new Set<number>());
-  const [decorationCollection, setDecorationsCollection] =
-    useState<monaco.editor.IEditorDecorationsCollection | null>(null);
+  const [useLocalFontSize, setUseLocalFontSize] = useState(false);
+  useState<monaco.editor.IEditorDecorationsCollection | null>(null);
   const decorationsRef = useRef(null);
   const [editorKey, setEditorKey] = useState(0); // State variable for the key
 
@@ -56,9 +43,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     const model = monaco.editor.createModel(code, 'c', monaco.Uri.parse('inmemory://test_script'));
     editor.setModel(model);
     decorationsRef.current = editor.createDecorationsCollection();
-    setDecorationsCollection(editor.createDecorationsCollection());
     editor.updateOptions({
-      fontSize: fontSize,
+      fontSize: useLocalFontSize ? fontSize : (externalFontSize ?? fontSize),
       renderValidationDecorations: 'on',
     });
     monaco.languages.register({ id: 'c' });
@@ -71,23 +57,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     });
 
     // Sets the current line number when the cursor position changes
-    editor.onDidChangeCursorPosition(event => {
+    editor.onDidChangeCursorPosition((event) => {
       const lineNum = event.position.lineNumber;
       setCurrCodeLineNum(lineNum);
     });
     const markers = applyMarkers();
     monaco.editor.setModelMarkers(model, 'c', markers);
-    // editor.updateOptions({
-    //   lightbulb: {
-    //     enabled: true
-    //   },
-    // });
 
     // Register the ask code gpt command
-    monaco.editor.registerCommand('askCodeGPTCommand', (accessor, ...args) => {
+    monaco.editor.registerCommand('askCodeGPTCommand', (_accessor, ...args) => {
       const [uri, range, problemMessage, lineCode] = args;
       askCodeGPT(uri, range, problemMessage, lineCode);
     });
+
     // Dispose of the previous code action provider if it exists
     // This prevents adding multiple ask codeGPT action into quick fix
     if (codeActionProviderRef.current) {
@@ -95,10 +77,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
 
     codeActionProviderRef.current = monaco.languages.registerCodeActionProvider('c', {
-      provideCodeActions: (model, range, context, token) => {
+      provideCodeActions: (model, range) => {
         const markers = monaco.editor.getModelMarkers({ resource: model.uri });
         const relevantMarker = markers.find(
-          marker => marker.startLineNumber === range.startLineNumber
+          (marker) => marker.startLineNumber === range.startLineNumber
         );
 
         if (!relevantMarker) {
@@ -130,8 +112,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const askCodeGPT = (
-    uri: monaco.Uri,
-    range: monaco.Range,
+    _uri: monaco.Uri,
+    _range: monaco.Range,
     problemMessage: string,
     lineCode: string
   ) => {
@@ -174,7 +156,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     setPassedPrompt(prompt);
   };
   // Adds the red squigly line on the code editor indicating an error or warning to line of code
-  const applyMarkers = (): monaco.editor.IMarkerData[] => {
+  const applyMarkers = useCallback((): monaco.editor.IMarkerData[] => {
     monaco.languages.register({ id: 'c' });
 
     monaco.languages.setLanguageConfiguration('c', {
@@ -185,18 +167,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       // Clear any previous markers
       monaco.editor.setModelMarkers(model, 'c', []);
 
-      const lnRegex = /ln:\s*(\d+)/g;
-      const lnJsonRegex = /ln":\s*(\d+)/g;
-      const clRegex = /cl:\s*(\d+)/g;
       const lnRegexcl = /ln:\s*(\d+)\s*cl:\s*(\d+)/;
       const quotedRegex = /"ln":\s*(\d+),\s*"cl":\s*(\d+)/;
       const clangRegex = /example.c:(\d+):(\d+)/;
       const markers: monaco.editor.IMarkerData[] = [];
-      codeError.map(error => {
-        let match;
+      codeError.map((error) => {
+        let match: string[];
         let lnNum = 0;
         let clNum = 1;
-        let severity = monaco.MarkerSeverity.Error;
         match = error.match(lnRegexcl);
         if (match) {
           lnNum = parseInt(match[1], 10);
@@ -212,19 +190,23 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         if (match) {
           lnNum = parseInt(match[1], 10);
           clNum = parseInt(match[2], 10);
-          if (error.includes('warning:')) {
-            severity = monaco.MarkerSeverity.Warning;
-          }
         }
 
-        if (lnNum !== 0) {
+        if (lnNum !== 0 && model) {
+          const lineCount = model.getLineCount();
+          if (lnNum < 1 || lnNum > lineCount) {
+            return; // Skip invalid line numbers
+          }
+          const lineLength = model.getLineLength(lnNum);
+          const safeStartColumn = Math.max(1, Math.min(clNum, lineLength));
+          const safeEndColumn = lineLength + 1;
           markers.push({
             code: null,
             source: 'c',
             startLineNumber: lnNum,
-            startColumn: clNum,
+            startColumn: safeStartColumn,
             endLineNumber: lnNum,
-            endColumn: model.getLineLength(lnNum) + 1,
+            endColumn: safeEndColumn,
             message: error,
             severity: monaco.MarkerSeverity.Error,
           });
@@ -233,46 +215,18 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       return markers;
     }
     return [];
-  };
-
-  const memoryLeakError = (errorMsg: string) => {
-    const lnRegex = /ln:\s*(\d+)/g;
-    const lnJsonRegex = /ln":\s*(\d+)/g;
-    const clRegex = /cl:\s*(\d+)/g;
-    let match;
-    let lnNum = 0;
-    let clNum = 1;
-
-    match = errorMsg.match(lnRegex);
-    if (match) {
-      const lineAndNum = match[0].split(' ');
-      lnNum = parseInt(lineAndNum[1], 10);
-    }
-
-    match = errorMsg.match(clRegex);
-    if (match) {
-      const lineAndNum = match[0].split(' ');
-      clNum = parseInt(lineAndNum[1], 10);
-    }
-    return {
-      lineNum: lnNum,
-      columnNum: clNum,
-    };
-  };
+  }, [codeError]);
 
   useEffect(() => {
     if (editorRef.current) {
       const model = editorRef.current.getModel();
       if (model) {
-        // model.onDidChangeContent(() => {
         const markers = applyMarkers();
         monaco.editor.setModelMarkers(model, 'c', markers);
-        setEditorKey(prevKey => prevKey + 1);
-
-        // });
+        setEditorKey((prevKey) => prevKey + 1);
       }
     }
-  }, [codeError]);
+  }, [codeError, applyMarkers]);
 
   // Used to detect for any changes in code
   // This is needed for when lz string compression calls setcode
@@ -281,33 +235,38 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       const model = editorRef.current.getModel();
       if (model && model.getValue() !== code) {
         model.setValue(code);
-        setEditorKey(prevKey => prevKey + 1);
+        setEditorKey((prevKey) => prevKey + 1);
       }
     }
-  }, [code, editorRef.current]);
+  }, [code]);
 
   useEffect(() => {
     if (decorationsRef !== null && decorationsRef.current !== null) {
+      const model = editorRef.current?.getModel();
+      const lineCount = model?.getLineCount() ?? 0;
       const newDecorations = [];
 
       for (const lineNum in lineNumDetails) {
         const colour = lineNumDetails[lineNum]['colour'].slice(1).toLowerCase();
         let decoration = {};
-        if (lineNumToHighlight.has(parseInt(lineNum))) {
+        const parsedLineNum = parseInt(lineNum);
+        if (!Number.isFinite(parsedLineNum) || parsedLineNum < 1 || parsedLineNum > lineCount) {
+          continue;
+        }
+        if (lineNumToHighlight.has(parsedLineNum)) {
           decoration = {
-            range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
+            range: new monaco.Range(parsedLineNum, 1, parsedLineNum, 1),
             options: {
               isWholeLine: true,
               inlineClassName: `line-decoration-text-${colour}`,
             },
           };
           if (editorRef.current) {
-            // editorRef.current.setPosition({lineNumber: parseInt(lineNum), column: 1})
-            editorRef.current.revealLine(parseInt(lineNum));
+            editorRef.current.revealLine(parsedLineNum);
           }
         } else {
           decoration = {
-            range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
+            range: new monaco.Range(parsedLineNum, 1, parsedLineNum, 1),
             options: {
               isWholeLine: true,
               inlineClassName: `line-decoration-${colour}`,
@@ -319,16 +278,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       }
       decorationsRef.current.set(newDecorations);
     }
-  }, [lineNumToHighlight]);
+  }, [lineNumToHighlight, lineNumDetails]);
 
   useEffect(() => {
     if (decorationsRef !== null && decorationsRef.current !== null) {
+      const model = editorRef.current?.getModel();
+      const lineCount = model?.getLineCount() ?? 0;
       const newDecorations = [];
 
       for (const lineNum in lineNumDetails) {
         const colour = lineNumDetails[lineNum]['colour'].slice(1).toLowerCase();
+        const parsedLineNum = parseInt(lineNum);
+        if (!Number.isFinite(parsedLineNum) || parsedLineNum < 1 || parsedLineNum > lineCount) {
+          continue;
+        }
         const decoration = {
-          range: new monaco.Range(parseInt(lineNum), 1, parseInt(lineNum), 1),
+          range: new monaco.Range(parsedLineNum, 1, parsedLineNum, 1),
           options: {
             isWholeLine: true,
             inlineClassName: `line-decoration-${colour}`,
@@ -336,30 +301,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         };
         newDecorations.push(decoration);
       }
-      // oldLineHighlights.add(parseInt(lineNum));
       decorationsRef.current.set(newDecorations);
     }
   }, [lineNumDetails]);
 
-  /*
-  d9f0e9
-Ffffe3
-e9e8f1
-ffd6d2
-d4e5ee
-d5e4ef
-ffe5c9
-e5f4cd
-f2f2f0
-e9d6e7
-edf8ea
-Fff8cf
-
-d5f1ec
-  */
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
+      /* Base (light theme) backgrounds — keep original hues for node→code consistency */
       .line-decoration-d9f0e9 { background: #d9f0e9; }
       .line-decoration-ffffe3 { background: #ffffe3; }
       .line-decoration-e9e8f1 { background: #e9e8f1; }
@@ -372,31 +321,106 @@ d5f1ec
       .line-decoration-e9d6e7 { background: #e9d6e7; }
       .line-decoration-edf8ea { background: #edf8ea; }
       .line-decoration-fff8cf { background: #fff8cf; }
-      .text-color { color: red; }
-      .line-decoration-text-d9f0e9 { background: #d9f0e9; color: red !important; }
-      .line-decoration-text-ffffe3 { background: #ffffe3; color: red !important; }
-      .line-decoration-text-e9e8f1 { background: #e9e8f1; color: red !important; }
-      .line-decoration-text-ffd6d2 { background: #ffd6d2; color: red !important; }
-      .line-decoration-text-d4e5ee { background: #d4e5ee; color: red !important; }
-      .line-decoration-text-d5e4ef { background: #d5e4ef; color: red !important; }
-      .line-decoration-text-ffe5c9 { background: #ffe5c9; color: red !important; }
-      .line-decoration-text-e5f4cd { background: #e5f4cd; color: red !important; }
-      .line-decoration-text-f2f2f0 { background: #f2f2f0; color: red !important; }
-      .line-decoration-text-e9d6e7 { background: #e9d6e7; color: red !important;}
-      .line-decoration-text-edf8ea { background: #edf8ea; color: red !important;}
-      .line-decoration-text-fff8cf { background: #fff8cf; color: red !important;}
+
+      .line-decoration-text-d9f0e9 { background: #d9f0e9; }
+      .line-decoration-text-ffffe3 { background: #ffffe3; }
+      .line-decoration-text-e9e8f1 { background: #e9e8f1; }
+      .line-decoration-text-ffd6d2 { background: #ffd6d2; }
+      .line-decoration-text-d4e5ee { background: #d4e5ee; }
+      .line-decoration-text-d5e4ef { background: #d5e4ef; }
+      .line-decoration-text-ffe5c9 { background: #ffe5c9; }
+      .line-decoration-text-e5f4cd { background: #e5f4cd; }
+      .line-decoration-text-f2f2f0 { background: #f2f2f0; }
+      .line-decoration-text-e9d6e7 { background: #e9d6e7; }
+      .line-decoration-text-edf8ea { background: #edf8ea; }
+      .line-decoration-text-fff8cf { background: #fff8cf; }
+
+      /* Dark theme: keep hue mapping, but reduce fill opacity and add outline for readability */
+      [data-theme='dark'] .line-decoration-d9f0e9 { background: rgba(217, 240, 233, 0.27); }
+      [data-theme='dark'] .line-decoration-ffffe3 { background: rgba(255, 255, 227, 0.27); }
+      [data-theme='dark'] .line-decoration-e9e8f1 { background: rgba(233, 232, 241, 0.27); }
+      [data-theme='dark'] .line-decoration-ffd6d2 { background: rgba(255, 214, 210, 0.27); }
+      [data-theme='dark'] .line-decoration-d4e5ee { background: rgba(212, 229, 238, 0.27); }
+      [data-theme='dark'] .line-decoration-d5e4ef { background: rgba(213, 228, 239, 0.27); }
+      [data-theme='dark'] .line-decoration-ffe5c9 { background: rgba(255, 229, 201, 0.27); }
+      [data-theme='dark'] .line-decoration-e5f4cd { background: rgba(229, 244, 205, 0.27); }
+      [data-theme='dark'] .line-decoration-f2f2f0 { background: rgba(242, 242, 240, 0.27); }
+      [data-theme='dark'] .line-decoration-e9d6e7 { background: rgba(233, 214, 231, 0.27); }
+      [data-theme='dark'] .line-decoration-edf8ea { background: rgba(237, 248, 234, 0.27); }
+      [data-theme='dark'] .line-decoration-fff8cf { background: rgba(255, 248, 207, 0.27); }
+
+      [data-theme='dark'] .line-decoration-text-d9f0e9,
+      [data-theme='dark'] .line-decoration-text-ffffe3,
+      [data-theme='dark'] .line-decoration-text-e9e8f1,
+      [data-theme='dark'] .line-decoration-text-ffd6d2,
+      [data-theme='dark'] .line-decoration-text-d4e5ee,
+      [data-theme='dark'] .line-decoration-text-d5e4ef,
+      [data-theme='dark'] .line-decoration-text-ffe5c9,
+      [data-theme='dark'] .line-decoration-text-e5f4cd,
+      [data-theme='dark'] .line-decoration-text-f2f2f0,
+      [data-theme='dark'] .line-decoration-text-e9d6e7,
+      [data-theme='dark'] .line-decoration-text-edf8ea,
+      [data-theme='dark'] .line-decoration-text-fff8cf,
+      [data-theme='dark'] .line-decoration-d9f0e9,
+      [data-theme='dark'] .line-decoration-ffffe3,
+      [data-theme='dark'] .line-decoration-e9e8f1,
+      [data-theme='dark'] .line-decoration-ffd6d2,
+      [data-theme='dark'] .line-decoration-d4e5ee,
+      [data-theme='dark'] .line-decoration-d5e4ef,
+      [data-theme='dark'] .line-decoration-ffe5c9,
+      [data-theme='dark'] .line-decoration-e5f4cd,
+      [data-theme='dark'] .line-decoration-f2f2f0,
+      [data-theme='dark'] .line-decoration-e9d6e7,
+      [data-theme='dark'] .line-decoration-edf8ea,
+      [data-theme='dark'] .line-decoration-fff8cf {
+        /* Improve legibility of Monaco dark tokens on light highlight without changing token colors */
+        text-shadow: 0 0 2px rgba(0,0,0,0.9), 0 0 1px rgba(0,0,0,0.9);
+      }
     `;
     document.head.appendChild(style);
   }, []);
 
-  const [theme, setTheme] = useState<'vs-light' | 'vs-dark'>('vs-light'); // Theme state for Monaco Editor
+  const [theme, setTheme] = useState<string>('websvf-light'); // Monaco theme name
+  const monacoInstance = useMonaco();
+
+  // Create a Monaco theme that follows CSS variables
+  const applyMonacoThemeFromCSSVars = React.useCallback(
+    (mode: 'light' | 'dark') => {
+      if (!monacoInstance) return;
+      const root = getComputedStyle(document.documentElement);
+      const background = (root.getPropertyValue('--surface') || '#ffffff').trim();
+      const foreground = (root.getPropertyValue('--text-color') || '#0f172a').trim();
+      const themeName = mode === 'dark' ? 'websvf-dark' : 'websvf-light';
+      monacoInstance.editor.defineTheme(themeName, {
+        base: mode === 'dark' ? 'vs-dark' : 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': background,
+          'editor.foreground': foreground,
+          'editorCursor.foreground': foreground,
+          'editorLineNumber.foreground': foreground,
+          'editorLineNumber.activeForeground': foreground,
+          'editorGutter.background': background,
+          'editor.selectionBackground': mode === 'dark' ? '#114a6c80' : '#60a5fa55',
+          'editor.inactiveSelectionBackground': mode === 'dark' ? '#114a6c55' : '#93c5fd55',
+          'editor.lineHighlightBackground': mode === 'dark' ? '#0e223a66' : '#e5e7eb',
+          'minimap.background': background,
+        },
+      });
+      // Ensure the theme is applied immediately (not just via prop)
+      monacoInstance.editor.setTheme(themeName);
+      setTheme(themeName);
+    },
+    [monacoInstance]
+  );
 
   // Effect to handle dynamic theme changes based on the `data-theme` attribute
   useEffect(() => {
     const updateTheme = () => {
-      const currentTheme =
-        document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs-light';
-      setTheme(currentTheme);
+      const mode =
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      applyMonacoThemeFromCSSVars(mode);
     };
 
     // Initial theme setting based on the attribute
@@ -410,13 +434,32 @@ d5f1ec
     });
 
     return () => observer.disconnect(); // Cleanup observer on unmount
-  }, []);
+  }, [monacoInstance, applyMonacoThemeFromCSSVars]);
+
+  // Compute the effective font size: local control wins once user interacts
+  const effectiveFontSize = useLocalFontSize ? fontSize : (externalFontSize ?? fontSize);
+
+  // Ensure font size updates are applied to Monaco immediately
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({ fontSize: effectiveFontSize });
+    }
+  }, [effectiveFontSize]);
 
   return (
     <>
       <div>
         <div id="codeEditor-fontSize-container">
-          <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize} />
+          <FontSizeMenu
+            fontSize={effectiveFontSize}
+            setFontSize={(size: number) => {
+              // Update local immediately for responsiveness
+              setUseLocalFontSize(true);
+              setFontSize(size);
+              // Also update the external settings so the Settings modal reflects the change
+              if (onExternalFontSizeChange) onExternalFontSizeChange(size);
+            }}
+          />
         </div>
         <Editor
           key={editorKey}
@@ -425,7 +468,7 @@ d5f1ec
           theme={theme}
           value={code}
           onMount={handleEditorDidMount}
-          options={{ fontSize: fontSize }}
+          options={{ fontSize: effectiveFontSize }}
         />
       </div>
     </>

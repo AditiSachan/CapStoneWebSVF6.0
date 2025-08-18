@@ -106,3 +106,4 @@ api/obj/*
 ../vscode/*
 api/SVF
 api/SVF_prebuilt/api/SVF-prebuilt/
+frontend/dist

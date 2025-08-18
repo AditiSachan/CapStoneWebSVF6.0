@@ -1,12 +1,7 @@
-// React import not needed with new JSX transform
 import './resetDefaultButton.css';
 
 function ResetDefaultButton() {
-  return (
-    <>
-      <button className="reset-button">Reset Default</button>
-    </>
-  );
+  return <button className="reset-button">Reset Default</button>;
 }
 
 export default ResetDefaultButton;

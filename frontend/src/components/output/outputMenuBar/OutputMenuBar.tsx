@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './outputMenuBar.module.css';
-import type { OutputType } from '../../multiSession/sessionManager'; 
+import type { OutputType } from '../../multiSession/sessionManager';
 
 interface OutputMenuBarProps {
   currentOutput: OutputType;
   setCurrentOutput: (outputType: OutputType) => void;
-  onDragStartTab: (tab: OutputType) => void;
+  onDragStartTab: (tab: OutputType, e: React.DragEvent<HTMLElement>) => void;
 }
 
 const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
@@ -20,7 +20,7 @@ const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
           className={`${styles.navItem} ${currentOutput === 'Graph' ? styles.active : ''}`}
           onClick={() => setCurrentOutput('Graph')}
           draggable
-          onDragStart={() => onDragStartTab('Graph')}
+          onDragStart={(e) => onDragStartTab('Graph', e)}
         >
           Graphs
         </li>
@@ -28,7 +28,7 @@ const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
           className={`${styles.navItem} ${currentOutput === 'Terminal Output' ? styles.active : ''}`}
           onClick={() => setCurrentOutput('Terminal Output')}
           draggable
-          onDragStart={() => onDragStartTab('Terminal Output')}
+          onDragStart={(e) => onDragStartTab('Terminal Output', e)}
         >
           Terminal Output
         </li>
@@ -36,7 +36,7 @@ const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
           className={`${styles.navItem} ${currentOutput === 'CodeGPT' ? styles.active : ''}`}
           onClick={() => setCurrentOutput('CodeGPT')}
           draggable
-          onDragStart={() => onDragStartTab('CodeGPT')}
+          onDragStart={(e) => onDragStartTab('CodeGPT', e)}
         >
           CodeGPT
         </li>
@@ -44,7 +44,7 @@ const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
           className={`${styles.navItem} ${currentOutput === 'LLVMIR' ? styles.active : ''}`}
           onClick={() => setCurrentOutput('LLVMIR')}
           draggable
-          onDragStart={() => onDragStartTab('LLVMIR')}
+          onDragStart={(e) => onDragStartTab('LLVMIR', e)}
         >
           LLVMIR
         </li>
@@ -52,7 +52,7 @@ const OutputMenuBar: React.FC<OutputMenuBarProps> = ({
           className={`${styles.navItem} ${currentOutput === 'Terminal' ? styles.active : ''}`}
           onClick={() => setCurrentOutput('Terminal')}
           draggable
-          onDragStart={() => onDragStartTab('Terminal')}
+          onDragStart={(e) => onDragStartTab('Terminal', e)}
         >
           Terminal
         </li>

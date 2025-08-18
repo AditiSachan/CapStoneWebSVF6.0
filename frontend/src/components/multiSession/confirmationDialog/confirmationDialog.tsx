@@ -27,14 +27,50 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       onClose={onCancel}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      PaperProps={{
+        sx: {
+          bgcolor: 'var(--surface)',
+          color: 'var(--text-color)',
+          border: '1px solid var(--border-color)',
+          boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
+          borderRadius: 2,
+        },
+      }}
     >
-      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+      <DialogTitle id="alert-dialog-title" sx={{ color: 'var(--text-color)' }}>
+        {title}
+      </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">{message}</DialogContentText>
+        <DialogContentText id="alert-dialog-description" sx={{ color: 'var(--text-color)' }}>
+          {message}
+        </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onCancel}>Cancel</Button>
-        <Button onClick={onConfirm} color="error" autoFocus>
+      <DialogActions sx={{ p: 2 }}>
+        <Button
+          onClick={onCancel}
+          sx={{
+            bgcolor: 'var(--muted)',
+            color: 'var(--text-color)',
+            textTransform: 'uppercase',
+            borderRadius: '10px',
+            px: 2.5,
+            '&:hover': { bgcolor: 'var(--muted)' },
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={onConfirm}
+          autoFocus
+          sx={{
+            bgcolor: 'var(--danger)',
+            color: '#ffffff',
+            textTransform: 'uppercase',
+            borderRadius: '10px',
+            px: 2.5,
+            '&:hover': { bgcolor: 'var(--danger-hover)' },
+          }}
+        >
           Delete
         </Button>
       </DialogActions>

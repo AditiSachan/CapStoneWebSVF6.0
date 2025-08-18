@@ -1,4 +1,14 @@
 import React, { useState, useCallback } from 'react';
+
+declare global {
+  interface Window {
+    showToast?: (
+      message: string,
+      type: 'error' | 'success' | 'warning' | 'info',
+      duration?: number
+    ) => void;
+  }
+}
 import Toast from './Toast';
 
 interface ToastMessage {
@@ -16,15 +26,15 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ onToastAdd }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const removeToast = useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   const addToast = useCallback(
     (message: string, type: 'error' | 'success' | 'warning' | 'info', duration?: number) => {
-      const id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+      const id = Date.now().toString() + Math.random().toString(36).slice(2, 11);
       const newToast: ToastMessage = { id, message, type, duration };
 
-      setToasts(prev => [...prev, newToast]);
+      setToasts((prev) => [...prev, newToast]);
 
       if (onToastAdd) {
         onToastAdd(newToast);
@@ -35,9 +45,9 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ onToastAdd }) => {
 
   // Expose addToast method globally for external use
   React.useEffect(() => {
-    (window as any).showToast = addToast;
+    window.showToast = addToast;
     return () => {
-      delete (window as any).showToast;
+      delete window.showToast;
     };
   }, [addToast]);
 

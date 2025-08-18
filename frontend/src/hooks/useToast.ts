@@ -7,8 +7,17 @@ interface ToastOptions {
 export const useToast = () => {
   const showToast = useCallback(
     (message: string, type: 'error' | 'success' | 'warning' | 'info', options?: ToastOptions) => {
-      if ((window as any).showToast) {
-        (window as any).showToast(message, type, options?.duration);
+      const maybeShowToast = (
+        window as unknown as {
+          showToast?: (
+            message: string,
+            type: 'error' | 'success' | 'warning' | 'info',
+            duration?: number
+          ) => void;
+        }
+      ).showToast;
+      if (maybeShowToast) {
+        maybeShowToast(message, type, options?.duration);
       }
     },
     []
@@ -50,5 +59,3 @@ export const useToast = () => {
     showInfo,
   };
 };
-
-export default useToast;

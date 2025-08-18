@@ -1,54 +1,52 @@
 #share-container {
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  /* padding: 1% 1% 1% 1%; */
-  border: 1px solid;
-  border-radius: 5px;
+  align-items: center; /* vertically center text and button */
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--surface-2);
+  overflow: hidden; /* keep radii clean */
 }
 
 #share-textArea {
-  background-color: #dcdcdc;
+  background-color: var(--surface);
+  color: var(--text-color);
   width: 100%;
   resize: none;
   font-size: 1rem;
-  height: 1.8rem;
+  height: 44px; /* match button height */
+  line-height: 44px; /* vertically center single-line text */
   white-space: nowrap;
   overflow: hidden;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  /* border-radius: 5px; */
   vertical-align: middle;
-  padding-top: 0.8rem;
-  padding-left: 0.8rem;
-  padding-right: 0.8rem;
-  padding-bottom: 0.2rem;
+  padding: 0 14px;
   border: none;
-
-  /* height: rem; */
 }
 
 #copy-icon-container {
-  padding: 1% 1% 0% 1%;
-
-  text-align: center;
+  width: 48px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  border: #696969 1px solid;
-  text-align: center;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-left: 1px solid var(--border-color);
+  background: var(--muted);
+  color: var(--text-color);
 }
 
 #copy-icon-container:hover {
-  background-color: #696969;
-  color: white;
+  background-color: var(--primary);
+  color: var(--primary-contrast);
 }
 
 /* Tooltip styling */
 .tooltip {
-  background-color: #333;
-  color: #fff;
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-text);
   text-align: center;
   padding: 8px;
   border-radius: 4px;
@@ -56,4 +54,10 @@
   opacity: 0.9;
   margin-top: 1%;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.actions-row {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-start; /* align Close button to the left */
 }

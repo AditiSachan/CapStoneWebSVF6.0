@@ -18,10 +18,12 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  width: 500,
+  bgcolor: 'var(--surface)',
+  color: 'var(--text-color)',
+  border: '1px solid var(--border-color)',
+  boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
+  borderRadius: 12,
   p: 4,
 };
 
@@ -80,22 +82,28 @@ export default function SettingsModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ color: 'var(--text-color)' }}
+          >
             Settings
           </Typography>
           {/* Code Editor font size */}
-          <Typography id="input-slider" gutterBottom>
+          <Typography id="input-slider" gutterBottom sx={{ color: 'var(--text-color)' }}>
             Code Editor Font Size
           </Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item>
-              <FormatSizeIcon />
+              <FormatSizeIcon sx={{ color: 'var(--text-color)' }} />
             </Grid>
             <Grid item xs>
               <Slider
                 value={typeof codeFontSize === 'number' ? codeFontSize : 10}
                 onChange={handleCodeSliderChange}
                 aria-labelledby="input-slider"
+                sx={{ color: 'var(--primary)' }}
               />
             </Grid>
             <Grid item>
@@ -111,22 +119,24 @@ export default function SettingsModal({
                   type: 'number',
                   'aria-labelledby': 'input-slider',
                 }}
+                sx={{ color: 'var(--text-color)' }}
               />
             </Grid>
           </Grid>
           {/* Terminal Output font size */}
-          <Typography id="input-slider" gutterBottom>
+          <Typography id="input-slider" gutterBottom sx={{ color: 'var(--text-color)' }}>
             Terminal Output Font Size
           </Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item>
-              <FormatSizeIcon />
+              <FormatSizeIcon sx={{ color: 'var(--text-color)' }} />
             </Grid>
             <Grid item xs>
               <Slider
                 value={typeof terminalOutputFontSize === 'number' ? terminalOutputFontSize : 10}
                 onChange={handleTerminalSliderChange}
                 aria-labelledby="input-slider"
+                sx={{ color: 'var(--primary)' }}
               />
             </Grid>
             <Grid item>
@@ -142,22 +152,24 @@ export default function SettingsModal({
                   type: 'number',
                   'aria-labelledby': 'input-slider',
                 }}
+                sx={{ color: 'var(--text-color)' }}
               />
             </Grid>
           </Grid>
           {/* LLVMIR Output font size */}
-          <Typography id="input-slider" gutterBottom>
+          <Typography id="input-slider" gutterBottom sx={{ color: 'var(--text-color)' }}>
             LLVMIR Font Size
           </Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item>
-              <FormatSizeIcon />
+              <FormatSizeIcon sx={{ color: 'var(--text-color)' }} />
             </Grid>
             <Grid item xs>
               <Slider
                 value={typeof llvmIRFontSize === 'number' ? llvmIRFontSize : 10}
                 onChange={handleLLVMSliderChange}
                 aria-labelledby="input-slider"
+                sx={{ color: 'var(--primary)' }}
               />
             </Grid>
             <Grid item>
@@ -173,11 +185,25 @@ export default function SettingsModal({
                   type: 'number',
                   'aria-labelledby': 'input-slider',
                 }}
+                sx={{ color: 'var(--text-color)' }}
               />
             </Grid>
           </Grid>
 
-          <Button onClick={handleClose}>Close</Button>
+          <Button
+            onClick={handleClose}
+            sx={{
+              backgroundColor: 'var(--primary)',
+              color: 'var(--primary-contrast)',
+              textTransform: 'uppercase',
+              borderRadius: '10px',
+              px: 2.5,
+              py: 1,
+              '&:hover': { backgroundColor: 'var(--primary-hover)' },
+            }}
+          >
+            Close
+          </Button>
         </Box>
       </Modal>
     </div>

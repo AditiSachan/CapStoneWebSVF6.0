@@ -1,6 +1,6 @@
 // compileOptionsMenu.tsx
 import React from 'react';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import makeAnimated from 'react-select/animated';
 import CustomOption from '../../tooltip/customOption';
 import CustomMultiValueLabel from '../../tooltip/customMultiValueLabel';
@@ -36,49 +36,125 @@ const CompileOptionsMenu: React.FC<CompileOptionsMenuProps> = ({
   selectedCompileOptions,
   setPassedPrompt,
 }) => {
-  // Add descriptions to options
   const optionsWithDescriptions = addDescriptionsToOptions(
     compileOptions,
     compileOptionDescriptions
   );
 
-  // Handler for selection changes
-  const handleChange = (selected: any) => {
-    setSelectedCompileOptions(selected || []);
+  // Non-removable chip for -emit-llvm
+  type MultiValueRemoveProps = React.ComponentProps<typeof components.MultiValueRemove> & {
+    data?: { value?: string };
   };
 
-  // Custom styles to ensure tooltips are visible
+  const NonRemovableMultiValueRemove: React.FC<MultiValueRemoveProps> = (props) => {
+    const { data } = props;
+    if (data?.value === '-emit-llvm') {
+      return null; // Hide the remove (x) for this option
+    }
+    return <components.MultiValueRemove {...props} />;
+  };
+
+  const handleChange = (selected) => {
+    const next = Array.isArray(selected) ? [...selected] : [];
+    // Ensure -emit-llvm is always present
+    const mustKeep = optionsWithDescriptions.find((o) => o.value === '-emit-llvm');
+    if (mustKeep && !next.some((o) => o.value === mustKeep.value)) {
+      next.push(mustKeep);
+    }
+    setSelectedCompileOptions(next);
+    if (setPassedPrompt) setPassedPrompt('');
+  };
+
+  // Custom styles to ensure tooltips are visible and theme-consistent
   const customStyles = {
-    option: (provided: any) => ({
+    control: (provided, state) => ({
+      ...provided,
+      overflow: 'visible',
+      backgroundColor: 'var(--surface)',
+      color: 'var(--text-color)',
+      borderColor: state.isFocused ? 'var(--primary)' : 'var(--border-color)',
+      boxShadow: 'none',
+      ':hover': {
+        borderColor: 'var(--primary)',
+      },
+    }),
+    option: (provided, state) => ({
       ...provided,
       position: 'relative',
       overflow: 'visible',
+      backgroundColor: state.isSelected
+        ? 'var(--primary)'
+        : state.isFocused
+          ? 'var(--muted)'
+          : 'var(--surface)',
+      color: state.isSelected ? 'var(--primary-contrast)' : 'var(--text-color)',
     }),
-    menuPortal: (base: any) => ({
+    menuPortal: (base) => ({
       ...base,
       zIndex: 9999,
     }),
-    menu: (provided: any) => ({
+    menu: (provided) => ({
       ...provided,
       overflow: 'visible',
       zIndex: 9999,
+      backgroundColor: 'var(--surface)',
+      color: 'var(--text-color)',
+      border: '1px solid var(--border-color)',
     }),
-    menuList: (provided: any) => ({
+    menuList: (provided) => ({
       ...provided,
       overflow: 'visible',
+      backgroundColor: 'var(--surface)',
+      color: 'var(--text-color)',
     }),
-    multiValue: (provided: any) => ({
+    multiValue: (provided) => ({
       ...provided,
       position: 'relative',
       overflow: 'visible',
+      backgroundColor: 'var(--muted)',
+      color: 'var(--text-color)',
+      border: '1px solid var(--border-color)',
     }),
-    valueContainer: (provided: any) => ({
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      ':hover': { backgroundColor: 'var(--danger)', color: 'var(--primary-contrast)' },
+    }),
+    valueContainer: (provided) => ({
       ...provided,
       overflow: 'visible',
+      color: 'var(--text-color)',
     }),
-    control: (provided: any) => ({
+    input: (provided) => ({
       ...provided,
-      overflow: 'visible',
+      color: 'var(--text-color)',
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      opacity: 0.8,
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+    }),
+    indicatorsContainer: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      ':hover': { color: 'var(--text-color)' },
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      ':hover': { color: 'var(--danger)' },
     }),
   };
 
@@ -89,6 +165,7 @@ const CompileOptionsMenu: React.FC<CompileOptionsMenuProps> = ({
       ...animatedComponents,
       Option: CustomOption,
       MultiValueLabel: CustomMultiValueLabel,
+      MultiValueRemove: NonRemovableMultiValueRemove,
     },
     styles: customStyles,
     isMulti: true,
@@ -105,12 +182,13 @@ const CompileOptionsMenu: React.FC<CompileOptionsMenuProps> = ({
       optionsWithDescriptions[4],
     ],
     name: 'compileOptions',
+    classNamePrefix: 'react-select',
+    // Prevent toggling -emit-llvm from the menu
+    isOptionDisabled: (option: unknown) => (option as CompileOption)?.value === '-emit-llvm',
   };
 
-  // Add setPassedPrompt to props if it exists
   if (setPassedPrompt) {
-    // Use type assertion here to bypass TypeScript's type checking
-    (selectProps as any).setPassedPrompt = setPassedPrompt;
+    selectProps.setPassedPrompt = setPassedPrompt;
   }
 
   return <Select {...selectProps} />;

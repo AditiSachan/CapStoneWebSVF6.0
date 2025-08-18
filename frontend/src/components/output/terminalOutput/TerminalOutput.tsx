@@ -1,33 +1,84 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Editor, { OnMount } from '@monaco-editor/react';
+import Editor, { OnMount, useMonaco } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 import FontSizeMenu from '../../fontSizeMenu/FontSizeMenu';
 import './terminalOutput.css';
 interface TerminalOutputProps {
   terminalOutputString: string;
+  externalFontSize?: number;
+  onExternalFontSizeChange?: (size: number) => void;
 }
 
-const TerminalOutput: React.FC<TerminalOutputProps> = ({ terminalOutputString }) => {
+const TerminalOutput: React.FC<TerminalOutputProps> = ({
+  terminalOutputString,
+  externalFontSize,
+  onExternalFontSizeChange,
+}) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [decorations, setDecorations] = useState<string[]>([]);
   const [fontSize, setFontSize] = useState(16);
+  const [useLocalFontSize, setUseLocalFontSize] = useState(false);
 
-  const handleEditorDidMount: OnMount = (editor, monaco) => {
+  const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
-    editor.updateOptions({ readOnly: true });
+    editor.updateOptions({
+      readOnly: true,
+      fontSize: useLocalFontSize ? fontSize : (externalFontSize ?? fontSize),
+    });
 
     editor.onDidChangeModelContent(() => {
-      const value = editor.getValue();
+      editor.getValue();
     });
   };
 
-  const [theme, setTheme] = useState('vs-light'); // Default to light mode theme
+  const [theme, setTheme] = useState('websvf-light');
+  const monacoInstance = useMonaco();
+
+  // Apply effective font size immediately when changed
+  const effectiveFontSize = useLocalFontSize ? fontSize : (externalFontSize ?? fontSize);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({ fontSize: effectiveFontSize });
+    }
+  }, [effectiveFontSize]);
+
+  // Create and apply Monaco theme using CSS variables
+  const applyMonacoThemeFromCSSVars = React.useCallback(
+    (mode: 'light' | 'dark') => {
+      if (!monacoInstance) return;
+      const root = getComputedStyle(document.documentElement);
+      const background = (root.getPropertyValue('--surface') || '#ffffff').trim();
+      const foreground = (root.getPropertyValue('--text-color') || '#0f172a').trim();
+      const themeName = mode === 'dark' ? 'websvf-dark' : 'websvf-light';
+      monacoInstance.editor.defineTheme(themeName, {
+        base: mode === 'dark' ? 'vs-dark' : 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': background,
+          'editor.foreground': foreground,
+          'editorCursor.foreground': foreground,
+          'editorLineNumber.foreground': foreground,
+          'editorLineNumber.activeForeground': foreground,
+          'editorGutter.background': background,
+          'editor.selectionBackground': mode === 'dark' ? '#114a6c80' : '#60a5fa55',
+          'editor.inactiveSelectionBackground': mode === 'dark' ? '#114a6c55' : '#93c5fd55',
+          'editor.lineHighlightBackground': mode === 'dark' ? '#0e223a66' : '#e5e7eb',
+          'minimap.background': background,
+        },
+      });
+      monacoInstance.editor.setTheme(themeName);
+      setTheme(themeName);
+    },
+    [monacoInstance]
+  );
 
   // Detect theme change based on the "data-theme" attribute
   useEffect(() => {
     const updateTheme = () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      setTheme(currentTheme === 'dark' ? 'vs-dark' : 'vs-light');
+      const mode =
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      applyMonacoThemeFromCSSVars(mode);
     };
 
     // Initial theme setting
@@ -41,13 +92,20 @@ const TerminalOutput: React.FC<TerminalOutputProps> = ({ terminalOutputString })
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [monacoInstance, applyMonacoThemeFromCSSVars]);
 
   return (
     <>
       <div>
         <div id="terminalOutput-fontSize-container">
-          <FontSizeMenu fontSize={fontSize} setFontSize={setFontSize} />
+          <FontSizeMenu
+            fontSize={effectiveFontSize}
+            setFontSize={(size: number) => {
+              setUseLocalFontSize(true);
+              setFontSize(size);
+              if (onExternalFontSizeChange) onExternalFontSizeChange(size);
+            }}
+          />
         </div>
         <Editor
           height="90vh"
@@ -55,7 +113,7 @@ const TerminalOutput: React.FC<TerminalOutputProps> = ({ terminalOutputString })
           theme={theme}
           value={terminalOutputString}
           onMount={handleEditorDidMount}
-          options={{ fontSize: fontSize }}
+          options={{ fontSize: effectiveFontSize }}
         />
       </div>
     </>

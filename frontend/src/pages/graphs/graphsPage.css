@@ -4,6 +4,7 @@
   background-color: var(--font-size-container-bg-color);
   height: calc(100vh - 60px); /* Adjust based on your navbar height */
   overflow: hidden;
+  color: var(--text-color);
 }
 
 .left {
@@ -36,7 +37,7 @@
 
 .resizer {
   width: 6px;
-  background-color: #d3d3d3;
+  background-color: var(--muted);
   cursor: col-resize;
   z-index: 100;
   position: absolute;
@@ -49,7 +50,7 @@
 
 .resizer:hover,
 .resizer:active {
-  background-color: #1976d2;
+  background-color: var(--primary);
   width: 6px;
 }
 
@@ -79,22 +80,16 @@
   order: 2;
 }
 
-/* #graph-page-code-container,
-#graph-page-output-container {
-  overflow: auto;
-  transition: width 0.1s ease;
-} */
-
 #graph-page-code-container {
   overflow: auto;
   transition: width 0.1s ease;
-  border-right: 1px solid #e0e0e0;
+  border-right: 1px solid var(--border-color);
 }
 
 #graph-page-output-container {
   position: relative;
   transition: order 0.3s ease;
-  border-left: 1px solid #e0e0e0;
+  border-left: 1px solid var(--border-color);
 }
 
 #graph-page-code-container.drag-over,
@@ -104,7 +99,7 @@
 
 .resizer {
   width: 8px;
-  background-color: #d3d3d3;
+  background-color: var(--muted);
   cursor: col-resize;
   z-index: 100;
   position: absolute;
@@ -113,12 +108,12 @@
 }
 
 .resizer:hover {
-  background-color: #aaa;
+  background-color: var(--primary);
 }
 
 .resizer {
   width: 8px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--muted);
   cursor: col-resize;
   z-index: 1000; /* Increase z-index to ensure it's above other elements */
   position: absolute;
@@ -129,13 +124,13 @@
 }
 
 .resizer.resizing {
-  background-color: #1976d2;
+  background-color: var(--primary);
   width: 8 px;
   opacity: 0.7;
 }
 .resizer:hover,
 .resizer:active {
-  background-color: #1976d2;
+  background-color: var(--primary);
 }
 
 /* Remove borders from containers that might interfere */

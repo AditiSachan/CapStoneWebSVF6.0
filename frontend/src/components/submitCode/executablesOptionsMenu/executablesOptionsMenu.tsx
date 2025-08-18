@@ -43,42 +43,101 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
   );
 
   // Handler for selection changes
-  const handleChange = (selected: any) => {
+  const handleChange = (selected) => {
     setSelectedExecutableOptions(selected || []);
+    if (setPassedPrompt) setPassedPrompt('');
   };
 
-  // Custom styles to ensure tooltips are visible
+  // Custom styles to ensure tooltips are visible and theme-consistent
   const customStyles = {
-    option: (provided: any) => ({
+    control: (provided, state) => ({
+      ...provided,
+      overflow: 'visible',
+      backgroundColor: 'var(--surface)',
+      color: 'var(--text-color)',
+      borderColor: state.isFocused ? 'var(--primary)' : 'var(--border-color)',
+      boxShadow: 'none',
+      ':hover': {
+        borderColor: 'var(--primary)',
+      },
+    }),
+    option: (provided, state) => ({
       ...provided,
       position: 'relative',
       overflow: 'visible',
+      backgroundColor: state.isSelected
+        ? 'var(--primary)'
+        : state.isFocused
+          ? 'var(--muted)'
+          : 'var(--surface)',
+      color: state.isSelected ? 'var(--primary-contrast)' : 'var(--text-color)',
     }),
-    menuPortal: (base: any) => ({
+    menuPortal: (base) => ({
       ...base,
       zIndex: 9999,
     }),
-    menu: (provided: any) => ({
+    menu: (provided) => ({
       ...provided,
       overflow: 'visible',
       zIndex: 9999,
+      backgroundColor: 'var(--surface)',
+      color: 'var(--text-color)',
+      border: '1px solid var(--border-color)',
     }),
-    menuList: (provided: any) => ({
+    menuList: (provided) => ({
       ...provided,
       overflow: 'visible',
+      backgroundColor: 'var(--surface)',
+      color: 'var(--text-color)',
     }),
-    multiValue: (provided: any) => ({
+    multiValue: (provided) => ({
       ...provided,
       position: 'relative',
       overflow: 'visible',
+      backgroundColor: 'var(--muted)',
+      color: 'var(--text-color)',
+      border: '1px solid var(--border-color)',
     }),
-    valueContainer: (provided: any) => ({
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      ':hover': { backgroundColor: 'var(--danger)', color: 'var(--primary-contrast)' },
+    }),
+    valueContainer: (provided) => ({
       ...provided,
       overflow: 'visible',
+      color: 'var(--text-color)',
     }),
-    control: (provided: any) => ({
+    input: (provided) => ({
       ...provided,
-      overflow: 'visible',
+      color: 'var(--text-color)',
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      opacity: 0.8,
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+    }),
+    indicatorsContainer: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      ':hover': { color: 'var(--text-color)' },
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: 'var(--text-color)',
+      ':hover': { color: 'var(--danger)' },
     }),
   };
 
@@ -98,12 +157,11 @@ const ExecutableOptionsMenu: React.FC<ExecutableOptionsMenuProps> = ({
     menuPortalTarget: document.body,
     menuPosition: 'fixed',
     name: 'executableOptions',
+    classNamePrefix: 'react-select',
   };
 
-  // Add setPassedPrompt to props if it exists
   if (setPassedPrompt) {
-    // Use type assertion here to bypass TypeScript's type checking
-    (selectProps as any).setPassedPrompt = setPassedPrompt;
+    selectProps.setPassedPrompt = setPassedPrompt;
   }
 
   return <Select {...selectProps} />;
