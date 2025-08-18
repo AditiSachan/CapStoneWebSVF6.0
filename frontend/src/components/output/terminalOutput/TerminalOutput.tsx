@@ -36,6 +36,17 @@ const TerminalOutput: React.FC<TerminalOutputProps> = ({
   // Apply effective font size immediately when changed
   const effectiveFontSize = useLocalFontSize ? fontSize : (externalFontSize ?? fontSize);
 
+  const normalizeHex = (value: string, fallback: string) => {
+    const raw = (value && value.trim()) || fallback;
+    const v = raw.toLowerCase();
+    const m3 = /^#([0-9a-f]{3})$/i.exec(v);
+    if (m3) {
+      const [r, g, b] = m3[1].split('');
+      return `#${r}${r}${g}${g}${b}${b}`;
+    }
+    return v;
+  };
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.updateOptions({ fontSize: effectiveFontSize });
@@ -47,8 +58,10 @@ const TerminalOutput: React.FC<TerminalOutputProps> = ({
     (mode: 'light' | 'dark') => {
       if (!monacoInstance) return;
       const root = getComputedStyle(document.documentElement);
-      const background = (root.getPropertyValue('--surface') || '#ffffff').trim();
-      const foreground = (root.getPropertyValue('--text-color') || '#0f172a').trim();
+      const backgroundRaw = root.getPropertyValue('--surface') || '#ffffff';
+      const foregroundRaw = root.getPropertyValue('--text-color') || '#0f172a';
+      const background = normalizeHex(backgroundRaw, '#ffffff');
+      const foreground = normalizeHex(foregroundRaw, '#0f172a');
       const themeName = mode === 'dark' ? 'websvf-dark' : 'websvf-light';
       monacoInstance.editor.defineTheme(themeName, {
         base: mode === 'dark' ? 'vs-dark' : 'vs',
