@@ -5,7 +5,7 @@ python3 --version
 cmake --version
 clang --version
 ```
-Download Python-SVF:
+Clone and install Python-SVF:
 ```sh
 git clone "https://github.com/SVF-tools/SVF-Python.git"
 cd SVF-Python
@@ -15,7 +15,7 @@ bash ./build.sh
 python3 -m pip install dist/*.whl
 ```
 
-Download required dependencies:
+Install required dependencies:
 ```sh
 # /path/to/CapStoneWebSVF6.0/api
 python3 -m pip install -r requirements.txt`
@@ -68,3 +68,4 @@ Samiksha Anirudh <br />
 Joshua Wills <br />
 Christian Tolentino <br />
 Aditi Sachan <br />
+
