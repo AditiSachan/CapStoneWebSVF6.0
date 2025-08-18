@@ -3,7 +3,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'api-morning-dawn-9144'
+app = 'api-broken-moon'
 primary_region = 'syd'
 
 [build]
