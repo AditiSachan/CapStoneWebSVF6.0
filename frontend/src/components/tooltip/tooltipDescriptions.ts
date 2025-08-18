@@ -20,7 +20,6 @@ export const executableOptionDescriptions: Record<string, string> = {
   saber: 'Memory Leak Detector. Identifies memory that is allocated but never freed, causing memory leaks in your program.',
   'ae -overflow': 'Buffer Overflow Detector. Identifies potential buffer overflow vulnerabilities where a program writes data beyond the allocated memory buffer.',
   'ae -null-deref': 'Null Dereference Detector. Identifies places where a null pointer could be dereferenced in your program, helping prevent crashes and undefined behavior.',
-  // Updated descriptions based on your clarifications:
   wpa: 'Whole Program Pointer Analysis. Performs comprehensive pointer analysis across the entire program to build accurate points-to relationships.',
   cfl: 'Context-Free Language Reachability Analysis. Uses CFL-reachability to perform precise program analysis based on context-free grammar rules.',
   dvf: 'On-Demand Value Flow Analysis. Performs value-flow analysis on demand, analyzing only the parts of the program relevant to specific queries for efficiency.'

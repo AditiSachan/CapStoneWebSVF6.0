@@ -88,9 +88,10 @@ typings/
 
 # TernJS port file
 .tern-port
-
+.idea/
+**/__pycache__/
 # Generated dot files
-*.dot
+**/**/*.dot
 
 config/
 
