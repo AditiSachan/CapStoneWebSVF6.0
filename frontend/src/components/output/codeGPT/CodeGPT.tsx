@@ -39,9 +39,6 @@ const CodeGPT = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const responseContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
-<<<<<<< HEAD
-=======
-  const [showCacheDebug, setShowCacheDebug] = useState(false);
   const [syntaxTheme, setSyntaxTheme] = useState(oneLight);
   type Attachment = {
     type: 'code' | 'graph' | 'llvm' | 'terminal';
@@ -50,7 +47,6 @@ const CodeGPT = ({
     pillHtml: string;
   };
   const [pendingAttachments, setPendingAttachments] = useState<Attachment[]>([]);
->>>>>>> istan18-all-features-6.0
 
   // Load messages from props
   useEffect(() => {
@@ -582,34 +578,6 @@ const CodeGPT = ({
 
   return (
     <div className={styles.codegptContainer}>
-<<<<<<< HEAD
-      <div className={styles.stickyHeader}>
-        <button onClick={handleReset} className={styles.resetButton}>
-          <RefreshIcon />
-        </button>
-=======
-      {/* Cache Debug Panel - gated by explicit flag */}
-      {String(import.meta.env.VITE_ENABLE_CACHE_DEBUG) === 'true' && (
-        <CacheDebugPanel
-          sessionId={sessionId}
-          isVisible={showCacheDebug}
-          onToggle={() => setShowCacheDebug(!showCacheDebug)}
-        />
-      )}
-
-      <div className={styles.stickyHeader}>
-        {/* Show debug toggle only when explicitly enabled via env flag */}
-        {String(import.meta.env.VITE_ENABLE_CACHE_DEBUG) === 'true' && (
-          <button
-            onClick={() => setShowCacheDebug(!showCacheDebug)}
-            className={styles.debugButton}
-            title="Toggle Cache Debug Panel"
-          >
-            🔍
-          </button>
-        )}
->>>>>>> istan18-all-features-6.0
-      </div>
       <div className={styles.codegptResponse} ref={responseContainerRef} onScroll={handleScroll}>
         {messages.map((message, index) => (
           <div
