@@ -590,7 +590,15 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
                 }}
               />
             ) : (
-              <p>No graph to display</p>
+              <div className="empty-state" role="status" aria-live="polite">
+                <div className="empty-icon" aria-hidden>
+                  🗺️
+                </div>
+                <div className="empty-title">No graph to display</div>
+                <div className="empty-subtitle">
+                  Run analysis to generate graphs, then pick a tab.
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -620,7 +628,15 @@ const DotGraphViewer: React.FC<DotGraphViewerProps> = ({
                   }}
                 />
               ) : (
-                <p>No graph to display</p>
+                <div className="empty-state" role="status" aria-live="polite">
+                  <div className="empty-icon" aria-hidden>
+                    🗺️
+                  </div>
+                  <div className="empty-title">No graph to display</div>
+                  <div className="empty-subtitle">
+                    Run analysis to generate graphs, then pick a tab.
+                  </div>
+                </div>
               )}
             </div>
           </div>

@@ -177,8 +177,10 @@ const CodeGPT = ({
 
       try {
         const combinedContext = pendingAttachments.map((a) => a.context).join('\n\n');
+        // Include full history (without the temporary loading message)
+        const history = messages.filter((m) => m.content !== 'Loading response...');
         const response = await doOpenAICall(
-          [{ role: 'user', content: visiblePrompt }],
+          [...history, { role: 'user', content: visiblePrompt }],
           undefined,
           combinedContext
         );
@@ -232,8 +234,10 @@ const CodeGPT = ({
       setGptInputQuery('');
 
       try {
+        // Include full history (without the temporary loading message)
+        const history = messages.filter((m) => m.content !== 'Loading response...');
         const response = await doOpenAICall(
-          userInput ? [{ role: 'user', content: userInput }] : [],
+          userInput ? [...history, { role: 'user', content: userInput }] : [...history],
           undefined,
           context
         );
